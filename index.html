@@ -235,6 +235,22 @@ input[type=range]{accent-color:var(--navy)}
 .toast{position:fixed;bottom:24px;left:24px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.25s;z-index:60;max-width:420px;border-right:4px solid var(--gold)}
 .toast.on{opacity:1;transform:none}
 .toast.err{border-right-color:var(--bad)}
+.toast.ok{background:#14663F;border-right-color:#7BE0A8}
+.toast.ok::before{content:"✓";display:inline-block;margin-left:8px;font-weight:900}
+.cmc{position:relative}
+.cmi{width:46px;height:46px;border-radius:50%;display:none;align-items:center;justify-content:center;margin-bottom:10px}
+.cmi svg{width:24px;height:24px}
+.cmc.t-save .cmi,.cmc.t-edit .cmi,.cmc.t-del .cmi{display:flex}
+.cmc.t-save .cmi{background:var(--ok-soft);color:var(--ok)}
+.cmc.t-edit .cmi{background:var(--tint);color:var(--navy)}
+.cmc.t-del .cmi{background:var(--bad-soft);color:var(--bad)}
+.cmc.t-del #cmYes{background:var(--bad);border-color:var(--bad)}
+.cmc.t-save #cmYes{background:var(--ok);border-color:var(--ok)}
+.cmsum{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+.cmsum td{border:1px solid var(--line);padding:6px 9px;white-space:normal}
+.cmsum td:first-child{background:var(--tint);color:var(--muted);font-weight:700;width:36%}
+.cmsum .old{color:var(--bad);text-decoration:line-through;font-size:12px;display:block}
+.cmsum .new{color:var(--ok);font-weight:700}
 
 #printArea{display:none;direction:ltr}
 #printArea .label{direction:rtl;margin:0}
@@ -460,6 +476,7 @@ html{-webkit-text-size-adjust:100%}
             <button class="btn gold" id="bPrintSel" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>طباعة المحدد</button>
             <button class="btn" id="bImport" title="دمج أصول من سجل Excel آخر">استيراد سجل</button>
             <button class="btn" id="bExport">تصدير نسخة</button>
+            <button class="btn pri" id="bReport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>طباعة تقرير</button>
           </div>
         </div>
         <div class="tbl-wrap atw"><table class="atbl">
@@ -611,6 +628,7 @@ html{-webkit-text-size-adjust:100%}
               <button class="btn gold" id="bGsCode">نسخ كود Apps Script</button>
               <span class="hint" id="gsInfo"></span>
             </div>
+            <label class="row" style="margin-top:12px;gap:8px;cursor:pointer;font-size:13px;flex-wrap:nowrap"><input type="checkbox" id="oShowSync" style="width:18px;height:18px;flex:none"><span>إظهار زرّي <b>«حفظ»</b> و<b>«تحديث من الشيت»</b> أعلى الصفحة <span class="hint">(الحفظ والتحديث يتمّان تلقائياً، فالزرّان للاستخدام اليدوي عند الحاجة فقط)</span></span></label>
             <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">خطوات الإعداد (مرة واحدة)</summary>
               <div class="infobox" style="margin-top:8px">
                 1. اضغط <b>نسخ كود Apps Script</b>.<br>
@@ -697,7 +715,7 @@ html{-webkit-text-size-adjust:100%}
   <div id="lockErr" style="color:var(--bad);font-size:12.5px;min-height:20px;margin-top:6px"></div>
   <div class="row" style="justify-content:center;margin-top:6px"><button class="btn" id="lockNo">إلغاء</button><button class="btn pri" id="lockYes">دخول</button></div>
 </div></div>
-<div class="modal" id="confirmM"><div class="card"><h3 id="cmT">تأكيد</h3><p id="cmB" style="margin:0 0 16px;line-height:1.8"></p><div class="row" style="justify-content:flex-end"><button class="btn" id="cmNo">إلغاء</button><button class="btn pri" id="cmYes">تأكيد</button></div></div></div>
+<div class="modal" id="confirmM"><div class="card cmc"><div class="cmi" id="cmI"></div><h3 id="cmT">تأكيد</h3><div id="cmB" style="margin:0 0 16px;line-height:1.8"></div><div class="row" style="justify-content:flex-end"><button class="btn" id="cmNo">إلغاء</button><button class="btn pri" id="cmYes">تأكيد</button></div></div></div>
 <div class="toast" id="toast"></div>
 <div id="printArea"></div>
 <input type="file" id="fileFallback" accept=".xlsx,.xls" style="display:none">
@@ -3132,9 +3150,9 @@ function useEmbedded(){odoo=(EMB.recs||[]).map(r=>({...r}));odooMeta={last:EMB.m
 let settings = { odooMulti:false, company:'راكان لاستيراد المواد الغذائية والتوزيع', prefix:'RKN', digits:5, mode:'pattern', cats: DEFAULT_CATS.map(c=>({name:c[0],code:c[1]})) };
 let fileHandle = null, fileName = '', lastMod = 0, dirty = false, editingCode = null;
 let queue = []; // codes queued for printing
-const prefs = Object.assign({ w:40,h:70,fmt:'ODOO',logo:true,co:false,name:true,code:true,loc:false,odoo:false,nameSrc:'local',border:false,mono:true,fs:100,sz:{logo:100,name:100,odoo:100,code:100,meta:100,bar:100},pad:1.5,rot:0,copies:1,custom:[],printer:'XP-P322B',page:'driver' }, load('rkm_prefs')||{});
+const prefs = Object.assign({ w:70,h:40,orient:'l',fmt:'ODOO',logo:true,co:false,name:true,code:true,loc:false,odoo:false,nameSrc:'local',border:false,mono:true,showSync:false,fs:100,sz:{logo:100,name:100,odoo:100,code:100,meta:100,bar:100},pad:1.5,rot:0,copies:1,custom:[],printer:'XP-P322B',page:'driver' }, load('rkm_prefs')||{});
 const FS = 'showOpenFilePicker' in window;
-if(!prefs.sizeV2){prefs.w=40;prefs.h=70;prefs.sizeV2=1;store('rkm_prefs',prefs)}
+if(!prefs.sizeV3){prefs.w=70;prefs.h=40;prefs.orient='l';prefs.sizeV2=1;prefs.sizeV3=1;store('rkm_prefs',prefs)}
 if(prefs.fmt==='EAN13')prefs.fmt='ODOO';
 
 /* ================= Utils ================= */
@@ -3146,8 +3164,9 @@ function today(){const d=new Date();return d.toISOString().slice(0,10)}
 function nowStr(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`}
 function fmtNum(n){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2})}
 function logo(){return load('rkm_logo')||DEFAULT_LOGO||''}
-let tt; function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast on'+(err?' err':'');clearTimeout(tt);tt=setTimeout(()=>t.className='toast',3200)}
-function confirmBox(title,body,yes='تأكيد'){return new Promise(r=>{$('#cmT').textContent=title;$('#cmB').innerHTML=body;$('#cmYes').textContent=yes;$('#confirmM').classList.add('on');
+let tt; function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast on'+(err==='ok'?' ok':err?' err':'');clearTimeout(tt);tt=setTimeout(()=>t.className='toast',3200)}
+const CMI={save:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h8V3M7 21v-7h10v7"/></svg>',edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',del:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>'};
+function confirmBox(title,body,yes='تأكيد',type){return new Promise(r=>{const c=document.querySelector('#confirmM .cmc');c.className='card cmc'+(type?' t-'+type:'');$('#cmI').innerHTML=CMI[type]||'';$('#cmT').textContent=title;$('#cmB').innerHTML=body;$('#cmYes').textContent=yes;$('#confirmM').classList.add('on');
   const done=v=>{$('#confirmM').classList.remove('on');$('#cmYes').onclick=$('#cmNo').onclick=null;r(v)};$('#cmYes').onclick=()=>done(true);$('#cmNo').onclick=()=>done(false)})}
 function catCode(name){const c=settings.cats.find(c=>c.name===name);return c?c.code:'OTH'}
 function eanCheck(d12){let s=0;for(let i=0;i<12;i++)s+=(+d12[i])*(i%2?3:1);return (10-s%10)%10}
@@ -3319,6 +3338,7 @@ function setConn(){setTimeout(()=>{const md=$('#mDot');if(md)md.className=$('#co
   if(sb){const show=(GS()&&(gsState==='error'||(dirty&&!gsBusy&&gsState!=='saving')))||needLogin();sb.style.display=show?'block':'none';
     $('#syncTxt').innerHTML=needLogin()?'<b>هذا الجهاز غير متصل بقاعدة البيانات المشتركة.</b> سجّل الدخول حتى تُحفظ بياناتك وتظهر على باقي الأجهزة.':'<b>لم تُحفظ آخر التغييرات في قاعدة البيانات بعد.</b> هي محفوظة مؤقتاً على هذا الجهاز وستُرفع تلقائياً عند عودة الاتصال.';
     $('#bSyncRetry').textContent=needLogin()?'تسجيل الدخول':'إعادة المحاولة الآن'}
+  const cloud=GS()||needLogin(),showMan=!cloud||!!prefs.showSync;$('#bOpen').style.display=showMan?'':'none';$('#bSave').style.display=showMan?'':'none';
   if(needLogin()){d.className='dot warn';t.textContent='Google Sheets · بانتظار تسجيل الدخول';$('#bNew').style.display='none';$('#bOpenTxt').textContent='تسجيل الدخول';return}
   $('#bNew').style.display=GS()?'none':'';$('#bOpenTxt').textContent=GS()?'تحديث من الشيت':'فتح ملف Excel';
   if(GS()){const m={loading:['warn','جارٍ التحميل…'],saving:['warn','جارٍ الحفظ…'],error:['','غير متصل — تحقق من الإعدادات']};const [c,x]=m[gsState]||[dirty?'warn':'on',dirty?'تغييرات بانتظار الحفظ':'متصل ومحفوظ'];
@@ -3440,10 +3460,17 @@ async function submitForm(e){
   if(assets.some(a=>a.code===d.code&&a.code!==editingCode))return toast('رقم الباركود مستخدم لأصل آخر',1);
   if(d.odooId){const o=!settings.odooMulti&&assets.find(a=>a.odooId===d.odooId&&a.code!==editingCode);if(o)return toast(`أصل أودو ${d.odooId} مربوط مسبقاً بالأصل ${o.code}`,1);const r=odoo.find(r=>r.id===d.odooId);d.odooName=r?r.name:(assets.find(a=>a.code===editingCode)?.odooName||'')}else d.odooName='';
   if(prefs.fmt==='EAN13'&&!/^\d{12,13}$/.test(d.code))toast('ملاحظة: نوع الباركود الحالي EAN-13 ويتطلب أرقاماً فقط',1);
+  const LBL={name:'اسم الأصل',code:'رقم الباركود',odooId:'رقم أودو',category:'الفئة',status:'الحالة',location:'الموقع',dept:'الإدارة / القسم',custodian:'العهدة / المسؤول',serial:'الرقم التسلسلي',purchaseDate:'تاريخ الشراء',value:'القيمة',notes:'ملاحظات'};
+  const row=(k,v)=>`<tr><td>${LBL[k]}</td><td>${v}</td></tr>`;
+  if(editingCode){const o=assets.find(x=>x.code===editingCode);
+    const ch=Object.keys(LBL).filter(k=>String(o[k]??'')!==String(d[k]??''));
+    if(!ch.length)return toast('لا توجد تغييرات لحفظها');
+    if(!await confirmBox('تأكيد تعديل الأصل',`سيتم حفظ التعديلات التالية على الأصل <b class="mono">${esc(o.code)}</b>:<table class="cmsum">${ch.map(k=>row(k,`<span class="old">${esc(o[k])||'—'}</span><span class="new">${esc(d[k])||'—'}</span>`)).join('')}</table>`,'حفظ التعديلات','edit'))return}
+  else if(!await confirmBox('تأكيد حفظ الأصل',`سيتم تسجيل الأصل التالي في قاعدة البيانات:<table class="cmsum">${row('name',`<b>${esc(d.name)}</b>`)}${row('code',`<b class="mono">${esc(d.code)}</b>`)}${row('category',esc(d.category))}${d.odooId?row('odooId',esc(d.odooId)):''}${d.location?row('location',esc(d.location)):''}${d.custodian?row('custodian',esc(d.custodian)):''}</table>`,andPrint?'حفظ وطباعة':'حفظ','save'))return;
   let a;
   if(editingCode){a=assets.find(x=>x.code===editingCode);if(a.code!==d.code&&+a.printCount>0&&!await confirmBox('تغيير رقم مطبوع','سيُستبدل الرقم <b class="mono">'+esc(a.code)+'</b> بالرقم <b class="mono">'+esc(d.code)+'</b>. الملصق الملصوق حالياً على الأصل لن يكون صالحاً.','تغيير'))return;Object.assign(a,d)}
   else{a=Object.assign({createdAt:today(),printCount:0,lastPrint:'',_x:{}},d);assets.push(a)}
-  const was=!!editingCode;editingCode=null;await commit();toast(was?'تم تحديث الأصل':'تم تسجيل الأصل '+a.code);
+  const was=!!editingCode;editingCode=null;await commit();toast(was?`تم حفظ تعديلات الأصل ${a.code} بنجاح`:`تم حفظ الأصل ${a.code} بنجاح`,'ok');
   if(andPrint){queue=[a.code];go('label');$('#pvAsset').value=a.code;acbLabel();renderPreview()}else{resetForm();f.name.focus()}
 }
 
@@ -3613,6 +3640,84 @@ async function bulkOdoo(){
   await commit();toast(`تم تسجيل ${free.length} أصل من أودو`);
 }
 
+/* ================= Assets report ================= */
+function reportHTML(list){
+  const fonts=[...document.styleSheets].flatMap(sh=>{try{return [...sh.cssRules]}catch(e){return []}}).filter(r=>r.type===5).map(r=>r.cssText).join('\n');
+  const now=new Date(),p2=n=>String(n).padStart(2,'0'),dIss=`${p2(now.getDate())}/${p2(now.getMonth()+1)}/${now.getFullYear()}`;
+  const repNo=`أ.ث / ${now.getFullYear()} / ${p2(now.getMonth()+1)}${p2(now.getDate())}${p2(now.getHours())}${p2(now.getMinutes())}`;
+  const fils=list.some(a=>a.value!==''&&a.value!=null&&Math.round(+a.value*100)%100!==0),dec=fils?2:0;
+  const money=v=>v===''||v==null||isNaN(+v)?'<span class="mu">—</span>':`<span dir="ltr">${(+v).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec})}</span> <span class="cur">د.ل</span>`;
+  const sum=arr=>arr.reduce((t,a)=>t+(+a.value||0),0);
+  const groups={};list.forEach(a=>{const k=a.category||'غير مصنف';(groups[k]=groups[k]||[]).push(a)});
+  const gk=Object.keys(groups).sort((x,y)=>groups[y].length-groups[x].length);
+  const total=sum(list),linked=list.filter(a=>a.odooId).length,printed=list.filter(a=>+a.printCount>0).length;
+  const flt=[];if($('#q').value.trim())flt.push('بحث: «'+esc($('#q').value.trim())+'»');['fCat','fLoc','fPrint','fOdoo'].forEach(id=>{const el=$('#'+id);if(el.value)flt.push(esc(el.options[el.selectedIndex].text))});
+  const scope=flt.length?`نطاق التقرير: ${flt.join(' · ')}`:'نطاق التقرير: جميع الأصول المسجلة في المنظومة';
+  const lg=logo();let n=0;
+  const det=gk.map(k=>{const g=groups[k];return `<tbody><tr class="grp"><td colspan="11">${esc(k)} <span class="gc">(${g.length})</span></td></tr>`+
+    g.map(a=>`<tr><td class="c">${++n}</td><td class="mono">${esc(a.code)}</td><td class="c">${a.odooId?esc(a.odooId):'<span class="mu">—</span>'}</td><td class="nm">${esc(a.name)}</td><td>${esc(a.location)||'<span class="mu">—</span>'}</td><td>${esc(a.dept)||'<span class="mu">—</span>'}</td><td>${esc(a.custodian)||'<span class="mu">—</span>'}</td><td class="c">${esc(a.purchaseDate)||'<span class="mu">—</span>'}</td><td class="m">${money(a.value)}</td><td class="c">${esc(a.status)||'<span class="mu">—</span>'}</td><td class="c">${+a.printCount>0?'مطبوع':'<span class="mu">لم يُطبع</span>'}</td></tr>`).join('')+
+    `<tr class="sub"><td colspan="8">إجمالي ${esc(k)}</td><td class="m">${money(sum(g))}</td><td colspan="2"></td></tr></tbody>`}).join('');
+  const sumRows=gk.map(k=>{const g=groups[k];return `<tr><td>${esc(k)}</td><td class="c">${g.length}</td><td class="c">${g.filter(a=>a.odooId).length}</td><td class="c">${g.filter(a=>+a.printCount>0).length}</td><td class="m">${money(sum(g))}</td><td class="c">${total?((sum(g)/total)*100).toFixed(1)+'%':'—'}</td></tr>`}).join('');
+  return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>تقرير سجل الأصول الثابتة</title><style>${fonts}
+:root{--blue:#0C4CA2;--blue-deep:#08386F;--orange:#F15C22;--ink:#1B2433;--muted:#5B6678;--line:#DCE3EE;--tint:#F2F6FC;--orange-tint:#FEF1EB}
+@page{size:A4 landscape;margin:11mm 11mm 14mm;@bottom-right{content:"راكان لاستيراد المواد الغذائية والتوزيع — تقرير سجل الأصول الثابتة";font:8px Tajawal,sans-serif;color:#5B6678}@bottom-left{content:"صفحة " counter(page) " من " counter(pages);font:8px Tajawal,sans-serif;color:#5B6678}}
+*{box-sizing:border-box}body{margin:0;font-family:'Tajawal',sans-serif;font-size:10.5px;line-height:1.6;color:var(--ink);background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bar{height:7px;background:linear-gradient(to left,var(--blue) 0 72%,var(--orange) 72% 100%)}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:10px 0 9px;border-bottom:1px solid var(--line)}
+.hd img{width:170px;max-height:70px;object-fit:contain}
+.meta{text-align:left;font-size:10px;color:var(--muted);line-height:1.9}.meta b{color:var(--ink)}
+.pill{display:inline-block;border:1.5px solid var(--orange);color:var(--orange);border-radius:999px;padding:0 10px;font-weight:700;font-size:9.5px}
+.kick{color:var(--orange);font-weight:700;font-size:11px;margin-top:12px}
+h1{margin:2px 0 2px;color:var(--blue-deep);font-weight:900;font-size:24px;line-height:1.3}
+.sub1{color:var(--muted);font-size:11px;margin-bottom:10px}
+h2{color:var(--blue);font-weight:800;font-size:14px;margin:16px 0 8px;display:flex;align-items:center;gap:8px;break-after:avoid}
+h2 i{font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);margin:6px 0 4px;break-inside:avoid}
+.kpi div{padding:9px 14px;border-left:1px solid var(--line)}.kpi div:last-child{border-left:0}
+.kpi small{display:block;color:var(--muted);font-size:10px}.kpi b{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--blue-deep)}
+.kpi .hero{background:var(--blue)}.kpi .hero small{color:#CFE0F7}.kpi .hero b{color:#fff}
+.kpi b .cur{font-size:.55em;color:inherit;opacity:.75}
+table{width:100%;border-collapse:collapse;border:1px solid #C9D3E3}
+th{background:var(--blue);color:#fff;font-weight:700;padding:6px 6px;border:1px solid #3B6DB3;text-align:right;font-size:10px;white-space:nowrap}
+td{border:1px solid var(--line);padding:4px 6px;vertical-align:middle}
+td.c{text-align:center}td.m{direction:rtl;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.mono{font-family:Consolas,'Courier New',monospace;direction:ltr;text-align:right;font-size:9.5px;white-space:nowrap}
+td.nm{font-weight:700}.cur{font-size:.78em;color:var(--muted)}.mu{color:#9AA4B5}
+tr{break-inside:avoid}thead{display:table-header-group}
+.grp td{background:var(--tint);color:var(--blue-deep);font-weight:800;font-size:11px}.gc{color:var(--muted);font-weight:600}
+.sub td{font-weight:800;border-bottom:1.5px solid var(--blue)}
+tfoot td,.tot td{background:var(--orange-tint);border-top:2px solid var(--orange);font-weight:800;font-size:11px}
+.sumt{width:70%}
+.sig{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:34px;break-inside:avoid}
+.sig div{border-top:1.5px solid var(--ink);padding-top:6px;text-align:center}.sig b{display:block}.sig span{color:var(--muted);font-size:10px}
+.note{font-size:9.5px;color:var(--muted);margin-top:8px}
+</style></head><body>
+<div class="bar"></div>
+<div class="hd">${lg?`<img src="${lg}" alt="راكان">`:'<b>راكان لاستيراد المواد الغذائية والتوزيع</b>'}<div class="meta">رقم التقرير: <b>${repNo}</b><br>تاريخ الإصدار: <b>${dIss}</b><br><span class="pill">سري — للاستخدام الداخلي</span></div></div>
+<div class="kick">تقرير مرفوع إلى الإدارة المالية</div>
+<h1>تقرير سجل الأصول الثابتة المرمَّزة</h1>
+<div class="sub1">${scope}</div>
+<div class="kpi"><div class="hero"><small>عدد الأصول</small><b>${list.length}</b></div><div><small>القيمة الإجمالية</small><b>${money(total)}</b></div><div><small>مربوط بأودو</small><b>${linked} <span class="cur">من ${list.length}</span></b></div><div><small>ملصقات مطبوعة</small><b>${printed} <span class="cur">من ${list.length}</span></b></div></div>
+<h2><i>1</i>ملخص الأصول حسب الفئة</h2>
+<table class="sumt"><thead><tr><th>الفئة</th><th style="text-align:center">عدد الأصول</th><th style="text-align:center">مربوط بأودو</th><th style="text-align:center">ملصقات مطبوعة</th><th>القيمة</th><th style="text-align:center">النسبة من القيمة</th></tr></thead>
+<tbody>${sumRows}</tbody><tfoot><tr><td>الإجمالي</td><td class="c">${list.length}</td><td class="c">${linked}</td><td class="c">${printed}</td><td class="m">${money(total)}</td><td class="c">${total?'100%':'—'}</td></tr></tfoot></table>
+<h2><i>2</i>تفاصيل الأصول</h2>
+<table><thead><tr><th style="width:3%;text-align:center">م</th><th style="width:10%">رقم الباركود</th><th style="width:5%;text-align:center">أودو</th><th>اسم الأصل</th><th style="width:11%">الموقع</th><th style="width:8%">القسم</th><th style="width:9%">العهدة</th><th style="width:7.5%;text-align:center">تاريخ الشراء</th><th style="width:9.5%">القيمة</th><th style="width:5.5%;text-align:center">الحالة</th><th style="width:6%;text-align:center">الملصق</th></tr></thead>
+${det||'<tbody><tr><td colspan="11" class="c">لا توجد أصول ضمن نطاق التقرير</td></tr></tbody>'}
+<tbody><tr class="tot"><td colspan="8">الإجمالي العام (${list.length} أصل)</td><td class="m">${money(total)}</td><td colspan="2"></td></tr></tbody></table>
+<div class="note">القيم المعروضة هي القيم المسجلة في المنظومة (القيمة الأصلية للأصل). أُعدّ هذا التقرير آلياً من منظومة ترميز الأصول بتاريخ ${dIss}.</div>
+<div class="sig"><div><b>أعدّه</b><span>الاسم / التوقيع</span></div><div><b>راجعه: رئيس قسم الحسابات</b><span>الاسم / التوقيع</span></div><div><b>اعتمده: المدير المالي</b><span>الاسم / التوقيع</span></div></div>
+</body></html>`;
+}
+function printReport(){
+  const list=filtered();if(!list.length)return toast('لا توجد أصول ضمن الفلاتر الحالية لطباعة تقرير عنها',1);
+  const old=document.getElementById('repFrame');if(old)old.remove();
+  const f=document.createElement('iframe');f.id='repFrame';f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+  document.body.appendChild(f);const w=f.contentWindow;w.document.open();w.document.write(reportHTML(list));w.document.close();
+  toast('جارٍ تجهيز التقرير… اختر طابعة A4 أو «حفظ بتنسيق PDF»');
+  const go=async()=>{try{await w.document.fonts.ready}catch(e){}const imgs=[...w.document.images];await Promise.all(imgs.map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));setTimeout(()=>{w.focus();w.print()},150)};
+  if(w.document.readyState==='complete')go();else f.onload=go;
+}
 /* ================= Import ================= */
 async function importFile(file){
   const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:true});
@@ -3633,6 +3738,7 @@ $$('.nav').forEach(n=>n.onclick=()=>{if(n.dataset.v==='form')editingCode=null;go
 $('#bOpen').onclick=()=>needLogin()?showLogin():GS()?gsLoad():openExcel();$('#bNew').onclick=newDb;$('#bSave').onclick=()=>{if(GS())return gsSave();if(!fileHandle&&!fileName&&FS)return newDb();save()};
 $('#fileFallback').onchange=async e=>{const f=e.target.files[0];if(!f)return;readWorkbook(await f.arrayBuffer());fileName=f.name;dirty=false;setConn();renderAll();toast(`تم تحميل ${f.name}`);e.target.value=''};
 $('#bImport').onclick=()=>$('#fileImport').click();$('#fileImport').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''};
+$('#bReport').onclick=()=>printReport();
 $('#bExport').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buildWorkbook()]));a.download=`نسخة_أصول_${today()}.xlsx`;a.click()};
 ['#q','#fCat','#fLoc','#fPrint','#fOdoo'].forEach(s=>$(s).addEventListener('input',renderTable));
 $('#chkAll').onchange=e=>{filtered().forEach(a=>e.target.checked?selected.add(a.code):selected.delete(a.code));renderTable()};
@@ -3640,7 +3746,8 @@ $('#tb').addEventListener('click',async e=>{const tr=e.target.closest('tr[data-c
   if(e.target.classList.contains('rc')){e.target.checked?selected.add(c):selected.delete(c);updSel();return}
   const act=(e.target.closest('[data-a]')||{}).dataset?.a;if(act==='edit')editAsset(c);
   if(act==='print'){queue=[c];go('label')}
-  if(act==='del'&&await confirmBox('حذف أصل',`هل تريد حذف الأصل <b class="mono">${esc(c)}</b> نهائياً من قاعدة البيانات؟`,'حذف')){assets=assets.filter(a=>a.code!==c);selected.delete(c);await commit();toast('تم حذف الأصل')}});
+  const da=assets.find(a=>a.code===c);
+  if(act==='del'&&await confirmBox('تأكيد حذف الأصل',`هل تريد حذف هذا الأصل نهائياً من قاعدة البيانات؟<table class="cmsum"><tr><td>اسم الأصل</td><td><b>${esc(da?.name)}</b></td></tr><tr><td>رقم الباركود</td><td class="mono">${esc(c)}</td></tr>${da?.odooId?`<tr><td>رقم أودو</td><td>${esc(da.odooId)}</td></tr>`:''}</table><div style="color:var(--bad);font-size:12.5px;margin-top:8px">لا يمكن التراجع عن الحذف${+da?.printCount>0?'، والملصق المطبوع على الأصل لن يُعرَّف بعد الآن':''}.</div>`,'حذف نهائي','del')){assets=assets.filter(a=>a.code!==c);selected.delete(c);await commit();toast(`تم حذف الأصل ${c} بنجاح`,'ok')}});
 $('#bPrintSel').onclick=()=>{queue=assets.filter(a=>selected.has(a.code)).map(a=>a.code);go('label')};
 $('#af').addEventListener('submit',submitForm);$('#bCancel').onclick=()=>{editingCode=null;go('assets')};
 $('#bGen').onclick=()=>{$('#af').code.value=nextCode($('#af').category.value)};
@@ -3714,12 +3821,14 @@ document.querySelectorAll('input[name=oMulti]').forEach(r=>r.onchange=async e=>{
 function renderMulti(){document.querySelectorAll('input[name=oMulti]').forEach(r=>{r.checked=(r.value==='1')===!!settings.odooMulti;r.closest('label').classList.toggle('on',r.checked)})}
 function dsRender(){document.querySelectorAll('input[name=dsMode]').forEach(r=>{r.checked=r.value===ds.mode;r.closest('label').classList.toggle('on',r.checked)});
   $('#gsBox').style.display=ds.mode==='gsheet'?'':'none';$('#gsUrl').value=ds.url||'';
+  $('#oShowSync').checked=!!prefs.showSync;
   const dv=$('#gsDev');dv.className='pill '+(GS()?'p-ok':'p-warn');dv.textContent=GS()?'متصل ومسجّل الدخول':'غير مسجّل الدخول';$('#bGsLogout').style.display=GS()?'':'none';
   $('#gsInfo').textContent=GS()?(gsName?`متصل بـ «${gsName}»`:''):''}
 function gsForm(){return {mode:'gsheet',url:$('#gsUrl').value.trim(),key:ds.key}}
 document.querySelectorAll('input[name=dsMode]').forEach(r=>r.onchange=async e=>{
   if(e.target.value==='excel'){if(dirty&&GS()&&!await confirmBox('التحويل إلى Excel','توجد تغييرات لم تُحفظ في Google Sheets بعد. هل تريد المتابعة؟','متابعة'))return dsRender();ds.mode='excel';store('rkm_ds',ds);gsName='';setConn();dsRender();toast('مصدر البيانات: ملف Excel — افتح الملف أو أنشئ قاعدة جديدة')}
   else{ds.mode='gsheet';if(!ds.url)ds.url=DEFAULT_GS;store('rkm_ds',ds);dsRender();setConn();if(GS())await gsLoad();else if(ds.url)showLogin();else $('#gsUrl').focus()}});
+$('#oShowSync').onchange=e=>{prefs.showSync=e.target.checked;store('rkm_prefs',prefs);setConn();toast(e.target.checked?'تم إظهار زرّي الحفظ والتحديث':'تم إخفاء زرّي الحفظ والتحديث','ok')};
 $('#bGsLogout').onclick=async()=>{if(dirty&&!await confirmBox('تسجيل الخروج','توجد تغييرات لم تُحفظ بعد. هل تريد المتابعة؟','خروج'))return;logoutDevice('تم تسجيل الخروج من هذا الجهاز.');dsRender()};
 $('#bGsCode').onclick=async()=>{const code=$('#gasTpl').textContent;
   try{await navigator.clipboard.writeText(code);toast('تم نسخ كود Apps Script ✓')}catch(e){const b=new Blob([code],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Code.gs';a.click();toast('تم تنزيل الكود كملف Code.gs')}};
