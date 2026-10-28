@@ -162,6 +162,25 @@ tr.hl td{background:var(--gold-2)!important}
 .stage{background:repeating-conic-gradient(#E9EDF3 0% 25%,#F6F8FB 0% 50%) 50%/18px 18px;border-radius:10px;min-height:340px;display:flex;align-items:center;justify-content:center;padding:30px;border:1px solid var(--line)}
 .ruler{color:var(--muted);font-size:12px;text-align:center;margin-top:8px}
 .warnbox{background:var(--gold-soft);color:#B23E10;border:1px solid var(--gold-2);border-right:4px solid var(--gold);border-radius:9px;padding:9px 12px;font-size:12.5px}
+/* collapsible sections */
+details.fold>summary,details.fold-in>summary{list-style:none;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+details.fold>summary::-webkit-details-marker,details.fold-in>summary::-webkit-details-marker{display:none}
+details.fold>summary{display:flex;align-items:center;gap:10px;margin:-4px 0}
+details.fold>summary h3{margin:0!important;flex:none}
+details.fold .fsum{flex:1;min-width:0;text-align:left;font-size:12.5px;font-weight:700;color:var(--navy-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details.fold .fsum small{font-weight:500;color:var(--muted,#64748b);margin-inline:4px}
+.chev{flex:none;width:26px;height:26px;border-radius:8px;background:var(--tint);border:1px solid var(--line);display:grid;place-items:center;transition:transform .2s,background .2s}
+.chev::before{content:"";width:7px;height:7px;border-left:2px solid var(--navy);border-bottom:2px solid var(--navy);transform:translateY(-2px) rotate(-45deg)}
+details[open]>summary .chev{transform:rotate(180deg)}
+details.fold>summary:hover .chev,details.fold-in>summary:hover .chev{background:#fff}
+details.fold[open]>summary{margin-bottom:14px;padding-bottom:12px;border-bottom:1px dashed var(--line)}
+details.fold[open] .fsum{visibility:hidden}
+details.fold-in{border:1px solid var(--line);border-radius:10px;background:var(--tint)}
+details.fold-in>summary{display:flex;align-items:center;gap:8px;padding:9px 12px;font-size:13px;font-weight:700;color:var(--navy)}
+details.fold-in>summary svg{width:17px;height:17px;flex:none;color:var(--gold)}
+details.fold-in>summary span{flex:1}
+details.fold-in>summary .chev{width:22px;height:22px;background:#fff}
+details.fold-in .infobox{border:0;border-top:1px solid var(--line);border-radius:0 0 10px 10px;margin:0}
 .infobox{background:var(--tint);color:var(--navy-2);border:1px solid var(--line);border-right:4px solid var(--gold);border-radius:9px;padding:10px 12px;font-size:12.5px;line-height:1.8}
 input[type=range]{accent-color:var(--navy)}
 
@@ -458,9 +477,9 @@ html{-webkit-text-size-adjust:100%}
       <div class="ttl"><h1 id="vTitle">لوحة المتابعة</h1><p id="vSub">نظرة عامة على الأصول المسجلة وحالة الترميز</p></div>
       <div class="row">
         <div class="conn" title="حالة الاتصال بقاعدة بيانات Excel"><i class="dot" id="connDot"></i><span id="connTxt">غير متصل بقاعدة بيانات</span></div>
-        <button class="btn" id="bOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span id="bOpenTxt" class="bt">فتح ملف Excel</span></button>
-        <button class="btn gold" id="bNew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span class="bt">قاعدة جديدة</span></button>
-        <button class="btn pri" id="bSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h8V3M7 21v-7h10v7"/></svg><span class="bt">حفظ</span></button>
+        <button class="btn" id="bOpen" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span id="bOpenTxt" class="bt">فتح ملف Excel</span></button>
+        <button class="btn gold" id="bNew" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span class="bt">قاعدة جديدة</span></button>
+        <button class="btn pri" id="bSave" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h8V3M7 21v-7h10v7"/></svg><span class="bt">حفظ</span></button>
       </div>
     </div>
 
@@ -562,8 +581,9 @@ html{-webkit-text-size-adjust:100%}
     <section class="view" id="v-label">
       <div class="designer">
         <div class="grid">
-          <div class="card">
-            <h3>مقاس الملصق (مم)</h3>
+          <details class="card fold" id="fSize">
+            <summary><h3>مقاس الملصق (مم)</h3><span class="fsum" id="szSum"></span><i class="chev"></i></summary>
+            <div class="fold-b">
             <div class="seg" id="orSeg">
               <button type="button" data-o="p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="3" width="10" height="18" rx="1.5"/></svg><span><b>طولي</b><small>40 × 70</small></span></button>
               <button type="button" data-o="l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="10" rx="1.5"/></svg><span><b>عرضي</b><small>70 × 40</small></span></button>
@@ -576,7 +596,8 @@ html{-webkit-text-size-adjust:100%}
               <button class="btn sm" id="bAddSize">حفظ كمقاس</button>
             </div>
             <div class="warnbox" id="szWarn" style="display:none;margin-top:10px"></div>
-          </div>
+            </div>
+          </details>
           <div class="card">
             <h3>محتوى الملصق</h3>
             <div class="grid" style="gap:12px">
@@ -629,7 +650,7 @@ html{-webkit-text-size-adjust:100%}
               <div class="field" style="flex:1;min-width:180px"><label>طراز الطابعة</label><select id="oPrinter"></select></div>
               <div class="field" style="flex:1.4;min-width:220px"><label>مقاس الصفحة يُحدَّد من</label><select id="oPage"><option value="driver">تعريف الطابعة (موصى به لـ XPrinter)</option><option value="css">المنظومة (المتصفح)</option></select></div>
             </div>
-            <div class="infobox" id="setupSteps"></div>
+            <details class="fold-in" id="fSteps"><summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span>إرشادات إعداد الطابعة</span><i class="chev"></i></summary><div class="infobox" id="setupSteps"></div></details>
           </div>
         </div>
       </div>
@@ -3829,8 +3850,9 @@ function allSizes(){const o=orient(),seen=new Set(),out=[];
   [...SIZES.map(s=>({a:s[0],b:s[1],n:s[2]})),...prefs.custom.map(s=>({a:s[0],b:s[1],n:'مخصص',c:1,ow:s[0],oh:s[1]}))].forEach(s=>{
     const lo=Math.min(s.a,s.b),hi=Math.max(s.a,s.b),w=o==='l'?hi:lo,h=o==='l'?lo:hi,k=w+'x'+h;if(seen.has(k))return;seen.add(k);out.push({w,h,n:s.n,c:s.c,ow:s.ow,oh:s.oh})});
   return out}
+function szSummary(){const e=$('#szSum');if(e)e.innerHTML=`${prefs.w} × ${prefs.h} مم<small>${prefs.w>prefs.h?'عرضي':prefs.w<prefs.h?'طولي':'مربع'}</small>`}
 function setSize(w,h){prefs.w=w;prefs.h=h;if(w!==h)prefs.orient=w>h?'l':'p';store('rkm_prefs',prefs);renderDesigner()}
-function renderDesigner(){
+function renderDesigner(){szSummary();
   $$('#orSeg button').forEach(b=>b.classList.toggle('on',b.dataset.o===orient()));
   $('#sizes').innerHTML=allSizes().map((s,i)=>`<div class="sz${s.w===prefs.w&&s.h===prefs.h?' on':''}${s.w>maxW()?' na':''}" data-w="${s.w}" data-h="${s.h}" title="${s.w>maxW()?'أعرض من عرض الطباعة في '+prefs.printer:''}">${s.c?`<span class="x" data-del="${s.ow}x${s.oh}">×</span>`:''}<b>${s.w} × ${s.h}</b><small>${s.n||'&nbsp;'}</small></div>`).join('');
   $('#cW').value=prefs.w;$('#cH').value=prefs.h;$('#oFmt').value=prefs.fmt;['logo','co','name','code','loc','odoo','border','mono'].forEach(k=>$('#o'+k[0].toUpperCase()+k.slice(1)).checked=prefs[k]);$('#oNameSrc').value=prefs.nameSrc;
