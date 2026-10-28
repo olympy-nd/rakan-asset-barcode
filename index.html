@@ -178,6 +178,7 @@ input[type=range]{accent-color:var(--navy)}
 .l-dual .od{font-family:'Tajawal',Tahoma,sans-serif;font-weight:800;direction:rtl;white-space:nowrap}
 .l-dual .od b{font-family:Consolas,'Courier New',monospace;direction:ltr;unicode-bidi:embed}
 .l-qr .tx .l-name{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.lockpin{-webkit-text-security:disc;text-security:disc}
 .pt .l-qr{flex-direction:column;align-items:stretch}
 .pt .l-qr .q{height:auto;width:auto;max-width:100%;flex:1 1 auto;min-height:0;align-self:center}
 .pt .l-qr .tx{flex:none}
@@ -542,7 +543,7 @@ input[type=range]{accent-color:var(--navy)}
   <div style="width:54px;height:54px;border-radius:50%;background:var(--tint);color:var(--navy);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
   <h3 style="justify-content:center">الإعدادات محمية</h3>
   <p class="hint" style="margin:0 0 12px">أدخل كلمة السر للدخول إلى الإعدادات</p>
-  <input type="password" id="lockIn" inputmode="numeric" autocomplete="off" class="inp" style="width:100%;text-align:center;font-size:20px;letter-spacing:6px;padding:10px">
+  <input type="text" id="lockIn" name="rkn-pin-x" inputmode="numeric" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore data-form-type="other" class="inp lockpin" style="width:100%;text-align:center;font-size:20px;letter-spacing:6px;padding:10px">
   <div id="lockErr" style="color:var(--bad);font-size:12.5px;min-height:20px;margin-top:6px"></div>
   <div class="row" style="justify-content:center;margin-top:6px"><button class="btn" id="lockNo">إلغاء</button><button class="btn pri" id="lockYes">دخول</button></div>
 </div></div>
@@ -3205,10 +3206,11 @@ async function doPrint(list,{test=false}={}){
 const TITLES={dash:['لوحة المتابعة','نظرة عامة على الأصول المسجلة وحالة الترميز'],assets:['سجل الأصول','جميع الأصول المرتبطة بقاعدة بيانات Excel'],form:['تسجيل أصل','إضافة أصل جديد وتوليد باركود فريد له'],label:['تصميم وطباعة الملصق','اختر المقاس والمحتوى ثم اطبع على XPrinter'],settings:['الإعدادات','الهوية ونظام الترقيم والفئات']};
 const LOCK_H='39c5f6df';let lockNext=null;
 function lockHash(t){let h=0x811c9dc5;for(const c of 'rkn|'+t){h^=c.charCodeAt(0);h=Math.imul(h,0x01000193)>>>0}return h.toString(16).padStart(8,'0')}
-function isUnlocked(){try{return sessionStorage.getItem('rkm_unlock')===LOCK_H}catch(e){return false}}
+let unlocked=false;
+function isUnlocked(){return unlocked}
 function askLock(next){lockNext=next;$('#lockIn').value='';$('#lockErr').textContent='';$('#lockM').classList.add('on');setTimeout(()=>$('#lockIn').focus(),50)}
-function tryUnlock(){if(lockHash($('#lockIn').value.trim())===LOCK_H){try{sessionStorage.setItem('rkm_unlock',LOCK_H)}catch(e){}$('#lockM').classList.remove('on');const n=lockNext;lockNext=null;if(n)n()}
-  else{$('#lockErr').textContent='كلمة السر غير صحيحة';$('#lockIn').select()}}
+function tryUnlock(){const v=$('#lockIn').value.trim();$('#lockIn').value='';if(lockHash(v)===LOCK_H){unlocked=true;$('#lockM').classList.remove('on');const n=lockNext;lockNext=null;if(n)n()}
+  else{$('#lockErr').textContent='كلمة السر غير صحيحة';$('#lockIn').focus()}}
 function go(v){if(v==='settings'&&!isUnlocked())return askLock(()=>go('settings'));$$('.nav').forEach(n=>n.classList.toggle('on',n.dataset.v===v));$$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));$('#vTitle').textContent=TITLES[v][0];$('#vSub').textContent=TITLES[v][1];if(v==='label')renderDesigner();if(v==='form'&&!editingCode)resetForm();window.scrollTo(0,0)}
 function renderAll(){renderOdooList();renderMulti();renderDash();renderTable();renderFilters();renderCatTable();fillCatSelect();if($('#v-label').classList.contains('on'))renderDesigner()}
 function bars(el,map){const e=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,8),m=Math.max(1,...e.map(x=>x[1]));el.innerHTML=e.length?e.map(([k,v])=>`<div class="bar"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(k)}</span><div class="tr"><div class="fl" style="width:${v/m*100}%"></div></div><b>${v}</b></div>`).join(''):'<div class="hint">لا توجد بيانات بعد</div>'}
@@ -3436,7 +3438,7 @@ async function importFile(file){
 }
 
 /* ================= Events ================= */
-$('#lockYes').onclick=tryUnlock;$('#bRelock').onclick=()=>{try{sessionStorage.removeItem('rkm_unlock')}catch(e){}go('dash');toast('تم قفل الإعدادات')};$('#lockNo').onclick=()=>{$('#lockM').classList.remove('on');lockNext=null};
+$('#lockYes').onclick=tryUnlock;$('#bRelock').onclick=()=>{unlocked=false;go('dash');toast('تم قفل الإعدادات')};$('#lockNo').onclick=()=>{$('#lockM').classList.remove('on');lockNext=null};
 $('#lockIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock();if(e.key==='Escape')$('#lockNo').click()});
 $$('.nav').forEach(n=>n.onclick=()=>{if(n.dataset.v==='form')editingCode=null;go(n.dataset.v)});
 $('#bOpen').onclick=()=>GS()?gsLoad():openExcel();$('#bNew').onclick=newDb;$('#bSave').onclick=()=>{if(GS())return gsSave();if(!fileHandle&&!fileName&&FS)return newDb();save()};
