@@ -129,6 +129,14 @@ tr.hl td{background:var(--gold-2)!important}
 /* Designer */
 .designer{display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start}
 .sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-height:270px;overflow:auto;padding:2px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--tint);border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:12px}
+.seg button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;padding:8px;border-radius:8px;color:var(--muted)}
+.seg button svg{width:22px;height:22px;flex:none}
+.seg button span{display:flex;flex-direction:column;line-height:1.25;text-align:right}
+.seg button b{font-size:13.5px;color:var(--ink)}
+.seg button small{font-size:11px;direction:ltr;text-align:right}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(8,56,111,.15),inset 0 0 0 1.5px var(--navy)}
+.seg button.on b{color:var(--navy)}
 .sz{border:1px solid var(--line);border-radius:9px;padding:7px 6px;text-align:center;cursor:pointer;background:#fff;line-height:1.35;position:relative}
 .sz b{display:block;font-size:13px;direction:ltr}
 .sz small{color:var(--muted);font-size:11px}
@@ -370,6 +378,10 @@ input[type=range]{accent-color:var(--navy)}
         <div class="grid">
           <div class="card">
             <h3>مقاس الملصق (مم)</h3>
+            <div class="seg" id="orSeg">
+              <button type="button" data-o="p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="3" width="10" height="18" rx="1.5"/></svg><span><b>طولي</b><small>40 × 70</small></span></button>
+              <button type="button" data-o="l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="10" rx="1.5"/></svg><span><b>عرضي</b><small>70 × 40</small></span></button>
+            </div>
             <div class="sizes" id="sizes"></div>
             <div class="row" style="margin-top:12px;align-items:flex-end">
               <div class="field" style="width:80px"><label>العرض</label><input type="number" id="cW" min="10" max="120" step="0.1" value="38"></div>
@@ -2959,7 +2971,7 @@ const SIZES = [ // [w,h,note]
   [50,25,''],[50,30,'شائع'],[50,40,''],[50.8,25.4,'2×1 إنش'],[57,32,''],[60,40,'شائع'],[70,40,''],
   [76.2,50.8,'3×2 إنش'],[80,50,''],[100,50,'4×2 إنش'],[100,100,'4×4 إنش'],[101.6,152.4,'4×6 شحن']
 ];
-const PRINTERS={ 'XP-P322B':58,'XP-365B':80,'XP-360B':80,'XP-235B':58,'XP-420B':108,'XP-470B':108,'أخرى':120 }; // max paper width (mm)
+const PRINTERS={ 'XP-P322B':72,'XP-365B':80,'XP-360B':80,'XP-235B':48,'XP-420B':108,'XP-470B':108,'أخرى':120 }; // max print width (mm)
 const maxW=()=>PRINTERS[prefs.printer]||80;
 
 /* ================= State ================= */
@@ -3177,7 +3189,7 @@ async function doPrint(list,{test=false}={}){
   if(!list.length)return toast('لا توجد أصول للطباعة',1);
   const un=prefs.fmt==='ODOO'?list.filter(a=>!a.odooId&&assets.includes(a)):[];
   if(un.length&&!await confirmBox('أصول غير مربوطة بأودو',`${un.length} من ${list.length} أصل غير مربوط بأودو، وستُطبع باسمها في المنظومة دون اسم أودو وكوده:<br><b dir="ltr">${un.slice(0,6).map(a=>esc(a.code)).join('، ')}${un.length>6?' …':''}</b><br>لربطها: سجل الأصول ← تعديل ← ربط بأصل في أودو.`,'طباعة على أي حال'))return;
-  if(prefs.w>maxW())toast(`تنبيه: عرض الملصق أكبر من عرض ورق ${prefs.printer} (${maxW()} مم)`,1);
+  if(prefs.w>maxW())toast(`تنبيه: عرض الملصق أكبر من عرض الطباعة في ${prefs.printer} (${maxW()} مم)`,1);
   const n=Math.max(1,+prefs.copies||1);let html='';
   list.forEach(a=>{for(let i=0;i<n;i++)html+=labelHTML(a,prefs)});
   const pa=$('#printArea');pa.innerHTML=html;pa.className=prefs.mono?'mono-print':'';pa.style.cssText='display:block;position:fixed;left:-9999px;top:0';fitText(pa);pa.style.cssText='';
@@ -3245,9 +3257,15 @@ async function submitForm(e){
 }
 
 /* ================= Designer ================= */
-function allSizes(){return [...SIZES.map(s=>({w:s[0],h:s[1],n:s[2]})),...prefs.custom.map(s=>({w:s[0],h:s[1],n:'مخصص',c:1}))]}
+const orient=()=>prefs.orient||(prefs.w>prefs.h?'l':'p');
+function allSizes(){const o=orient(),seen=new Set(),out=[];
+  [...SIZES.map(s=>({a:s[0],b:s[1],n:s[2]})),...prefs.custom.map(s=>({a:s[0],b:s[1],n:'مخصص',c:1,ow:s[0],oh:s[1]}))].forEach(s=>{
+    const lo=Math.min(s.a,s.b),hi=Math.max(s.a,s.b),w=o==='l'?hi:lo,h=o==='l'?lo:hi,k=w+'x'+h;if(seen.has(k))return;seen.add(k);out.push({w,h,n:s.n,c:s.c,ow:s.ow,oh:s.oh})});
+  return out}
+function setSize(w,h){prefs.w=w;prefs.h=h;if(w!==h)prefs.orient=w>h?'l':'p';store('rkm_prefs',prefs);renderDesigner()}
 function renderDesigner(){
-  $('#sizes').innerHTML=allSizes().map((s,i)=>`<div class="sz${s.w===prefs.w&&s.h===prefs.h?' on':''}${s.w>maxW()?' na':''}" data-w="${s.w}" data-h="${s.h}" title="${s.w>maxW()?'أعرض من ورق '+prefs.printer:''}">${s.c?`<span class="x" data-del="${s.w}x${s.h}">×</span>`:''}<b>${s.w} × ${s.h}</b><small>${s.n||'&nbsp;'}</small></div>`).join('');
+  $$('#orSeg button').forEach(b=>b.classList.toggle('on',b.dataset.o===orient()));
+  $('#sizes').innerHTML=allSizes().map((s,i)=>`<div class="sz${s.w===prefs.w&&s.h===prefs.h?' on':''}${s.w>maxW()?' na':''}" data-w="${s.w}" data-h="${s.h}" title="${s.w>maxW()?'أعرض من عرض الطباعة في '+prefs.printer:''}">${s.c?`<span class="x" data-del="${s.ow}x${s.oh}">×</span>`:''}<b>${s.w} × ${s.h}</b><small>${s.n||'&nbsp;'}</small></div>`).join('');
   $('#cW').value=prefs.w;$('#cH').value=prefs.h;$('#oFmt').value=prefs.fmt;['logo','co','name','code','loc','odoo','border','mono'].forEach(k=>$('#o'+k[0].toUpperCase()+k.slice(1)).checked=prefs[k]);$('#oNameSrc').value=prefs.nameSrc;
   $$('[data-szk]').forEach(d=>{const v=(prefs.sz||{})[d.dataset.szk]||100;d.querySelector('input').value=v;d.querySelector('.szv').textContent=v+'%';const k=d.dataset.szk,isO=prefs.fmt==='ODOO';d.style.display=(k==='bar'&&isO)||(k==='odoo'&&!prefs.odoo)||(k==='meta'&&!prefs.loc)||(k==='code'&&!prefs.code&&!isO)||(k==='logo'&&!prefs.logo&&!prefs.co)||(k==='name'&&!prefs.name)?'none':''});$('#oPad').value=prefs.pad;$('#vPad').textContent=prefs.pad;$('#oRot').value=prefs.rot;$('#oCopies').value=prefs.copies;
   const s=$('#pvAsset'),v=s.value;
@@ -3263,21 +3281,21 @@ function renderPreview(){
   if(prefs.fmt==='ODOO'&&!sa.odooId){ow.style.display='block';ow.innerHTML=`<div class="row" style="justify-content:space-between"><span>الأصل <b dir="ltr">${esc(sa.code)}</b> غير مربوط بأودو، لذلك يظهر اسمه في المنظومة بدلاً من اسم أودو وكوده.</span>${assets.some(a=>a.code===sa.code)?`<button class="btn sm gold" onclick="editAsset('${esc(sa.code)}');setTimeout(()=>{$('#odooPick').focus()},50)">ربطه بأودو الآن</button>`:''}</div>`}else ow.style.display='none';
   const l=pv.firstElementChild;fitText(pv);l.style.zoom=scale;l.style.boxShadow='0 4px 18px rgba(0,0,0,.18)';l.style.borderRadius='1mm';
   $('#ruler').textContent=`${prefs.w} × ${prefs.h} مم · ${Math.round(prefs.w*8)} × ${Math.round(prefs.h*8)} نقطة عند 203 DPI · تكبير ${scale.toFixed(1)}×`;
-  const w=$('#szWarn');if(prefs.w>maxW()){w.style.display='block';w.textContent=`عرض ${prefs.w} مم يتجاوز أقصى عرض ورق للطابعة ${prefs.printer} (${maxW()} مم).`}else w.style.display='none';renderSetup();
+  const w=$('#szWarn');if(prefs.w>maxW()){w.style.display='block';w.textContent=`عرض ${prefs.w} مم يتجاوز أقصى عرض طباعة للطابعة ${prefs.printer} (${maxW()} مم).`}else w.style.display='none';renderSetup();
   const qa=queue.map(c=>assets.find(a=>a.code===c)).filter(Boolean);
   $('#qCount').textContent=qa.length?`(${qa.length*prefs.copies})`:'المعروض';
   $('#queueInfo').textContent=qa.length?`في قائمة الطباعة: ${qa.length} أصل × ${prefs.copies} نسخة`:'سيُطبع الأصل المعروض في المعاينة. لطباعة دفعة حدّد الأصول من سجل الأصول.';
 }
 function renderSetup(){
-  const o=$('#oPrinter');if(!o.options.length)o.innerHTML=Object.keys(PRINTERS).map(k=>`<option value="${k}">${k==='أخرى'?'طراز آخر':'XPrinter '+k} — ورق حتى ${PRINTERS[k]} مم</option>`).join('');
+  const o=$('#oPrinter');if(!o.options.length)o.innerHTML=Object.keys(PRINTERS).map(k=>`<option value="${k}">${k==='أخرى'?'طراز آخر':'XPrinter '+k} — طباعة حتى ${PRINTERS[k]} مم</option>`).join('');
   o.value=prefs.printer;$('#oPage').value=prefs.page;$('#sidePrinter').textContent='XPrinter '+prefs.printer;
   const W=prefs.w,H=prefs.h,P=prefs.printer;
   $('#setupSteps').innerHTML=prefs.page==='driver'?`<b>إعداد مرة واحدة في ويندوز:</b><br>
   1. لوحة التحكم ← <b>الأجهزة والطابعات</b> ← زر يمين على <b>${P}</b> ← <b>تفضيلات الطباعة (Printing Preferences)</b>.<br>
-  2. تبويب <b>Page Setup</b> ← <b>New</b>: الاسم <b>${W}x${H}</b> · العرض <b>${W} مم</b> · الارتفاع <b>${H} مم</b> ← OK، ثم اختره ورقاً افتراضياً واجعل الاتجاه <b>Portrait (عمودي)</b>.<br>
+  2. تبويب <b>Page Setup</b> ← <b>New</b>: الاسم <b>${W}x${H}</b> · العرض <b>${W} مم</b> · الارتفاع <b>${H} مم</b> ← OK، ثم اختره ورقاً افتراضياً واجعل الاتجاه في التعريف <b>Portrait</b> (العرض ${W} عبر رأس الطباعة).<br>
   3. في تبويب <b>Stock</b> (إن وُجد) اختر <b>Labels With Gaps</b> والفجوة 2 مم ← تطبيق.<br>
   <b>عند كل طباعة من المتصفح (إعدادات إضافية):</b><br>
-  4. الاتجاه <b>عمودي</b> · حجم الورق <b>${W}x${H}</b> · الهوامش <b>بلا</b> · المقياس <b>100% / الحجم الفعلي</b> · ألغِ <b>الرؤوس والتذييلات</b>.<br>
+  4. الاتجاه <b>${W>H?'أفقي (المناظر الطبيعية)':'عمودي'}</b> — تأكد في المعاينة أن الملصق يملأ صفحة واحدة؛ إن خرج مُدوَّراً على الورق فاستخدم «التدوير» في محتوى الملصق · حجم الورق <b>${W}x${H}</b> · الهوامش <b>بلا</b> · المقياس <b>100% / الحجم الفعلي</b> · ألغِ <b>الرؤوس والتذييلات</b>.<br>
   5. إذا خرج الملصق على أكثر من ورقة: اضغط زر <b>FEED</b> في الطابعة مطولاً حتى تومض لتقيس فجوة اللفة، ثم أعد الطباعة.`
   :`المنظومة ترسل للمتصفح مقاس الصفحة ${W} × ${H} مم مباشرة. استخدم هذا الوضع فقط إذا كان مقاس الورق نفسه معرّفاً في تعريف الطابعة؛ وإن ظهرت صفحة "أفقية" أو خرج الملصق على عدة أوراق فارجع إلى وضع <b>تعريف الطابعة</b>.`;
 }
@@ -3439,9 +3457,10 @@ $('#af').category.onchange=()=>{if(!editingCode)$('#af').code.value=nextCode($('
 $('#scanInp').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=e.target.value.trim();const a=assets.find(x=>x.code.toLowerCase()===v.toLowerCase());
   $('#scanRes').innerHTML=a?`<div class="infobox"><div class="row" style="justify-content:space-between"><div><b class="mono">${esc(a.code)}</b> — <b>${esc(a.name)}</b><br>${esc(a.category)} · ${esc(a.location||'—')} · ${esc(a.dept||'—')} · العهدة: ${esc(a.custodian||'—')} ${statusPill(a.status)}</div><div class="row"><button class="btn sm" onclick="editAsset('${esc(a.code)}')">تعديل</button><button class="btn sm gold" onclick="queue=['${esc(a.code)}'];go('label')">إعادة طباعة</button></div></div></div>`:`<div class="warnbox">لا يوجد أصل بالرقم <b class="mono">${esc(v)}</b></div>`;e.target.select()});
 // designer
-$('#sizes').addEventListener('click',e=>{const x=e.target.dataset.del;if(x){prefs.custom=prefs.custom.filter(s=>`${s[0]}x${s[1]}`!==x);store('rkm_prefs',prefs);renderDesigner();return}const s=e.target.closest('.sz');if(s){prefs.w=+s.dataset.w;prefs.h=+s.dataset.h;store('rkm_prefs',prefs);renderDesigner()}});
-$('#bApplySize').onclick=()=>{const w=+$('#cW').value,h=+$('#cH').value;if(!(w>=10&&h>=10))return toast('أدخل مقاساً صحيحاً (10 مم على الأقل)',1);prefs.w=w;prefs.h=h;store('rkm_prefs',prefs);renderDesigner()};
-$('#bAddSize').onclick=()=>{const w=+$('#cW').value,h=+$('#cH').value;if(!(w>=10&&h>=10))return toast('أدخل مقاساً صحيحاً',1);if(!allSizes().some(s=>s.w===w&&s.h===h))prefs.custom.push([w,h]);prefs.w=w;prefs.h=h;store('rkm_prefs',prefs);renderDesigner();toast(`تم حفظ المقاس ${w} × ${h} مم`)};
+$('#sizes').addEventListener('click',e=>{const x=e.target.dataset.del;if(x){prefs.custom=prefs.custom.filter(s=>`${s[0]}x${s[1]}`!==x);store('rkm_prefs',prefs);renderDesigner();return}const s=e.target.closest('.sz');if(s)setSize(+s.dataset.w,+s.dataset.h)});
+$('#orSeg').addEventListener('click',e=>{const b=e.target.closest('[data-o]');if(!b||b.dataset.o===orient())return;prefs.orient=b.dataset.o;const lo=Math.min(prefs.w,prefs.h),hi=Math.max(prefs.w,prefs.h);setSize(b.dataset.o==='l'?hi:lo,b.dataset.o==='l'?lo:hi);toast(b.dataset.o==='l'?'النظام العرضي':'النظام الطولي')});
+$('#bApplySize').onclick=()=>{const w=+$('#cW').value,h=+$('#cH').value;if(!(w>=10&&h>=10))return toast('أدخل مقاساً صحيحاً (10 مم على الأقل)',1);setSize(w,h)};
+$('#bAddSize').onclick=()=>{const w=+$('#cW').value,h=+$('#cH').value;if(!(w>=10&&h>=10))return toast('أدخل مقاساً صحيحاً',1);if(!prefs.custom.some(s=>Math.min(...s)===Math.min(w,h)&&Math.max(...s)===Math.max(w,h))&&!SIZES.some(s=>Math.min(s[0],s[1])===Math.min(w,h)&&Math.max(s[0],s[1])===Math.max(w,h)))prefs.custom.push([w,h]);setSize(w,h);toast(`تم حفظ المقاس ${w} × ${h} مم`)};
 $('#oFmt').onchange=e=>setPref('fmt',e.target.value);
 ['logo','co','name','code','loc','odoo','border','mono'].forEach(k=>$('#o'+k[0].toUpperCase()+k.slice(1)).onchange=e=>setPref(k,e.target.checked));
 $('#oNameSrc').onchange=e=>setPref('nameSrc',e.target.value);
