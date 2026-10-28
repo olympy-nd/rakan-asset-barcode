@@ -248,6 +248,8 @@ input[type=range]{accent-color:var(--navy)}
 .toast{position:fixed;bottom:24px;left:24px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.25s;z-index:60;max-width:420px;border-right:4px solid var(--gold)}
 .toast.on{opacity:1;transform:none}
 .toast.err{border-right-color:var(--bad)}
+body.syncing .mut,body.syncing #af button[type=submit],body.syncing .atbl .ib,body.syncing #bPrintSel,body.syncing #bPrintQueue,body.syncing #bImport,body.syncing #bOdooBulk,body.syncing #bOdooImport,body.syncing #bSaveSettings{opacity:.45;pointer-events:none;filter:grayscale(.4)}
+body.syncing .conn .dot{animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.3}}
 .toast.ok{background:#14663F;border-right-color:#7BE0A8}
 .toast.ok::before{content:"✓";display:inline-block;margin-left:8px;font-weight:900}
 .cmc{position:relative}
@@ -3076,12 +3078,15 @@ var qrcode = function() {
 </script>
 <script id="gasTpl" type="text/plain">/**
  * منظومة باركود الأصول — راكان لاستيراد المواد الغذائية والتوزيع
- * خادم Google Sheets (Apps Script). يُلصق داخل الشيت: الإضافات ← Apps Script
+ * خادم Google Sheets (Apps Script) — الإصدار 2: مزامنة على مستوى الأصل الواحد.
+ * يُلصق داخل الشيت: الإضافات ← Apps Script
  * ثم: نشر ← نشر جديد ← تطبيق ويب ← التنفيذ باسم: أنا ← من يمكنه الوصول: أي شخص
- * المفتاح السري يُنشأ في المنظومة ويُقفل هنا عند أول اتصال (لا يُكتب في الكود).
- * لإعادة ضبط المفتاح: شغّل الدالة resetKey من محرر Apps Script ثم أعد الاتصال من المنظومة.
+ * رمز الدخول يُحدَّد من المنظومة عند أول دخول ويُقفل هنا (لا يُكتب في الكود).
+ * لتغيير رمز الدخول: شغّل الدالة resetKey من المحرر ثم أدخل الرمز الجديد في المنظومة.
  */
-const SHEETS = ['الأصول', 'أصول أودو', 'الفئات', 'سجل الطباعة', 'الإعدادات'];
+const A_SHEET = 'الأصول', CODE_H = 'رقم الباركود', VER_H = 'الإصدار', DEL_SHEET = '_محذوفات';
+const SECTIONS = { odoo: 'أصول أودو', settings: 'الإعدادات', cats: 'الفئات', log: 'سجل الطباعة' };
+const LEGACY = ['الأصول', 'أصول أودو', 'الفئات', 'سجل الطباعة', 'الإعدادات'];
 const TEXT_COL = /رقم|باركود|الكود|الرمز|تاريخ|التاريخ|آخر طباعة|المقاس/;
 
 function doGet(e) { return handle_(e && e.parameter ? e.parameter : {}); }
@@ -3091,6 +3096,7 @@ function doPost(e) {
   return handle_(p);
 }
 
+/* ---------- auth ---------- */
 function handle_(p) {
   const props = PropertiesService.getScriptProperties(), stored = props.getProperty('key');
   if (p.action === 'init') {
@@ -3102,55 +3108,241 @@ function handle_(p) {
     if (!p.key || p.key !== stored) return out_({ ok: false, error: 'unauthorized' });
   }
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  if (p.action === 'init') return out_({ ok: true, name: ss.getName(), rev: rev_() });
-  if (p.action === 'ping') return out_({ ok: true, name: ss.getName(), rev: rev_() });
-  if (p.action === 'load') {
-    const data = {};
-    SHEETS.forEach(n => { const sh = ss.getSheetByName(n); data[n] = sh ? read_(sh) : []; });
-    return out_({ ok: true, name: ss.getName(), rev: rev_(), data: data });
-  }
-  if (p.action === 'save') {
-    const lock = LockService.getScriptLock();
-    if (!lock.tryLock(20000)) return out_({ ok: false, error: 'busy' });
-    try {
-      if (p.baseRev && p.baseRev !== rev_()) return out_({ ok: false, error: 'conflict', rev: rev_() });
-      Object.keys(p.data || {}).forEach(n => { if (SHEETS.indexOf(n) >= 0) write_(ss, n, p.data[n]); });
-      const r = bump_();
-      return out_({ ok: true, rev: r });
-    } finally { lock.releaseLock(); }
-  }
+  const a = p.action;
+  if (a === 'init' || a === 'ping') return out_({ ok: true, name: ss.getName(), rev: rev_(), seq: seq_(), v: 2 });
+  if (a === 'sync') return out_(sync_(ss, +p.since || 0));
+  if (a === 'load') return out_(legacyLoad_(ss));
+  // ---- writes ----
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
+  try {
+    if (a === 'upsert') return out_(upsert_(ss, p));
+    if (a === 'upsertMany') return out_(upsertMany_(ss, p));
+    if (a === 'remove') return out_(remove_(ss, p));
+    if (a === 'putSection') return out_(putSection_(ss, p));
+    if (a === 'appendLog') return out_(appendLog_(ss, p));
+    if (a === 'save') return out_(legacySave_(ss, p));
+  } finally { lock.releaseLock(); }
   return out_({ ok: false, error: 'unknown_action' });
 }
 
+/* ---------- sequence / versions ---------- */
+function P_() { return PropertiesService.getScriptProperties(); }
+function seq_() { return +(P_().getProperty('seq') || 0); }
+function nextSeq_() { const n = seq_() + 1; P_().setProperty('seq', String(n)); P_().setProperty('rev', 's' + n); return n; }
+function secSeq_(k) { return +(P_().getProperty('sec_' + k) || 0); }
+function rev_() { return P_().getProperty('rev') || ('s' + seq_()); }
+/** تعديل يدوي داخل الشيت: يجبر الأجهزة على إعادة تحميل كاملة */
+function onEdit() { const n = nextSeq_(); P_().setProperty('sec_full', String(n)); }
+function resetKey() { P_().deleteProperty('key'); }
+
+/* ---------- sheet helpers ---------- */
+function sheet_(ss, name, head) {
+  let sh = ss.getSheetByName(name);
+  if (!sh) {
+    sh = ss.insertSheet(name);
+    if (head && head.length) { sh.getRange(1, 1, 1, head.length).setValues([head]); fmtHead_(sh, head.length); textCols_(sh, head); }
+    if (name === DEL_SHEET) sh.hideSheet();
+  }
+  return sh;
+}
+function fmtHead_(sh, w) {
+  sh.getRange(1, 1, 1, w).setBackground('#0C4CA2').setFontColor('#FFFFFF').setFontWeight('bold');
+  sh.setFrozenRows(1); sh.setRightToLeft(true);
+}
+function textCols_(sh, head) {
+  head.forEach((h, c) => { if (TEXT_COL.test(String(h))) sh.getRange(1, c + 1, sh.getMaxRows(), 1).setNumberFormat('@'); });
+}
+function cell_(v) { return v instanceof Date ? Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd') : v; }
 function read_(sh) {
-  const rng = sh.getDataRange(), vals = rng.getValues(), tz = Session.getScriptTimeZone();
-  return vals.map(r => r.map(v => v instanceof Date ? Utilities.formatDate(v, tz, 'yyyy-MM-dd') : v))
-             .filter((r, i) => i === 0 || r.some(v => v !== '' && v !== null));
+  if (!sh || sh.getLastRow() < 1) return [];
+  return sh.getDataRange().getValues().map(r => r.map(cell_)).filter((r, i) => i === 0 || r.some(v => v !== '' && v !== null));
+}
+function header_(sh) { const w = sh.getLastColumn(); return w ? sh.getRange(1, 1, 1, w).getValues()[0].map(String) : []; }
+/** يضمن وجود الأعمدة المطلوبة ويعيد خريطة العنوان ← رقم العمود */
+function ensureCols_(sh, names) {
+  let head = header_(sh); const add = names.filter(n => head.indexOf(n) < 0);
+  if (add.length) {
+    const start = head.length + 1;
+    if (sh.getMaxColumns() < head.length + add.length) sh.insertColumnsAfter(sh.getMaxColumns(), head.length + add.length - sh.getMaxColumns());
+    sh.getRange(1, start, 1, add.length).setValues([add]); fmtHead_(sh, head.length + add.length); head = head.concat(add);
+    add.forEach((n, i) => { if (TEXT_COL.test(n)) sh.getRange(1, start + i, sh.getMaxRows(), 1).setNumberFormat('@'); });
+  }
+  const m = {}; head.forEach((h, i) => m[h] = i); return { head, m };
+}
+function findRow_(sh, codeCol, code) {
+  const n = sh.getLastRow(); if (n < 2) return -1;
+  const vals = sh.getRange(2, codeCol + 1, n - 1, 1).getValues();
+  for (let i = 0; i < vals.length; i++) if (String(vals[i][0]).trim() === code) return i + 2;
+  return -1;
+}
+function codes_(sh, codeCol) {
+  const n = sh.getLastRow(); if (n < 2) return [];
+  return sh.getRange(2, codeCol + 1, n - 1, 1).getValues().map(r => String(r[0]).trim());
+}
+/** رقم باركود بديل غير مكرر بنفس النمط */
+function nextFreeCode_(code, used) {
+  const set = new Set(used);
+  if (/^29\d{11}$/.test(code)) {
+    let max = 0; used.forEach(c => { if (/^29\d{11}$/.test(c)) max = Math.max(max, +c.slice(2, 12)); });
+    for (let n = max + 1; ; n++) { const d12 = '29' + String(n).padStart(10, '0'); let s = 0; for (let i = 0; i < 12; i++) s += (+d12[i]) * (i % 2 ? 3 : 1); const c = d12 + ((10 - s % 10) % 10); if (!set.has(c)) return c; }
+  }
+  const m = code.match(/^(.*?)(\d+)$/); if (!m) { let i = 2; while (set.has(code + '-' + i)) i++; return code + '-' + i; }
+  const head = m[1], w = m[2].length; let max = 0;
+  used.forEach(c => { if (c.indexOf(head) === 0) { const t = c.slice(head.length); if (/^\d+$/.test(t)) max = Math.max(max, +t); } });
+  for (let n = max + 1; ; n++) { const c = head + String(n).padStart(w, '0'); if (!set.has(c)) return c; }
+}
+function rowObj_(head, row) { const o = {}; head.forEach((h, i) => o[h] = cell_(row[i])); return o; }
+
+/* ---------- sync ---------- */
+function sync_(ss, since) {
+  const seq = seq_();
+  if (since && since === seq) return { ok: true, seq, rev: rev_(), same: true };
+  const full = !since || since < secSeq_('full');
+  const res = { ok: true, seq, rev: rev_(), full, name: ss.getName(), sections: {} };
+  const sh = ss.getSheetByName(A_SHEET);
+  const rows = read_(sh);
+  res.head = rows[0] || [];
+  const vi = res.head.indexOf(VER_H);
+  res.assets = full ? rows.slice(1) : rows.slice(1).filter(r => vi >= 0 && (+r[vi] || 0) > since);
+  if (!full) {
+    const dsh = ss.getSheetByName(DEL_SHEET);
+    res.deleted = dsh ? read_(dsh).slice(1).filter(r => +r[1] > since).map(r => String(r[0])) : [];
+  } else res.deleted = [];
+  Object.keys(SECTIONS).forEach(k => { if (full || secSeq_(k) > since) res.sections[k] = read_(ss.getSheetByName(SECTIONS[k])); });
+  return res;
 }
 
-function write_(ss, name, rows) {
-  let sh = ss.getSheetByName(name);
-  if (!sh) sh = ss.insertSheet(name);
+/* ---------- writes ---------- */
+function upsert_(ss, p) {
+  const obj = p.row || {}, isNew = !!p.isNew, oldCode = p.oldCode ? String(p.oldCode).trim() : '';
+  let code = String(obj[CODE_H] || '').trim(); if (!code) return { ok: false, error: 'no_code' };
+  const sh = sheet_(ss, A_SHEET, [CODE_H]);
+  const { head, m } = ensureCols_(sh, Object.keys(obj).concat([VER_H]));
+  const ci = m[CODE_H], vi = m[VER_H];
+  const used = codes_(sh, ci);
+  let target = -1, renamed = '';
+  if (isNew) {
+    if (used.indexOf(code) >= 0) { renamed = code; code = nextFreeCode_(code, used); }
+  } else {
+    const look = oldCode || code;
+    target = findRow_(sh, ci, look);
+    if (target < 0) return { ok: false, error: 'gone', code: look };
+    const cur = sh.getRange(target, 1, 1, head.length).getValues()[0];
+    if ((+cur[vi] || 0) !== (+p.baseVer || 0)) return { ok: false, error: 'conflict', code: look, row: rowObj_(head, cur), head };
+    if (oldCode && code !== oldCode && used.indexOf(code) >= 0) return { ok: false, error: 'code_taken', code };
+  }
+  const n = nextSeq_();
+  obj[CODE_H] = code; obj[VER_H] = n;
+  const row = head.map(h => (h in obj) ? obj[h] : '');
+  if (target < 0) { sh.appendRow(row); }
+  else {
+    const cur = sh.getRange(target, 1, 1, head.length).getValues()[0];
+    head.forEach((h, i) => { if (!(h in obj)) row[i] = cur[i]; });
+    sh.getRange(target, 1, 1, head.length).setValues([row]);
+  }
+  if (oldCode && code !== oldCode) logDel_(ss, oldCode, n);
+  return { ok: true, seq: n, ver: n, code, renamed, row: rowObj_(head, row) };
+}
+/** دفعة واحدة: أصول جديدة و/أو تعديلات (مثل التسجيل الجماعي أو تحديث عدّاد الطباعة) */
+function upsertMany_(ss, p) {
+  const items = p.items || []; if (!items.length) return { ok: true, seq: seq_(), results: [] };
+  const sh = sheet_(ss, A_SHEET, [CODE_H]);
+  const keys = {}; items.forEach(it => Object.keys(it.row || {}).forEach(k => keys[k] = 1));
+  const { head, m } = ensureCols_(sh, Object.keys(keys).concat([VER_H]));
+  const ci = m[CODE_H], vi = m[VER_H], w = head.length;
+  const last = sh.getLastRow(), data = last > 1 ? sh.getRange(2, 1, last - 1, w).getValues() : [];
+  const idx = {}; data.forEach((r, i) => idx[String(r[ci]).trim()] = i);
+  const used = Object.keys(idx);
+  const n = nextSeq_(), results = [], adds = []; let touched = false;
+  items.forEach(it => {
+    const obj = Object.assign({}, it.row || {}); let code = String(obj[CODE_H] || '').trim();
+    if (!code) return results.push({ code, error: 'no_code' });
+    if (it.isNew) {
+      let nc = code; if (idx[nc] !== undefined || used.indexOf(nc) >= 0) nc = nextFreeCode_(code, used);
+      used.push(nc); obj[CODE_H] = nc; obj[VER_H] = n;
+      adds.push(head.map(h => (h in obj) ? obj[h] : '')); idx[nc] = -1;
+      results.push({ code, newCode: nc, ver: n });
+    } else {
+      const i = idx[code]; if (i === undefined || i < 0) return results.push({ code, error: 'gone' });
+      const cur = data[i];
+      if ((+cur[vi] || 0) !== (+it.baseVer || 0)) return results.push({ code, error: 'conflict', row: rowObj_(head, cur) });
+      obj[VER_H] = n; data[i] = head.map((h, j) => (h in obj) ? obj[h] : cur[j]); touched = true;
+      results.push({ code, newCode: code, ver: n });
+    }
+  });
+  if (touched) sh.getRange(2, 1, data.length, w).setValues(data);
+  if (adds.length) sh.getRange(sh.getLastRow() + 1, 1, adds.length, w).setValues(adds);
+  return { ok: true, seq: n, results, head };
+}
+function remove_(ss, p) {
+  const code = String(p.code || '').trim();
+  const sh = ss.getSheetByName(A_SHEET); if (!sh) return { ok: true, seq: seq_() };
+  const { head, m } = ensureCols_(sh, [VER_H]);
+  const r = findRow_(sh, m[CODE_H], code);
+  if (r < 0) return { ok: true, seq: seq_(), gone: true };
+  const cur = sh.getRange(r, 1, 1, head.length).getValues()[0];
+  if (!p.force && (+cur[m[VER_H]] || 0) !== (+p.baseVer || 0)) return { ok: false, error: 'conflict', code, row: rowObj_(head, cur), head };
+  sh.deleteRow(r);
+  const n = nextSeq_(); logDel_(ss, code, n);
+  return { ok: true, seq: n };
+}
+function logDel_(ss, code, n) {
+  const d = sheet_(ss, DEL_SHEET, ['رقم الباركود', 'التسلسل']);
+  d.appendRow([code, n]);
+  const last = d.getLastRow(); if (last > 1500) d.deleteRows(2, last - 1001);
+}
+function putSection_(ss, p) {
+  const name = SECTIONS[p.section]; if (!name) return { ok: false, error: 'bad_section' };
+  writeAll_(ss, name, p.rows || []);
+  const n = nextSeq_(); P_().setProperty('sec_' + p.section, String(n));
+  return { ok: true, seq: n };
+}
+function appendLog_(ss, p) {
+  const rows = p.rows || []; if (!rows.length) return { ok: true, seq: seq_() };
+  const head = p.head || ['التاريخ', 'رقم الباركود', 'اسم الأصل', 'المقاس', 'عدد النسخ'];
+  const sh = sheet_(ss, SECTIONS.log, head);
+  const w = Math.max(head.length, sh.getLastColumn());
+  sh.getRange(sh.getLastRow() + 1, 1, rows.length, head.length).setValues(rows.map(r => { const x = r.slice(0, head.length); while (x.length < head.length) x.push(''); return x; }));
+  const n = nextSeq_(); P_().setProperty('sec_log', String(n));
+  return { ok: true, seq: n, w };
+}
+function writeAll_(ss, name, rows) {
+  let sh = ss.getSheetByName(name), fresh = false;
+  if (!sh) { sh = ss.insertSheet(name); fresh = true; }
   sh.clearContents();
   if (!rows || !rows.length) return;
   const w = Math.max.apply(null, rows.map(r => r.length));
   const grid = rows.map(r => { const x = r.slice(); while (x.length < w) x.push(''); return x; });
   if (sh.getMaxColumns() < w) sh.insertColumnsAfter(sh.getMaxColumns(), w - sh.getMaxColumns());
   if (sh.getMaxRows() < grid.length + 1) sh.insertRowsAfter(sh.getMaxRows(), grid.length + 1 - sh.getMaxRows());
-  grid[0].forEach((h, c) => { if (TEXT_COL.test(String(h))) sh.getRange(1, c + 1, grid.length, 1).setNumberFormat('@'); });
+  textCols_(sh, grid[0]);
   sh.getRange(1, 1, grid.length, w).setValues(grid);
-  sh.getRange(1, 1, 1, w).setBackground('#0C4CA2').setFontColor('#FFFFFF').setFontWeight('bold');
-  sh.setFrozenRows(1);
-  sh.setRightToLeft(true);
+  if (fresh || sh.getFrozenRows() !== 1) fmtHead_(sh, w);
 }
 
-/** يمسح المفتاح المحفوظ؛ أول جهاز يتصل بعدها يحدد المفتاح الجديد */
-function resetKey() { PropertiesService.getScriptProperties().deleteProperty('key'); }
+/* ---------- legacy full load/save (للأجهزة التي لم تُحدَّث بعد) ---------- */
+function legacyLoad_(ss) {
+  const data = {}; LEGACY.forEach(n => { data[n] = read_(ss.getSheetByName(n)); });
+  return { ok: true, name: ss.getName(), rev: rev_(), seq: seq_(), data };
+}
+function legacySave_(ss, p) {
+  if (p.baseRev && p.baseRev !== rev_()) return { ok: false, error: 'conflict', rev: rev_() };
+  const n0 = seq_() + 1;
+  Object.keys(p.data || {}).forEach(name => {
+    if (LEGACY.indexOf(name) < 0) return;
+    let rows = p.data[name];
+    if (name === A_SHEET && rows && rows.length) {
+      let vi = rows[0].indexOf(VER_H);
+      if (vi < 0) { rows = rows.map((r, i) => r.concat([i ? n0 : VER_H])); }
+      else rows = rows.map((r, i) => { if (i) { r = r.slice(); r[vi] = n0; } return r; });
+    }
+    writeAll_(ss, name, rows);
+  });
+  const n = nextSeq_(); P_().setProperty('sec_full', String(n));
+  return { ok: true, rev: rev_(), seq: n };
+}
 
-function rev_() { return PropertiesService.getScriptProperties().getProperty('rev') || bump_(); }
-function bump_() { const r = new Date().toISOString(); PropertiesService.getScriptProperties().setProperty('rev', r); return r; }
-/** يُسجّل أي تعديل يدوي في الشيت حتى تعرف المنظومة أن البيانات تغيّرت */
-function onEdit() { bump_(); }
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 </script>
 <script id="odooDefault" type="application/json">{"recs":[],"meta":{}}</script>
@@ -3163,7 +3355,7 @@ const DEFAULT_LOGO = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAM
 const FIELDS = [
   ['code','رقم الباركود'],['name','اسم الأصل'],['odooId','رقم الأصل في أودو'],['odooName','اسم الأصل في أودو'],['category','الفئة'],['location','الموقع'],['dept','الإدارة / القسم'],
   ['custodian','العهدة / المسؤول'],['serial','الرقم التسلسلي'],['purchaseDate','تاريخ الشراء'],['value','القيمة'],
-  ['status','الحالة'],['notes','ملاحظات'],['createdAt','تاريخ التسجيل'],['printCount','عدد مرات الطباعة'],['lastPrint','آخر طباعة']
+  ['status','الحالة'],['notes','ملاحظات'],['createdAt','تاريخ التسجيل'],['printCount','عدد مرات الطباعة'],['lastPrint','آخر طباعة'],['ver','الإصدار']
 ];
 const ALIASES = { // extra header spellings accepted on import
   code:['باركود','الباركود','رقم الأصل','كود','الكود','Barcode','Code','Asset Code','Asset Tag'],
@@ -3253,20 +3445,23 @@ function rowsToAssets(rows){
     a.code=String(a.code??'').trim();a.name=String(a.name??'').trim();
     if(!a.name&&!a.code)return;
     a.purchaseDate=toDateStr(a.purchaseDate);a.createdAt=toDateStr(a.createdAt)||'';a.lastPrint=a.lastPrint instanceof Date?nowStr():String(a.lastPrint??'');
-    a.printCount=+a.printCount||0;for(const [k] of FIELDS)if(a[k]==null)a[k]='';out.push(a)});
+    a.printCount=+a.printCount||0;a.ver=+a.ver||0;for(const [k] of FIELDS)if(a[k]==null)a[k]='';out.push(a)});
   return {list:out,extras:[...extras]};
 }
 function readWorkbook(buf){readWB(XLSX.read(buf,{type:'array',cellDates:true}))}
+function parseSettings(rows){(rows||[]).forEach(([k,v])=>{if(k==='البادئة')settings.prefix=String(v);if(k==='عدد خانات التسلسل')settings.digits=+v||5;if(k==='نمط الترقيم')settings.mode=v==='رقمي'?'numeric':'pattern';if(k==='ربط أودو')settings.odooMulti=v==='متعدد';if(k==='اسم الشركة')settings.company=String(v)})}
+function parseCats(objs){const c=(objs||[]).map(r=>({name:String(r['اسم الفئة']??'').trim(),code:String(r['الرمز']??'').trim().toUpperCase()})).filter(c=>c.name&&c.code);if(c.length)settings.cats=c}
+function parseOdoo(objs,hdr){const o=(objs||[]).map(r=>({id:String(r['رقم أودو']??'').trim(),name:String(r['اسم الأصل في أودو']??''),date:toDateStr(r['تاريخ الاقتناء']),value:r['القيمة الأصلية'],book:r['القيمة الدفترية'],account:String(r['حساب الأصل']??''),status:String(r['الحالة']??'')})).filter(r=>r.id);if(o.length){odoo=o;odooMeta={last:String((hdr||[])[8]||''),src:'قاعدة البيانات'}}}
+function fixCats(){assets.forEach(a=>{if(a.category&&!settings.cats.some(c=>c.name===a.category))settings.cats.push({name:a.category,code:autoCatCode(a.category)})})}
+function aoaObjs(rows){if(!rows||!rows.length)return [];const h=rows[0].map(String);return rows.slice(1).map(r=>{const o={};h.forEach((k,i)=>o[k]=r[i]??'');return o})}
 function readWB(wb){
   const sh=wb.Sheets['الأصول']||wb.Sheets[wb.SheetNames[0]];
-  const {list,extras}=rowsToAssets(XLSX.utils.sheet_to_json(sh,{defval:''}));
+  const {list,extras}=rowsToAssets(sh?XLSX.utils.sheet_to_json(sh,{defval:''}):[]);
   assets=list;extraCols=extras;useEmbedded();
-  const st=wb.Sheets['الإعدادات'];
-  if(st){XLSX.utils.sheet_to_json(st,{header:1}).forEach(([k,v])=>{if(k==='البادئة')settings.prefix=String(v);if(k==='عدد خانات التسلسل')settings.digits=+v||5;if(k==='نمط الترقيم')settings.mode=v==='رقمي'?'numeric':'pattern';if(k==='ربط أودو')settings.odooMulti=v==='متعدد';if(k==='اسم الشركة')settings.company=String(v)})}
-  const ct=wb.Sheets['الفئات'];
-  if(ct){const c=XLSX.utils.sheet_to_json(ct,{defval:''}).map(r=>({name:String(r['اسم الفئة']).trim(),code:String(r['الرمز']).trim().toUpperCase()})).filter(c=>c.name&&c.code);if(c.length)settings.cats=c}
-  assets.forEach(a=>{if(a.category&&!settings.cats.some(c=>c.name===a.category))settings.cats.push({name:a.category,code:autoCatCode(a.category)})});
-  const os=wb.Sheets['أصول أودو'];if(os&&XLSX.utils.sheet_to_json(os).length){odoo=XLSX.utils.sheet_to_json(os,{defval:''}).map(r=>({id:String(r['رقم أودو']).trim(),name:String(r['اسم الأصل في أودو']),date:toDateStr(r['تاريخ الاقتناء']),value:r['القيمة الأصلية'],book:r['القيمة الدفترية'],account:String(r['حساب الأصل']),status:String(r['الحالة'])})).filter(r=>r.id);odooMeta={last:String((XLSX.utils.sheet_to_json(os,{header:1})[0]||[])[8]||''),src:'قاعدة البيانات'}}
+  const st=wb.Sheets['الإعدادات'];if(st)parseSettings(XLSX.utils.sheet_to_json(st,{header:1}));
+  const ct=wb.Sheets['الفئات'];if(ct)parseCats(XLSX.utils.sheet_to_json(ct,{defval:''}));
+  fixCats();
+  const os=wb.Sheets['أصول أودو'];if(os&&XLSX.utils.sheet_to_json(os).length)parseOdoo(XLSX.utils.sheet_to_json(os,{defval:''}),XLSX.utils.sheet_to_json(os,{header:1})[0]);
   assets.forEach(a=>{a.odooId=String(a.odooId??'').trim();a.odooName=String(a.odooName??'')});
   const lg=wb.Sheets['سجل الطباعة'];printLog=lg?XLSX.utils.sheet_to_json(lg,{defval:''}):[];
 }
@@ -3314,8 +3509,8 @@ async function save(silent){
   }catch(e){toast(e.name==='NoModificationAllowedError'||/lock|busy|in use/i.test(e.message)?'الملف مفتوح في Excel — أغلقه ثم أعد الحفظ':'فشل الحفظ: '+e.message,1);dirty=true;setConn()}
   saving=false;
 }
-async function commit(){dirty=true;setConn();store('rkm_backup',{assets,printLog,extraCols,settings,odoo,odooMeta,t:nowStr(),pending:GS()||needLogin(),rev:gsRev});
-  if(GS())gsQueue();else if(needLogin())showLogin('سجّل الدخول لحفظ التغييرات في قاعدة البيانات المشتركة.');else if(fileHandle)await save(true);renderAll()}
+async function commit(){if(GS()){gsCommit();renderAll();return}dirty=true;setConn();store('rkm_backup',{assets,printLog,extraCols,settings,odoo,odooMeta,t:nowStr()});
+  if(needLogin())showLogin('سجّل الدخول لحفظ التغييرات في قاعدة البيانات المشتركة.');else if(fileHandle)await save(true);renderAll()}
 
 /* ================= Google Sheets data source ================= */
 const DEFAULT_GS='https://script.google.com/macros/s/AKfycbze8fynGES3KTpdepXYgkbn6JJ0z5RbB0OgL6epb19koqJILpNfZY1lno3uRTC46x4F/exec'.startsWith('https:')?'https://script.google.com/macros/s/AKfycbze8fynGES3KTpdepXYgkbn6JJ0z5RbB0OgL6epb19koqJILpNfZY1lno3uRTC46x4F/exec':'';
@@ -3333,41 +3528,132 @@ function sha256(str){const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956
     H=H.map((v,i)=>(v+[a,bb,c,d,e,f,g,h][i])>>>0)}
   return H.map(v=>v.toString(16).padStart(8,'0')).join('')}
 const keyFromCode=c=>'rkn-'+sha256('rakan-assets|'+String(c).trim());
-let gsRev='',gsName='',gsBusy=false,gsPending=false,gsTimer=null,gsState='';
+let gsName='',gsState='',syncing=false,pulling=false,pumping=false,lastErr='';
 async function gsCall(action,payload={},cfg=ds){
   let r;try{r=await fetch(cfg.url,{method:'POST',body:JSON.stringify(Object.assign({key:cfg.key,action},payload)),redirect:'follow'})}catch(e){throw new Error('تعذّر الوصول إلى رابط Apps Script — تحقق من الرابط والاتصال بالإنترنت')}
   let j;try{j=await r.json()}catch(e){throw new Error('الرابط لا يعيد استجابة المنظومة — تأكد أنه رابط تطبيق الويب (ينتهي بـ /exec) وأن الوصول "أي شخص"')}
-  if(!j.ok){const m={unauthorized:'رمز الدخول غير صحيح',busy:'الشيت مشغول بحفظ آخر، حاول بعد لحظات',not_initialized:'لم يُحدَّد رمز دخول للمنظومة بعد',weak_key:'رمز الدخول قصير جداً'};const e=new Error(m[j.error]||j.error);e.code=j.error;throw e}
+  if(!j.ok){const m={unauthorized:'رمز الدخول غير صحيح',busy:'الشيت مشغول بحفظ آخر، حاول بعد لحظات',not_initialized:'لم يُحدَّد رمز دخول للمنظومة بعد',weak_key:'رمز الدخول قصير جداً'};const e=new Error(m[j.error]||j.error);e.code=j.error;e.data=j;throw e}
   return j;
 }
 function wbFromSheets(data){const wb=XLSX.utils.book_new();Object.entries(data||{}).forEach(([n,rows])=>{if(rows&&rows.length)XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),n)});return wb}
-async function gsLoad(quiet){
-  gsState='loading';setConn();
-  try{const j=await gsCall('load');const wb=wbFromSheets(j.data);
-    if(wb.SheetNames.length)readWB(wb);else{assets=[];printLog=[];extraCols=[];useEmbedded()}
-    gsRev=j.rev;gsName=j.name;dirty=false;gsState='';store('rkm_backup',{assets,printLog,extraCols,settings,odoo,odooMeta,t:nowStr(),pending:false,rev:gsRev});
-    setConn();renderAll();if(!quiet)toast(`تم الاتصال بـ Google Sheets · ${assets.length} أصل · ${odoo.length} أصل أودو`);return true}
-  catch(e){gsState='error';setConn();if(e.code==='unauthorized'||e.code==='not_initialized'){logoutDevice('تغيّر رمز الدخول للمنظومة — أدخل الرمز الحالي.');return false}toast('Google Sheets: '+e.message,1);return false}
+
+/* ===== مزامنة سريعة: فتح فوري من ذاكرة الجهاز + إرسال التغييرات فقط ===== */
+const SECN={odoo:'أصول أودو',settings:'الإعدادات',cats:'الفئات',log:'سجل الطباعة'};
+let SH=Object.assign({seq:0,base:{},secs:{},logLen:0},load('rkm_sync')||{});
+let OPS=load('rkm_ops')||[];const renameHint={};const waiters={};
+function saveSH(){store('rkm_sync',SH)}function saveOps(){store('rkm_ops',OPS)}
+function cacheState(){store('rkm_backup',{assets,printLog,extraCols,settings,odoo,odooMeta,t:nowStr()})}
+function assetRow(a){const o={};FIELDS.forEach(([k,l])=>{if(k==='ver')return;o[l]=k==='value'||k==='printCount'?(a[k]===''||a[k]==null?'':+a[k]):(a[k]??'')});extraCols.forEach(h=>o[h]=a._x?.[h]??'');return o}
+const snap=a=>JSON.stringify(assetRow(a));
+function secRows(k){const wb=buildWB(),n=SECN[k],ws=wb.Sheets[n];let rows=ws?XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:true}):[];
+  if(k==='settings')rows=rows.filter(r=>r[0]!=='آخر تحديث');return rows}
+function secSnap(k){if(k==='odoo')return JSON.stringify([odoo,odooMeta.last||'']);return JSON.stringify(secRows(k))}
+function pendingCodes(){const c=new Set();OPS.forEach(o=>{if(o.code)c.add(o.code);if(o.oldCode)c.add(o.oldCode);(o.codes||[]).forEach(x=>c.add(x))});return c}
+function pendingSec(k){return OPS.some(o=>o.t==='sec'&&o.k===k)}
+/** يحسب الفروقات منذ آخر حالة معروفة ويضيفها كعمليات صغيرة إلى الطابور */
+function diffOps(){
+  const ups=[],cur=new Set();
+  assets.forEach(a=>{cur.add(a.code);const s=snap(a),b=SH.base[a.code];
+    if(!b){const old=renameHint[a.code];if(old&&SH.base[old]){ups.push({t:'up',code:a.code,oldCode:old});SH.base[a.code]={s,ver:SH.base[old].ver};delete SH.base[old];delete renameHint[a.code]}
+      else{ups.push({t:'up',code:a.code,isNew:true});SH.base[a.code]={s,ver:0}}}
+    else if(b.s!==s){ups.push({t:'up',code:a.code});b.s=s}});
+  Object.keys(SH.base).forEach(c=>{if(!cur.has(c)){OPS.push({t:'rm',code:c,ver:SH.base[c].ver||0,id:Date.now()+Math.random()});delete SH.base[c]}});
+  const queued=new Set(OPS.filter(o=>o.t==='up'&&!o.inflight).map(o=>o.code));
+  const fresh=ups.filter(o=>!(queued.has(o.code)&&!o.oldCode));
+  const singles=fresh.filter(o=>o.oldCode),batch=fresh.filter(o=>!o.oldCode);
+  singles.forEach(o=>OPS.push(Object.assign(o,{id:Date.now()+Math.random()})));
+  if(batch.length>3){const ex=OPS.find(o=>o.t==='many'&&!o.inflight);
+    if(ex){batch.forEach(o=>{if(!ex.codes.includes(o.code)){ex.codes.push(o.code);if(o.isNew)ex.news.push(o.code)}})}
+    else OPS.push({t:'many',codes:batch.map(o=>o.code),news:batch.filter(o=>o.isNew).map(o=>o.code),id:Date.now()+Math.random()})}
+  else batch.forEach(o=>OPS.push(Object.assign(o,{id:Date.now()+Math.random()})));
+  ['odoo','settings','cats'].forEach(k=>{const sn=secSnap(k);if(SH.secs[k]!==sn){SH.secs[k]=sn;if(!OPS.some(o=>o.t==='sec'&&o.k===k&&!o.inflight))OPS.push({t:'sec',k,id:Date.now()+Math.random()})}});
+  if(printLog.length>SH.logLen){const lh=['التاريخ','رقم الباركود','اسم الأصل','المقاس','عدد النسخ'];OPS.push({t:'log',rows:printLog.slice(SH.logLen).map(r=>lh.map(h=>r[h]??'')),id:Date.now()+Math.random()});SH.logLen=printLog.length}
+  saveOps();saveSH();
 }
-function gsQueue(){clearTimeout(gsTimer);gsTimer=setTimeout(()=>gsSave(),700)}
-function gsPayload(){const wb=buildWB(),data={};wb.SheetNames.forEach(n=>data[n]=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',raw:true}));return data}
-async function gsSave(force){
-  if(gsBusy){gsPending=true;return}
-  gsBusy=true;gsState='saving';setConn();
-  try{const j=await gsCall('save',{data:gsPayload(),baseRev:force?'':gsRev});gsRev=j.rev;dirty=false;gsState='';markPending(false)}
-  catch(e){gsState='error';
-    if(e.code==='conflict'){gsBusy=false;setConn();
-      if(await confirmBox('تم تعديل Google Sheet من مكان آخر','عُدِّلت البيانات في الشيت (من جهاز آخر أو يدوياً) بعد آخر تحميل.<br><b>استبدال</b>: يحفظ نسختك الحالية فوق تعديلاتهم.<br><b>إلغاء</b>: يحمّل آخر نسخة من الشيت وتُلغى آخر تغييراتك.','استبدال'))return gsSave(true);
-      return gsLoad()}
-    if(e.code==='unauthorized'||e.code==='not_initialized'){gsBusy=false;logoutDevice('تغيّر رمز الدخول للمنظومة — أدخل الرمز الحالي، وستُرفع تغييراتك بعدها.');return}
-    toast('تعذّر الحفظ في Google Sheets — سيُعاد المحاولة تلقائياً',1)}
-  gsBusy=false;setConn();if(gsPending){gsPending=false;gsSave()}
+function gsCommit(){diffOps();cacheState();setConn();pump()}
+function renameLocal(from,to){const a=assets.find(x=>x.code===from);if(!a)return;a.code=to;if(SH.base[from]){SH.base[to]=SH.base[from];delete SH.base[from]}
+  if(selected.has(from)){selected.delete(from);selected.add(to)}queue=queue.map(c=>c===from?to:c);if($('#pvAsset').value===from)$('#pvAsset').value=to;
+  OPS.forEach(o=>{if(o.code===from)o.code=to;if(o.codes)o.codes=o.codes.map(c=>c===from?to:c);if(o.news)o.news=o.news.map(c=>c===from?to:c)});
+  if(editingCode===from)editingCode=to}
+function serverAsset(head,row){const obj=Array.isArray(row)?Object.fromEntries(head.map((h,i)=>[h,row[i]])):row;const a=rowsToAssets([obj]).list[0];if(a){a.odooId=String(a.odooId??'').trim();a.odooName=String(a.odooName??'')}return a}
+function acceptServer(a){const i=assets.findIndex(x=>x.code===a.code);if(i>=0)assets[i]=a;else assets.push(a);SH.base[a.code]={s:snap(a),ver:a.ver}}
+/** إرسال الطابور بالترتيب */
+async function pump(){
+  if(pumping||!GS()||!OPS.length)return;pumping=true;setConn();
+  try{while(OPS.length&&GS()){const op=OPS[0];op.inflight=true;let res;
+    try{res=await sendOp(op)}catch(e){op.inflight=false;
+      if(e.code==='unauthorized'||e.code==='not_initialized'){pumping=false;logoutDevice('تغيّر رمز الدخول للمنظومة — أدخل الرمز الحالي، وستُرفع تغييراتك بعدها.');return}
+      if(e.code==='conflict'||e.code==='gone'||e.code==='code_taken'){await resolveConflict(op,e);continue}
+      gsState='error';lastErr=e.message;setConn();Object.values(waiters).forEach(w=>w.reject&&w.reject(e));setTimeout(()=>pump(),6000);break}
+    OPS.shift();saveOps();gsState='';afterOp(op,res);}
+  }finally{pumping=false;cacheState();saveSH();setConn()}
 }
-async function gsCheck(){if(!GS()||gsBusy||document.hidden)return;if(dirty)return gsSave();try{const j=await gsCall('ping');if(gsState==='error'){gsState='';setConn()}if(j.rev!==gsRev){await gsLoad(true);toast('تم تحديث البيانات من Google Sheets')}}catch(e){if(e.code==='unauthorized'||e.code==='not_initialized')logoutDevice('تغيّر رمز الدخول للمنظومة — أدخل الرمز الحالي.')}}
-setInterval(gsCheck,20000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)gsCheck()});
-window.addEventListener('online',()=>gsCheck());
-function markPending(v){try{const b=load('rkm_backup')||{};b.pending=!!v;store('rkm_backup',b)}catch(e){}}
+async function sendOp(op){
+  if(op.t==='up'){const a=assets.find(x=>x.code===op.code);if(!a)return {skip:true};
+    return gsCall('upsert',{row:assetRow(a),isNew:!!op.isNew,oldCode:op.oldCode||'',baseVer:a.ver||0})}
+  if(op.t==='many'){const items=op.codes.map(c=>{const a=assets.find(x=>x.code===c);return a?{row:assetRow(a),isNew:op.news.includes(c),baseVer:a.ver||0}:null}).filter(Boolean);
+    return gsCall('upsertMany',{items})}
+  if(op.t==='rm')return gsCall('remove',{code:op.code,baseVer:op.ver||0,force:!!op.force});
+  if(op.t==='sec'){const rows=op.k==='odoo'?(()=>{const lk=linkMap();return [['رقم أودو','اسم الأصل في أودو','تاريخ الاقتناء','القيمة الأصلية','القيمة الدفترية','حساب الأصل','الحالة','باركود المنظومة',odooMeta.last||''],...odoo.map(r=>[r.id,r.name,r.date,r.value===''?'':+r.value,r.book===''?'':+r.book,r.account,r.status,(lk[r.id]||[]).join('، ')])]})():secRows(op.k);
+    return gsCall('putSection',{section:op.k,rows})}
+  if(op.t==='log')return gsCall('appendLog',{rows:op.rows});
+}
+function afterOp(op,res){if(!res||res.skip)return;
+  const fix=(code,newCode,ver)=>{if(newCode&&newCode!==code){renameLocal(code,newCode);toast(`رقم الباركود ${code} كان مستخدماً على جهاز آخر، فاعتُمد الرقم ${newCode}`,1)}
+    const a=assets.find(x=>x.code===(newCode||code));if(a){a.ver=ver;if(SH.base[a.code])SH.base[a.code].ver=ver}
+    const w=waiters[code];if(w){w.resolve(newCode||code);delete waiters[code]}};
+  if(op.t==='up')fix(op.code,res.code,res.ver);
+  if(op.t==='many'){const confl=[];(res.results||[]).forEach(r=>{if(r.error==='conflict'&&r.row){const sa=serverAsset(res.head,r.row);if(sa)acceptServer(sa);confl.push(r.code)}else if(r.error==='gone'){}else fix(r.code,r.newCode,r.ver)});
+    if(confl.length)toast(`${confl.length} أصل عُدِّل من جهاز آخر في الوقت نفسه، فاعتُمدت النسخة الأحدث من قاعدة البيانات`,1)}
+  renderAll()}
+async function resolveConflict(op,e){
+  const local=op.code?assets.find(x=>x.code===op.code):null;
+  if(e.code==='gone'){const ok=await confirmBox('الأصل حُذف من جهاز آخر',`الأصل <b class="mono">${esc(op.oldCode||op.code)}</b> حُذف من جهاز آخر بينما كنت تعدّله.<br><b>إعادة إنشائه</b>: يُحفظ بتعديلاتك كأصل من جديد.<br><b>إلغاء</b>: يُحذف من هذا الجهاز أيضاً.`,'إعادة إنشائه','edit');
+    if(ok&&local){op.isNew=true;delete op.oldCode;op.inflight=false;return}
+    OPS.shift();if(local){assets=assets.filter(x=>x!==local);delete SH.base[local.code]}saveOps();renderAll();return}
+  if(e.code==='code_taken'){OPS.shift();saveOps();toast(`رقم الباركود ${e.data?.code||''} مستخدم لأصل آخر — أُعيد تحميل البيانات`,1);await pull(true);return}
+  const srv=e.data&&e.data.row?serverAsset(e.data.head,e.data.row):null;
+  if(op.t==='rm'){const ok=await confirmBox('الأصل عُدِّل من جهاز آخر',`الأصل <b class="mono">${esc(op.code)}</b> عُدِّل من جهاز آخر بعد آخر تحديث لديك. هل تريد حذفه رغم ذلك؟`,'حذف رغم ذلك','del');
+    if(ok){op.force=true;op.inflight=false;return}OPS.shift();if(srv)acceptServer(srv);saveOps();renderAll();return}
+  if(!srv||!local){OPS.shift();saveOps();return}
+  const L={name:'اسم الأصل',category:'الفئة',location:'الموقع',dept:'الإدارة / القسم',custodian:'العهدة / المسؤول',status:'الحالة',serial:'الرقم التسلسلي',value:'القيمة',purchaseDate:'تاريخ الشراء',odooId:'رقم أودو',notes:'ملاحظات',printCount:'عدد مرات الطباعة'};
+  const diff=Object.keys(L).filter(k=>String(local[k]??'')!==String(srv[k]??''));
+  const tbl=`<table class="cmsum"><tr><td></td><td><b>نسختك</b> · <b style="color:var(--navy)">الجهاز الآخر</b></td></tr>${diff.map(k=>`<tr><td>${L[k]}</td><td><span class="new">${esc(local[k])||'—'}</span><br><span style="color:var(--navy)">${esc(srv[k])||'—'}</span></td></tr>`).join('')}</table>`;
+  const mine=await confirmBox('تعارض في التعديل',`الأصل <b class="mono">${esc(local.code)}</b> عُدِّل من جهاز آخر في الوقت نفسه.${tbl}<div style="margin-top:8px"><b>اعتماد نسختي</b>: تُحفظ تعديلاتك فوقها. <b>إلغاء</b>: تُعتمد نسخة الجهاز الآخر.</div>`,'اعتماد نسختي','edit');
+  if(mine){local.ver=srv.ver;op.inflight=false;return}
+  OPS.shift();acceptServer(srv);saveOps();renderAll();toast('اعتُمدت نسخة الجهاز الآخر','ok')}
+/** جلب التغييرات من الشيت (أو كل البيانات عند full) */
+async function pull(full){
+  if(!GS()||pulling)return;pulling=true;if(full)SH.seq=0;
+  if(!SH.seq){syncing=true;document.body.classList.add('syncing');setConn()}
+  try{const t0=performance.now();const r=await gsCall('sync',{since:SH.seq||0});gsName=r.name||gsName;
+    if(r.same){if(gsState==='error'){gsState='';}syncing=false;document.body.classList.remove('syncing');setConn();return true}
+    const pend=pendingCodes();
+    if(r.full){const keep=assets.filter(a=>pend.has(a.code));const next=[];SH.base={};
+      (r.assets||[]).forEach(row=>{const a=serverAsset(r.head,row);if(!a||!a.code)return;if(pend.has(a.code))return;next.push(a);SH.base[a.code]={s:snap(a),ver:a.ver}});
+      keep.forEach(a=>{next.push(a);SH.base[a.code]={s:snap(a),ver:a.ver||0}});
+      const rec=SH.recover;if(rec&&rec.length){rec.forEach(a=>{if(!next.some(x=>x.code===a.code)){next.push(a)}});delete SH.recover}
+      assets=next;extraCols=[...new Set([...extraCols,...(r.head||[]).filter(h=>!headerKey(h))])]}
+    else{(r.assets||[]).forEach(row=>{const a=serverAsset(r.head,row);if(!a||!a.code||pend.has(a.code))return;const l=assets.find(x=>x.code===a.code);if(l&&(+l.ver||0)>=a.ver)return;acceptServer(a)});
+      (r.deleted||[]).forEach(c=>{if(pend.has(c))return;assets=assets.filter(a=>a.code!==c);delete SH.base[c];selected.delete(c)})}
+    const S=r.sections||{};
+    if(S.settings&&!pendingSec('settings'))parseSettings(S.settings);
+    if(S.cats&&!pendingSec('cats'))parseCats(aoaObjs(S.cats));
+    if(S.odoo&&!pendingSec('odoo')&&S.odoo.length>1)parseOdoo(aoaObjs(S.odoo),S.odoo[0]);
+    if(S.log)printLog=aoaObjs(S.log);
+    fixCats();assets.forEach(a=>{a.odooId=String(a.odooId??'').trim();a.odooName=String(a.odooName??'')});
+    ['odoo','settings','cats'].forEach(k=>{if(!pendingSec(k))SH.secs[k]=secSnap(k)});SH.logLen=printLog.length;
+    if(SH.recover&&SH.recover.length&&!r.full){delete SH.recover}
+    SH.seq=r.seq;SH.ms=Math.round(performance.now()-t0);saveSH();cacheState();gsState='';
+    if(r.full)diffOps();
+    syncing=false;document.body.classList.remove('syncing');renderAll();setConn();pump();return true}
+  catch(e){gsState='error';lastErr=e.message;if(SH.seq){syncing=false;document.body.classList.remove('syncing')}setConn();if(e.code==='unauthorized'||e.code==='not_initialized'){logoutDevice('تغيّر رمز الدخول للمنظومة — أدخل الرمز الحالي.');return false}return false}
+  finally{pulling=false}}
+function waitCode(code,ms=20000){return new Promise((res,rej)=>{waiters[code]={resolve:res,reject:rej};setTimeout(()=>{if(waiters[code]){delete waiters[code];rej(new Error('timeout'))}},ms)})}
+function syncTick(){if(!GS()||document.hidden)return;if(OPS.length)pump();pull(false)}
+setInterval(syncTick,7000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncTick()});
+window.addEventListener('online',()=>syncTick());
 /* ---- login on this device ---- */
 let loginBusy=false;
 function showLogin(msg){$('#loginLogo').src=logo()||'';$('#loginLogo').hidden=!logo();$('#loginMsg').textContent=msg||'أدخل رمز الدخول للاتصال بقاعدة البيانات المشتركة. يُطلب مرة واحدة على هذا الجهاز.';$('#loginErr').textContent='';$('#loginIn').value='';$('#loginM').classList.add('on');setTimeout(()=>$('#loginIn').focus(),60)}
@@ -3379,13 +3665,13 @@ async function doLogin(){if(loginBusy)return;const code=$('#loginIn').value.trim
       $('#loginM').classList.remove('on');const ok=await confirmBox('تحديد رمز الدخول','هذا أول دخول للمنظومة. الرمز الذي أدخلته سيصبح <b>رمز الدخول لكل الأجهزة</b>. احفظه في مكان آمن وأعطه لمن يستخدم المنظومة فقط.','اعتماد الرمز');
       if(!ok){showLogin();return}await gsCall('init',{},c)}
     ds=c;store('rkm_ds',ds);$('#loginM').classList.remove('on');fileHandle=null;fileName='';
-    const b=load('rkm_backup');if(b&&b.pending){gsRev=b.rev||'stale';dirty=true;await gsSave()}else await gsLoad(true);
+    const b=load('rkm_backup');if(b&&b.pending&&!load('rkm_sync'))SH.recover=assets.slice();await pull(true);
     toast('تم الدخول — متصل بقاعدة البيانات المشتركة');SFX.play('login');renderAll();dsRender()}
   catch(e){SFX.play('err');$('#loginM').classList.add('on');$('#loginErr').textContent=e.code==='unauthorized'?'رمز الدخول غير صحيح':e.message}
   finally{loginBusy=false;$('#loginYes').disabled=false}}
 $('#loginYes').onclick=doLogin;$('#loginIn').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 $('#loginExcel').onclick=()=>{ds.mode='excel';store('rkm_ds',ds);$('#loginM').classList.remove('on');setConn();renderAll();toast('مصدر البيانات: ملف Excel على هذا الجهاز')};
-$('#bSyncRetry').onclick=()=>{if(needLogin())return showLogin();gsCheck()};
+$('#bSyncRetry').onclick=()=>{if(needLogin())return showLogin();gsState='';pump();pull(false)};
 
 
 /* IndexedDB for remembering the file handle */
@@ -3395,13 +3681,13 @@ async function idbGet(k){try{const d=await idb();return await new Promise(r=>{co
 
 function setConn(){setTimeout(()=>{const md=$('#mDot');if(md)md.className=$('#connDot').className},0);
   const d=$('#connDot'),t=$('#connTxt'),sb=$('#syncBar');
-  if(sb){const show=(GS()&&(gsState==='error'||(dirty&&!gsBusy&&gsState!=='saving')))||needLogin();sb.style.display=show?'block':'none';
+  if(sb){const show=(GS()&&gsState==='error'&&OPS.length>0)||needLogin();sb.style.display=show?'block':'none';
     $('#syncTxt').innerHTML=needLogin()?'<b>هذا الجهاز غير متصل بقاعدة البيانات المشتركة.</b> سجّل الدخول حتى تُحفظ بياناتك وتظهر على باقي الأجهزة.':'<b>لم تُحفظ آخر التغييرات في قاعدة البيانات بعد.</b> هي محفوظة مؤقتاً على هذا الجهاز وستُرفع تلقائياً عند عودة الاتصال.';
     $('#bSyncRetry').textContent=needLogin()?'تسجيل الدخول':'إعادة المحاولة الآن'}
   const cloud=GS()||needLogin(),showMan=!cloud||!!prefs.showSync;$('#bOpen').style.display=showMan?'':'none';$('#bSave').style.display=showMan?'':'none';
   if(needLogin()){d.className='dot warn';t.textContent='Google Sheets · بانتظار تسجيل الدخول';$('#bNew').style.display='none';$('#bOpenTxt').textContent='تسجيل الدخول';return}
   $('#bNew').style.display=GS()?'none':'';$('#bOpenTxt').textContent=GS()?'تحديث من الشيت':'فتح ملف Excel';
-  if(GS()){const m={loading:['warn','جارٍ التحميل…'],saving:['warn','جارٍ الحفظ…'],error:['','غير متصل — تحقق من الإعدادات']};const [c,x]=m[gsState]||[dirty?'warn':'on',dirty?'تغييرات بانتظار الحفظ':'متصل ومحفوظ'];
+  if(GS()){const n=OPS.length;const [c,x]=syncing?['warn','جارٍ التحديث…']:gsState==='error'?(n?['','غير متصل — '+n+' تغيير محفوظ مؤقتاً']:['warn','تعذّر التحديث — إعادة المحاولة…']):n?['warn',`جارٍ الحفظ (${n})…`]:['on','متصل ومحدَّث'];
     d.className='dot '+c;t.textContent='Google Sheets'+(gsName?' · '+gsName:'')+' · '+x;return}
   if(fileHandle||fileName){d.className='dot '+(dirty?'warn':'on');t.textContent=(fileName||'')+(dirty?' · تغييرات غير محفوظة':' · متصل')}
   else{d.className='dot';t.textContent=assets.length?'بيانات مؤقتة — غير مرتبطة بملف':'غير متصل بقاعدة بيانات'}
@@ -3528,10 +3814,13 @@ async function submitForm(e){
     if(!await confirmBox('تأكيد تعديل الأصل',`سيتم حفظ التعديلات التالية على الأصل <b class="mono">${esc(o.code)}</b>:<table class="cmsum">${ch.map(k=>row(k,`<span class="old">${esc(o[k])||'—'}</span><span class="new">${esc(d[k])||'—'}</span>`)).join('')}</table>`,'حفظ التعديلات','edit'))return}
   else if(!await confirmBox('تأكيد حفظ الأصل',`سيتم تسجيل الأصل التالي في قاعدة البيانات:<table class="cmsum">${row('name',`<b>${esc(d.name)}</b>`)}${row('code',`<b class="mono">${esc(d.code)}</b>`)}${row('category',esc(d.category))}${d.odooId?row('odooId',esc(d.odooId)):''}${d.location?row('location',esc(d.location)):''}${d.custodian?row('custodian',esc(d.custodian)):''}</table>`,andPrint?'حفظ وطباعة':'حفظ','save'))return;
   let a;
-  if(editingCode){a=assets.find(x=>x.code===editingCode);if(a.code!==d.code&&+a.printCount>0&&!await confirmBox('تغيير رقم مطبوع','سيُستبدل الرقم <b class="mono">'+esc(a.code)+'</b> بالرقم <b class="mono">'+esc(d.code)+'</b>. الملصق الملصوق حالياً على الأصل لن يكون صالحاً.','تغيير'))return;Object.assign(a,d)}
+  if(GS()&&syncing)return toast('انتظر لحظة حتى يكتمل تحديث البيانات…',1);
+  if(editingCode){a=assets.find(x=>x.code===editingCode);if(a.code!==d.code)renameHint[d.code]=a.code;if(a.code!==d.code&&+a.printCount>0&&!await confirmBox('تغيير رقم مطبوع','سيُستبدل الرقم <b class="mono">'+esc(a.code)+'</b> بالرقم <b class="mono">'+esc(d.code)+'</b>. الملصق الملصوق حالياً على الأصل لن يكون صالحاً.','تغيير'))return;Object.assign(a,d)}
   else{a=Object.assign({createdAt:today(),printCount:0,lastPrint:'',_x:{}},d);assets.push(a)}
   const was=!!editingCode;editingCode=null;await commit();toast(was?`تم حفظ تعديلات الأصل ${a.code} بنجاح`:`تم حفظ الأصل ${a.code} بنجاح`,'ok');
-  if(andPrint){queue=[a.code];go('label');$('#pvAsset').value=a.code;acbLabel();renderPreview()}else{resetForm();f.name.focus()}
+  if(andPrint){let code=a.code;
+    if(GS()&&!was){toast('جارٍ تأكيد رقم الباركود من قاعدة البيانات…');try{code=await waitCode(a.code)}catch(e){toast('تم حفظ الأصل على هذا الجهاز، وسيُرفع عند عودة الاتصال. اطبع ملصقه بعد تأكيد رقمه.',1);resetForm();return}}
+    queue=[code];go('label');$('#pvAsset').value=code;acbLabel();renderPreview()}else{resetForm();f.name.focus()}
 }
 
 /* ================= Designer ================= */
@@ -3795,7 +4084,7 @@ async function importFile(file){
 $('#lockYes').onclick=tryUnlock;$('#bRelock').onclick=()=>{unlocked=false;go('dash');toast('تم قفل الإعدادات')};$('#lockNo').onclick=()=>{$('#lockM').classList.remove('on');lockNext=null};
 $('#lockIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock();if(e.key==='Escape')$('#lockNo').click()});
 $$('.nav').forEach(n=>n.onclick=()=>{if(n.dataset.v==='form')editingCode=null;go(n.dataset.v)});
-$('#bOpen').onclick=()=>needLogin()?showLogin():GS()?gsLoad():openExcel();$('#bNew').onclick=newDb;$('#bSave').onclick=()=>{if(GS())return gsSave();if(!fileHandle&&!fileName&&FS)return newDb();save()};
+$('#bOpen').onclick=()=>needLogin()?showLogin():GS()?(pull(true).then(ok=>ok&&toast('تم التحديث من الشيت','ok'))):openExcel();$('#bNew').onclick=newDb;$('#bSave').onclick=()=>{if(GS()){if(!OPS.length)return toast('كل التغييرات محفوظة','ok');return pump()}if(!fileHandle&&!fileName&&FS)return newDb();save()};
 $('#fileFallback').onchange=async e=>{const f=e.target.files[0];if(!f)return;readWorkbook(await f.arrayBuffer());fileName=f.name;dirty=false;setConn();renderAll();toast(`تم تحميل ${f.name}`);e.target.value=''};
 $('#bImport').onclick=()=>$('#fileImport').click();$('#fileImport').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''};
 $('#bReport').onclick=()=>printReport();
@@ -3887,24 +4176,24 @@ function dsRender(){document.querySelectorAll('input[name=dsMode]').forEach(r=>{
 function gsForm(){return {mode:'gsheet',url:$('#gsUrl').value.trim(),key:ds.key}}
 document.querySelectorAll('input[name=dsMode]').forEach(r=>r.onchange=async e=>{
   if(e.target.value==='excel'){if(dirty&&GS()&&!await confirmBox('التحويل إلى Excel','توجد تغييرات لم تُحفظ في Google Sheets بعد. هل تريد المتابعة؟','متابعة'))return dsRender();ds.mode='excel';store('rkm_ds',ds);gsName='';setConn();dsRender();toast('مصدر البيانات: ملف Excel — افتح الملف أو أنشئ قاعدة جديدة')}
-  else{ds.mode='gsheet';if(!ds.url)ds.url=DEFAULT_GS;store('rkm_ds',ds);dsRender();setConn();if(GS())await gsLoad();else if(ds.url)showLogin();else $('#gsUrl').focus()}});
+  else{ds.mode='gsheet';if(!ds.url)ds.url=DEFAULT_GS;store('rkm_ds',ds);dsRender();setConn();if(GS())await pull(true);else if(ds.url)showLogin();else $('#gsUrl').focus()}});
 function renderSound(){$('#oSound').checked=!!prefs.sound;$('#oVol').value=prefs.vol;$('#vVol').textContent=prefs.vol+'%';$('#oVol').disabled=!prefs.sound}
 $('#oSound').onchange=e=>{prefs.sound=e.target.checked;store('rkm_prefs',prefs);renderSound();if(prefs.sound)SFX.play('ok')};
 $('#oVol').oninput=e=>{prefs.vol=+e.target.value;$('#vVol').textContent=prefs.vol+'%';store('rkm_prefs',prefs)};$('#oVol').onchange=()=>SFX.play('ok');
 document.querySelectorAll('[data-sfx]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();SFX.play(b.dataset.sfx)}));
 $('#oShowSync').onchange=e=>{prefs.showSync=e.target.checked;store('rkm_prefs',prefs);setConn();toast(e.target.checked?'تم إظهار زرّي الحفظ والتحديث':'تم إخفاء زرّي الحفظ والتحديث','ok')};
-$('#bGsLogout').onclick=async()=>{if(dirty&&!await confirmBox('تسجيل الخروج','توجد تغييرات لم تُحفظ بعد. هل تريد المتابعة؟','خروج'))return;logoutDevice('تم تسجيل الخروج من هذا الجهاز.');dsRender()};
+$('#bGsLogout').onclick=async()=>{if(OPS.length&&!await confirmBox('تسجيل الخروج','توجد تغييرات لم تُحفظ بعد. هل تريد المتابعة؟','خروج'))return;logoutDevice('تم تسجيل الخروج من هذا الجهاز.');dsRender()};
 $('#bGsCode').onclick=async()=>{const code=$('#gasTpl').textContent;
   try{await navigator.clipboard.writeText(code);toast('تم نسخ كود Apps Script ✓')}catch(e){const b=new Blob([code],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Code.gs';a.click();toast('تم تنزيل الكود كملف Code.gs')}};
 $('#bGsConnect').onclick=async()=>{const u=$('#gsUrl').value.trim();if(!/^https:\/\/script\.google(usercontent)?\.com\/.+\/exec$/.test(u))return toast('الرابط يجب أن يكون رابط تطبيق ويب من script.google.com وينتهي بـ /exec',1);
-  if(u!==ds.url){ds={mode:'gsheet',url:u,key:''};store('rkm_ds',ds)}dsRender();if(GS())await gsLoad();else showLogin()};
-$('#bGsPush').onclick=async()=>{if(!GS())return toast('اتصل بالشيت أولاً',1);if(await confirmBox('رفع البيانات الحالية',`سيُستبدل محتوى الشيت بالبيانات الموجودة الآن في المنظومة (${assets.length} أصل · ${odoo.length} أصل أودو).`,'رفع واستبدال')){await gsSave(true);if(!dirty)toast('تم رفع البيانات ✓')}};
+  if(u!==ds.url){ds={mode:'gsheet',url:u,key:''};store('rkm_ds',ds)}dsRender();if(GS())await pull(true);else showLogin()};
+$('#bGsPush').onclick=async()=>{if(!GS())return toast('اتصل بالشيت أولاً',1);if(await confirmBox('رفع البيانات الحالية',`سيُستبدل محتوى الشيت بالبيانات الموجودة الآن في المنظومة (${assets.length} أصل · ${odoo.length} أصل أودو).`,'رفع واستبدال','save')){try{const wb=buildWB(),data={};wb.SheetNames.forEach(n=>data[n]=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:'',raw:true}));await gsCall('save',{data,baseRev:''});OPS=[];saveOps();await pull(true);toast('تم رفع البيانات','ok')}catch(e){toast(e.message,1)}}};
 $('#bSysSave').onclick=()=>saveSystemFile(false);
 $('#bOdooImport').onclick=()=>$('#fileOdoo').click();$('#fileOdoo').onchange=e=>{const f=e.target.files[0];if(f)importOdoo(f);e.target.value=''};
 $('#bOdooBulk').onclick=bulkOdoo;
 $('#bReconnect').onclick=async()=>{const h=await idbGet('handle');if(h&&await verifyPerm(h)){await attach(h);$('#reconnect').style.display='none'}else toast('تعذّرت إعادة الاتصال — افتح الملف يدوياً',1)};
-window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
-window.addEventListener('focus',async()=>{if(GS())return gsCheck();if(!fileHandle||dirty||saving)return;try{const f=await fileHandle.getFile();if(f.lastModified>lastMod+1500&&await confirmBox('تحديث من Excel','تم تعديل ملف قاعدة البيانات خارج المنظومة. هل تريد تحميل أحدث نسخة؟','تحميل')){readWorkbook(await f.arrayBuffer());lastMod=f.lastModified;renderAll();toast('تم تحميل آخر التعديلات')}else lastMod=f.lastModified}catch(e){}});
+window.addEventListener('beforeunload',e=>{if(dirty||(GS()&&OPS.length)){e.preventDefault();e.returnValue=''}});
+window.addEventListener('focus',async()=>{if(GS())return syncTick();if(!fileHandle||dirty||saving)return;try{const f=await fileHandle.getFile();if(f.lastModified>lastMod+1500&&await confirmBox('تحديث من Excel','تم تعديل ملف قاعدة البيانات خارج المنظومة. هل تريد تحميل أحدث نسخة؟','تحميل')){readWorkbook(await f.arrayBuffer());lastMod=f.lastModified;renderAll();toast('تم تحميل آخر التعديلات')}else lastMod=f.lastModified}catch(e){}});
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();$('#bSave').click()}});
 window.addEventListener('resize',()=>{if($('#v-label').classList.contains('on'))renderPreview()});
 
@@ -3919,8 +4208,8 @@ window.addEventListener('resize',()=>{if($('#v-label').classList.contains('on'))
     if(/^https:\/\/script\.google(usercontent)?\.com\/.+\/exec$/.test(u)&&ds.url!==u){ds={mode:'gsheet',url:u,key:''};store('rkm_ds',ds)}}
   if(GS()||needLogin()){renderSettings();renderSetup();setConn();renderAll();resetForm();sysState();dsRender();
     if(needLogin()){showLogin();return}
-    const pb=load('rkm_backup');if(pb&&pb.pending){gsRev=pb.rev||'stale';dirty=true;await gsSave();if(!dirty)return}
-    await gsLoad(true);return}
+    const pb=load('rkm_backup');if(pb&&pb.pending&&!load('rkm_sync'))SH.recover=assets.slice();
+    syncing=true;document.body.classList.add('syncing');setConn();pull(!SH.seq).then(ok=>{if(!ok){syncing=false;document.body.classList.remove('syncing');setConn()}});pump();return}
   if(FS){const h=await idbGet('handle');if(h){$('#lastName').textContent=h.name;let ok=false;
     try{if(await h.queryPermission({mode:'readwrite'})==='granted'){await attach(h);ok=true}}catch(e){}
     if(!ok){$('#reconnect').style.display='block';
