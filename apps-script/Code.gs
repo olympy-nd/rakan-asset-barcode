@@ -32,7 +32,7 @@ function handle_(p) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const a = p.action;
   if (a === 'init' || a === 'ping') return out_({ ok: true, name: ss.getName(), rev: rev_(), seq: seq_(), v: 2 });
-  if (a === 'sync') return out_(sync_(ss, +p.since || 0));
+  if (a === 'sync') { if (!seq_()) nextSeq_(); return out_(sync_(ss, +p.since || 0)); }
   if (a === 'load') return out_(legacyLoad_(ss));
   // ---- writes ----
   const lock = LockService.getScriptLock();

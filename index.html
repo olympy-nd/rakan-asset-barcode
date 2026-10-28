@@ -3110,7 +3110,7 @@ function handle_(p) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const a = p.action;
   if (a === 'init' || a === 'ping') return out_({ ok: true, name: ss.getName(), rev: rev_(), seq: seq_(), v: 2 });
-  if (a === 'sync') return out_(sync_(ss, +p.since || 0));
+  if (a === 'sync') { if (!seq_()) nextSeq_(); return out_(sync_(ss, +p.since || 0)); }
   if (a === 'load') return out_(legacyLoad_(ss));
   // ---- writes ----
   const lock = LockService.getScriptLock();
@@ -3624,8 +3624,8 @@ async function resolveConflict(op,e){
   OPS.shift();acceptServer(srv);saveOps();renderAll();toast('اعتُمدت نسخة الجهاز الآخر','ok')}
 /** جلب التغييرات من الشيت (أو كل البيانات عند full) */
 async function pull(full){
-  if(!GS()||pulling)return;pulling=true;if(full)SH.seq=0;
-  if(!SH.seq){syncing=true;document.body.classList.add('syncing');setConn()}
+  if(!GS()||pulling)return;pulling=true;if(full){SH.seq=0;SH.ok=false}
+  if(!SH.ok){syncing=true;document.body.classList.add('syncing');setConn()}
   try{const t0=performance.now();const r=await gsCall('sync',{since:SH.seq||0});gsName=r.name||gsName;
     if(r.same){if(gsState==='error'){gsState='';}syncing=false;document.body.classList.remove('syncing');setConn();return true}
     const pend=pendingCodes();
@@ -3644,10 +3644,10 @@ async function pull(full){
     fixCats();assets.forEach(a=>{a.odooId=String(a.odooId??'').trim();a.odooName=String(a.odooName??'')});
     ['odoo','settings','cats'].forEach(k=>{if(!pendingSec(k))SH.secs[k]=secSnap(k)});SH.logLen=printLog.length;
     if(SH.recover&&SH.recover.length&&!r.full){delete SH.recover}
-    SH.seq=r.seq;SH.ms=Math.round(performance.now()-t0);saveSH();cacheState();gsState='';
+    SH.seq=r.seq;SH.ok=true;SH.ms=Math.round(performance.now()-t0);saveSH();cacheState();gsState='';
     if(r.full)diffOps();
     syncing=false;document.body.classList.remove('syncing');renderAll();setConn();pump();return true}
-  catch(e){gsState='error';lastErr=e.message;if(SH.seq){syncing=false;document.body.classList.remove('syncing')}setConn();if(e.code==='unauthorized'||e.code==='not_initialized'){logoutDevice('تغيّر رمز الدخول للمنظومة — أدخل الرمز الحالي.');return false}return false}
+  catch(e){gsState='error';lastErr=e.message;if(SH.ok){syncing=false;document.body.classList.remove('syncing')}setConn();if(e.code==='unauthorized'||e.code==='not_initialized'){logoutDevice('تغيّر رمز الدخول للمنظومة — أدخل الرمز الحالي.');return false}return false}
   finally{pulling=false}}
 function waitCode(code,ms=20000){return new Promise((res,rej)=>{waiters[code]={resolve:res,reject:rej};setTimeout(()=>{if(waiters[code]){delete waiters[code];rej(new Error('timeout'))}},ms)})}
 function syncTick(){if(!GS()||document.hidden)return;if(OPS.length)pump();pull(false)}
