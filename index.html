@@ -99,6 +99,31 @@ td{padding:8px 10px;border:1px solid var(--line);white-space:nowrap}
 tr:nth-child(even) td{background:var(--tint)}
 tr:hover td{background:var(--gold-soft)}
 tr.hl td{background:var(--gold-2)!important}
+.atw{overflow:visible;max-height:none;border-radius:10px}
+.atbl{table-layout:fixed;font-size:12.5px}
+.atbl th{white-space:normal;line-height:1.35;padding:9px 6px;font-size:12px;vertical-align:middle;top:7px}
+.atbl td{white-space:normal;overflow-wrap:anywhere;word-break:normal;padding:7px 6px;line-height:1.5;vertical-align:middle}
+.atbl td.mono{font-size:11.5px;overflow-wrap:anywhere}
+.atbl .on2{display:block;color:var(--muted);font-size:11px;line-height:1.4;margin-top:2px}
+.atbl .num{font-variant-numeric:tabular-nums}
+.atbl .num b{font-weight:600;white-space:nowrap}
+.atbl .num small{color:var(--muted);font-size:.78em}
+.atbl .pill{white-space:normal;padding:2px 6px;font-size:11px;line-height:1.35;text-align:center}
+.atbl .acts{display:flex;gap:3px;justify-content:center;flex-wrap:nowrap}
+.ib{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);padding:0}
+.ib svg{width:14px;height:14px;pointer-events:none}
+.ib:hover{border-color:var(--navy-3)}
+.ib.gold{background:var(--gold);border-color:var(--gold);color:#fff}
+.ib.danger{color:var(--bad)}
+@media (max-width:900px){
+  .atbl colgroup,.atbl thead{display:none}
+  .atbl,.atbl tbody,.atbl tr,.atbl td{display:block;width:100%}
+  .atbl tr{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;padding:6px 10px;background:#fff}
+  .atbl td{border:0;border-bottom:1px dashed var(--line);display:flex;gap:10px;justify-content:space-between;text-align:left}
+  .atbl td:last-child{border-bottom:0}
+  .atbl td::before{content:attr(data-l);font-weight:700;color:var(--muted);text-align:right;flex:none}
+  .atbl td.empty::before{content:none}
+}
 .empty{padding:40px;text-align:center;color:var(--muted)}
 
 /* Designer */
@@ -145,6 +170,10 @@ input[type=range]{accent-color:var(--navy)}
 .l-dual .od{font-family:'Tajawal',Tahoma,sans-serif;font-weight:800;direction:rtl;white-space:nowrap}
 .l-dual .od b{font-family:Consolas,'Courier New',monospace;direction:ltr;unicode-bidi:embed}
 .l-qr .tx .l-name{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pt .l-qr{flex-direction:column;align-items:stretch}
+.pt .l-qr .q{height:auto;width:auto;max-width:100%;flex:1 1 auto;min-height:0;align-self:center}
+.pt .l-qr .tx{flex:none}
+.pt .l-qr .tx>*,.pt .l-qr .tx .l-code{text-align:center}
 .l-err{color:#C0392B;font-size:2.4mm;text-align:center;align-self:center;font-weight:700}
 .mono-print .label img{filter:grayscale(1) contrast(1.4)}
 
@@ -224,7 +253,7 @@ input[type=range]{accent-color:var(--navy)}
     <button class="nav" data-v="assets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>سجل الأصول</button>
     <button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>تسجيل أصل</button>
     <button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg>تصميم وطباعة الملصق</button>
-    <button class="nav" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.4 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 1.7 14H1.6a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.4a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 1.7V1.6a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.2.9z"/></svg>الإعدادات</button>
+    <button class="nav" data-v="settings" title="محمية بكلمة سر"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.4 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 1.7 14H1.6a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.4a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 1.7V1.6a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.2.9z"/></svg>الإعدادات</button>
     <div class="side-foot">
       الطابعة: <b style="color:#fff" id="sidePrinter">XPrinter</b><br>
       حراري مباشر · 203 DPI<br>
@@ -283,8 +312,9 @@ input[type=range]{accent-color:var(--navy)}
             <button class="btn" id="bExport">تصدير نسخة</button>
           </div>
         </div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th style="width:34px"><input type="checkbox" id="chkAll"></th><th>رقم الباركود</th><th>أودو</th><th>اسم الأصل</th><th>الفئة</th><th>الموقع</th><th>القسم</th><th>العهدة</th><th>الحالة</th><th>الطباعة</th><th>إجراءات</th></tr></thead>
+        <div class="tbl-wrap atw"><table class="atbl">
+          <colgroup><col style="width:2.5%"><col style="width:9%"><col style="width:5%"><col style="width:14.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:7%"><col style="width:7%"><col style="width:6.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:5%"><col style="width:5.5%"><col style="width:8%"></colgroup>
+          <thead><tr><th><input type="checkbox" id="chkAll"></th><th>رقم الباركود</th><th>أودو</th><th>اسم الأصل</th><th>الفئة</th><th>الموقع</th><th>القسم</th><th>العهدة</th><th>الرقم التسلسلي</th><th>تاريخ الشراء</th><th>القيمة</th><th>الحالة</th><th>الطباعة</th><th>إجراءات</th></tr></thead>
           <tbody id="tb"></tbody>
         </table></div>
         <div class="hint" style="margin-top:8px" id="tblFoot"></div>
@@ -411,7 +441,7 @@ input[type=range]{accent-color:var(--navy)}
     <section class="view" id="v-settings">
       <div class="grid g2">
         <div class="card" style="grid-column:1/-1">
-          <h3>مصدر البيانات</h3>
+          <h3 style="justify-content:space-between"><span>مصدر البيانات</span><button class="btn sm" id="bRelock" type="button">قفل الإعدادات</button></h3>
           <div class="row" style="gap:10px;align-items:stretch;margin-bottom:14px">
             <label class="sz" style="flex:1;min-width:240px;text-align:right;padding:10px 12px;display:flex;gap:10px;align-items:flex-start"><input type="radio" name="dsMode" value="gsheet" style="margin-top:5px"><span><b style="direction:rtl">Google Sheets (سحابي)</b><small style="display:block;line-height:1.6">قاعدة بيانات مشتركة تعمل من أي جهاز ومن رابط GitHub، وتُحفظ التغييرات تلقائياً.</small></span></label>
             <label class="sz" style="flex:1;min-width:240px;text-align:right;padding:10px 12px;display:flex;gap:10px;align-items:flex-start"><input type="radio" name="dsMode" value="excel" style="margin-top:5px"><span><b style="direction:rtl">ملف Excel على الجهاز</b><small style="display:block;line-height:1.6">ملف .xlsx محلي يُفتح من الجهاز (Chrome / Edge).</small></span></label>
@@ -496,6 +526,14 @@ input[type=range]{accent-color:var(--navy)}
   </main>
 </div>
 
+<div class="modal" id="lockM"><div class="card" style="max-width:360px;text-align:center">
+  <div style="width:54px;height:54px;border-radius:50%;background:var(--tint);color:var(--navy);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+  <h3 style="justify-content:center">الإعدادات محمية</h3>
+  <p class="hint" style="margin:0 0 12px">أدخل كلمة السر للدخول إلى الإعدادات</p>
+  <input type="password" id="lockIn" inputmode="numeric" autocomplete="off" class="inp" style="width:100%;text-align:center;font-size:20px;letter-spacing:6px;padding:10px">
+  <div id="lockErr" style="color:var(--bad);font-size:12.5px;min-height:20px;margin-top:6px"></div>
+  <div class="row" style="justify-content:center;margin-top:6px"><button class="btn" id="lockNo">إلغاء</button><button class="btn pri" id="lockYes">دخول</button></div>
+</div></div>
 <div class="modal" id="confirmM"><div class="card"><h3 id="cmT">تأكيد</h3><p id="cmB" style="margin:0 0 16px;line-height:1.8"></p><div class="row" style="justify-content:flex-end"><button class="btn" id="cmNo">إلغاء</button><button class="btn pri" id="cmYes">تأكيد</button></div></div></div>
 <div class="toast" id="toast"></div>
 <div id="printArea"></div>
@@ -2917,7 +2955,7 @@ const DEFAULT_CATS = [
   ['مركبات','VEH'],['أجهزة اتصالات','COM'],['أدوات وعدد','TLS'],['أخرى','OTH']
 ];
 const SIZES = [ // [w,h,note]
-  [38,25,'الافتراضي'],[25,15,'صغير جداً'],[30,20,'صغير'],[32,19,'رفوف'],[35,25,''],[40,20,''],[40,25,''],[40,30,'شائع'],
+  [40,70,'الافتراضي'],[38,25,''],[25,15,'صغير جداً'],[30,20,'صغير'],[32,19,'رفوف'],[35,25,''],[40,20,''],[40,25,''],[40,30,'شائع'],
   [50,25,''],[50,30,'شائع'],[50,40,''],[50.8,25.4,'2×1 إنش'],[57,32,''],[60,40,'شائع'],[70,40,''],
   [76.2,50.8,'3×2 إنش'],[80,50,''],[100,50,'4×2 إنش'],[100,100,'4×4 إنش'],[101.6,152.4,'4×6 شحن']
 ];
@@ -2931,8 +2969,9 @@ function useEmbedded(){odoo=(EMB.recs||[]).map(r=>({...r}));odooMeta={last:EMB.m
 let settings = { odooMulti:false, company:'راكان لاستيراد المواد الغذائية والتوزيع', prefix:'RKN', digits:5, mode:'pattern', cats: DEFAULT_CATS.map(c=>({name:c[0],code:c[1]})) };
 let fileHandle = null, fileName = '', lastMod = 0, dirty = false, editingCode = null;
 let queue = []; // codes queued for printing
-const prefs = Object.assign({ w:38,h:25,fmt:'ODOO',logo:true,co:false,name:true,code:true,loc:false,odoo:false,nameSrc:'local',border:false,mono:true,fs:100,sz:{logo:100,name:100,odoo:100,code:100,meta:100,bar:100},pad:1.5,rot:0,copies:1,custom:[],printer:'XP-P322B',page:'driver' }, load('rkm_prefs')||{});
+const prefs = Object.assign({ w:40,h:70,fmt:'ODOO',logo:true,co:false,name:true,code:true,loc:false,odoo:false,nameSrc:'local',border:false,mono:true,fs:100,sz:{logo:100,name:100,odoo:100,code:100,meta:100,bar:100},pad:1.5,rot:0,copies:1,custom:[],printer:'XP-P322B',page:'driver' }, load('rkm_prefs')||{});
 const FS = 'showOpenFilePicker' in window;
+if(!prefs.sizeV2){prefs.w=40;prefs.h=70;prefs.sizeV2=1;store('rkm_prefs',prefs)}
 if(prefs.fmt==='EAN13')prefs.fmt='ODOO';
 
 /* ================= Utils ================= */
@@ -3103,7 +3142,7 @@ function labelHTML(a,o){
   const W=o.w,H=o.h,rot=+o.rot,side=rot%180!==0;
   const cw=side?H:W, ch=side?W:H; // content box
   const Z=Object.assign({logo:100,name:100,odoo:100,code:100,meta:100,bar:100},o.sz),z=n=>(Z[n]||100)/100;
-  const pad=o.pad, k=Math.min(ch,cw*0.75), fsName=k*0.105*z('name'), fsSmall=k*0.085, fsLogo=fsSmall*z('logo'), fsMeta=fsSmall*z('meta'), fsCode=k*0.1*z('code'), fsOdoo=k*0.1*z('odoo');
+  const pad=o.pad, k=Math.min(ch,cw*(ch>cw*1.2?1.05:0.75)), fsName=k*0.105*z('name'), fsSmall=k*0.085, fsLogo=fsSmall*z('logo'), fsMeta=fsSmall*z('meta'), fsCode=k*0.1*z('code'), fsOdoo=k*0.1*z('odoo');
   const isO=o.fmt==='ODOO';let bc='';
   if(!isO)try{bc=barcodeSVG(a.code,o.fmt)}catch(e){bc=`<div class="l-err">رقم غير صالح لـ ${o.fmt}</div>`}
   const hh=fsLogo*(o.co?1.6:2.6);const head=(o.logo||o.co)?`<div class="l-head" style="font-size:${fsLogo}mm;height:${hh}mm">${o.logo&&logo()?`<img src="${logo()}" style="height:${hh}mm;width:auto">`:''}${o.co?`<span>${esc(settings.company)}</span>`:''}</div>`:'';
@@ -3117,7 +3156,7 @@ function labelHTML(a,o){
   else if(o.fmt==='QR') body=`${head}<div class="l-qr"><div class="q">${bc}</div><div class="tx">${name}${meta}${code}${od}</div></div>`;
   else body=`${head}${name}${meta}<div class="l-bc" style="padding:0.4mm ${Math.max(2,cw*0.05)}mm;min-height:${Math.min(ch*0.75,ch*0.3*z('bar'))}mm">${bc}</div>${code}${od}`;
   const tf=rot===90?`translate(${W}mm,0) rotate(90deg)`:rot===180?`translate(${W}mm,${H}mm) rotate(180deg)`:rot===270?`translate(0,${H}mm) rotate(270deg)`:'none';
-  return `<div class="label" style="width:${W}mm;height:${H}mm"><div class="lbl-in${o.border?' bd':''}" style="width:${cw}mm;height:${ch}mm;padding:${pad}mm;gap:${Math.max(.3,ch*.015)}mm;transform:${tf}">${body}</div></div>`;
+  return `<div class="label" style="width:${W}mm;height:${H}mm"><div class="lbl-in${o.border?' bd':''}${ch>cw*1.2?' pt':''}" style="width:${cw}mm;height:${ch}mm;padding:${pad}mm;gap:${Math.max(.3,ch*.015)}mm;transform:${tf}">${body}</div></div>`;
 }
 
 function fitText(root){
@@ -3152,7 +3191,13 @@ async function doPrint(list,{test=false}={}){
 
 /* ================= Rendering ================= */
 const TITLES={dash:['لوحة المتابعة','نظرة عامة على الأصول المسجلة وحالة الترميز'],assets:['سجل الأصول','جميع الأصول المرتبطة بقاعدة بيانات Excel'],form:['تسجيل أصل','إضافة أصل جديد وتوليد باركود فريد له'],label:['تصميم وطباعة الملصق','اختر المقاس والمحتوى ثم اطبع على XPrinter'],settings:['الإعدادات','الهوية ونظام الترقيم والفئات']};
-function go(v){$$('.nav').forEach(n=>n.classList.toggle('on',n.dataset.v===v));$$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));$('#vTitle').textContent=TITLES[v][0];$('#vSub').textContent=TITLES[v][1];if(v==='label')renderDesigner();if(v==='form'&&!editingCode)resetForm();window.scrollTo(0,0)}
+const LOCK_H='39c5f6df';let lockNext=null;
+function lockHash(t){let h=0x811c9dc5;for(const c of 'rkn|'+t){h^=c.charCodeAt(0);h=Math.imul(h,0x01000193)>>>0}return h.toString(16).padStart(8,'0')}
+function isUnlocked(){try{return sessionStorage.getItem('rkm_unlock')===LOCK_H}catch(e){return false}}
+function askLock(next){lockNext=next;$('#lockIn').value='';$('#lockErr').textContent='';$('#lockM').classList.add('on');setTimeout(()=>$('#lockIn').focus(),50)}
+function tryUnlock(){if(lockHash($('#lockIn').value.trim())===LOCK_H){try{sessionStorage.setItem('rkm_unlock',LOCK_H)}catch(e){}$('#lockM').classList.remove('on');const n=lockNext;lockNext=null;if(n)n()}
+  else{$('#lockErr').textContent='كلمة السر غير صحيحة';$('#lockIn').select()}}
+function go(v){if(v==='settings'&&!isUnlocked())return askLock(()=>go('settings'));$$('.nav').forEach(n=>n.classList.toggle('on',n.dataset.v===v));$$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));$('#vTitle').textContent=TITLES[v][0];$('#vSub').textContent=TITLES[v][1];if(v==='label')renderDesigner();if(v==='form'&&!editingCode)resetForm();window.scrollTo(0,0)}
 function renderAll(){renderOdooList();renderMulti();renderDash();renderTable();renderFilters();renderCatTable();fillCatSelect();if($('#v-label').classList.contains('on'))renderDesigner()}
 function bars(el,map){const e=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,8),m=Math.max(1,...e.map(x=>x[1]));el.innerHTML=e.length?e.map(([k,v])=>`<div class="bar"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(k)}</span><div class="tr"><div class="fl" style="width:${v/m*100}%"></div></div><b>${v}</b></div>`).join(''):'<div class="hint">لا توجد بيانات بعد</div>'}
 function renderDash(){
@@ -3166,7 +3211,7 @@ function filtered(){const q=$('#q').value.trim().toLowerCase(),c=$('#fCat').valu
   return assets.filter(a=>(!q||[a.code,a.name,a.location,a.dept,a.custodian,a.serial,a.odooId,a.odooName].join(' ').toLowerCase().includes(q))&&(!c||a.category===c)&&(!l||a.location===l)&&(p===''||(p==='1')===(+a.printCount>0))&&(od===''||(od==='1')===!!a.odooId))}
 function renderTable(){
   const list=filtered();
-  $('#tb').innerHTML=list.length?list.map(a=>`<tr data-c="${esc(a.code)}"><td><input type="checkbox" class="rc" ${selected.has(a.code)?'checked':''}></td><td class="mono"><b>${esc(a.code)}</b></td><td>${a.odooId?`<span class="pill p-ok" title="${esc(a.odooName)}" dir="ltr">${esc(a.odooId)}</span>`:'<span class="hint">—</span>'}</td><td>${esc(a.name)}</td><td>${esc(a.category)}</td><td>${esc(a.location)}</td><td>${esc(a.dept)}</td><td>${esc(a.custodian)}</td><td>${statusPill(a.status)}</td><td>${+a.printCount>0?`<span class="pill p-ok">${a.printCount}×</span>`:'<span class="pill p-gray">لم يُطبع</span>'}</td><td><div class="row" style="gap:5px;flex-wrap:nowrap"><button class="btn sm gold" data-a="print">طباعة</button><button class="btn sm" data-a="edit">تعديل</button><button class="btn sm danger" data-a="del">حذف</button></div></td></tr>`).join(''):`<tr><td colspan="11" class="empty">${assets.length?'لا توجد نتائج مطابقة للبحث':'لا توجد أصول بعد — افتح ملف Excel أو سجّل أول أصل'}</td></tr>`;
+  $('#tb').innerHTML=list.length?list.map(a=>`<tr data-c="${esc(a.code)}"><td data-l="تحديد"><input type="checkbox" class="rc" ${selected.has(a.code)?'checked':''}></td><td data-l="رقم الباركود" class="mono"><b>${esc(a.code)}</b></td><td data-l="أودو">${a.odooId?`<span class="pill p-ok" dir="ltr">${esc(a.odooId)}</span>`:'<span class="hint">—</span>'}</td><td data-l="اسم الأصل"><b>${esc(a.name)}</b>${a.odooName&&cleanName(a.odooName)!==a.name?`<span class="on2">أودو: ${esc(a.odooName)}</span>`:''}</td><td data-l="الفئة">${esc(a.category)||'—'}</td><td data-l="الموقع">${esc(a.location)||'—'}</td><td data-l="القسم">${esc(a.dept)||'—'}</td><td data-l="العهدة">${esc(a.custodian)||'—'}</td><td data-l="الرقم التسلسلي" class="mono">${esc(a.serial)||'—'}</td><td data-l="تاريخ الشراء" class="num">${esc(a.purchaseDate)||'—'}</td><td data-l="القيمة" class="num">${a.value!==''&&a.value!=null?`<b>${fmtNum(a.value)}</b> <small>د.ل</small>`:'—'}</td><td data-l="الحالة">${statusPill(a.status)||'—'}</td><td data-l="الطباعة">${+a.printCount>0?`<span class="pill p-ok">${a.printCount}×</span>`:'<span class="pill p-gray">لم يُطبع</span>'}</td><td data-l="إجراءات"><div class="acts"><button class="ib gold" data-a="print" title="طباعة الملصق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button><button class="ib" data-a="edit" title="تعديل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><button class="ib danger" data-a="del" title="حذف"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="14" class="empty">${assets.length?'لا توجد نتائج مطابقة للبحث':'لا توجد أصول بعد — افتح ملف Excel أو سجّل أول أصل'}</td></tr>`;
   $('#tblFoot').textContent=`عرض ${list.length} من ${assets.length} أصل`;updSel();
 }
 function updSel(){selected=new Set([...selected].filter(c=>assets.some(a=>a.code===c)));$('#selInfo').textContent=selected.size?`محدد: ${selected.size}`:'لم يتم تحديد أصول';$('#bPrintSel').disabled=!selected.size}
@@ -3373,6 +3418,8 @@ async function importFile(file){
 }
 
 /* ================= Events ================= */
+$('#lockYes').onclick=tryUnlock;$('#bRelock').onclick=()=>{try{sessionStorage.removeItem('rkm_unlock')}catch(e){}go('dash');toast('تم قفل الإعدادات')};$('#lockNo').onclick=()=>{$('#lockM').classList.remove('on');lockNext=null};
+$('#lockIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock();if(e.key==='Escape')$('#lockNo').click()});
 $$('.nav').forEach(n=>n.onclick=()=>{if(n.dataset.v==='form')editingCode=null;go(n.dataset.v)});
 $('#bOpen').onclick=()=>GS()?gsLoad():openExcel();$('#bNew').onclick=newDb;$('#bSave').onclick=()=>{if(GS())return gsSave();if(!fileHandle&&!fileName&&FS)return newDb();save()};
 $('#fileFallback').onchange=async e=>{const f=e.target.files[0];if(!f)return;readWorkbook(await f.arrayBuffer());fileName=f.name;dirty=false;setConn();renderAll();toast(`تم تحميل ${f.name}`);e.target.value=''};
@@ -3382,7 +3429,7 @@ $('#bExport').onclick=()=>{const a=document.createElement('a');a.href=URL.create
 $('#chkAll').onchange=e=>{filtered().forEach(a=>e.target.checked?selected.add(a.code):selected.delete(a.code));renderTable()};
 $('#tb').addEventListener('click',async e=>{const tr=e.target.closest('tr[data-c]');if(!tr)return;const c=tr.dataset.c;
   if(e.target.classList.contains('rc')){e.target.checked?selected.add(c):selected.delete(c);updSel();return}
-  const act=e.target.dataset.a;if(act==='edit')editAsset(c);
+  const act=(e.target.closest('[data-a]')||{}).dataset?.a;if(act==='edit')editAsset(c);
   if(act==='print'){queue=[c];go('label')}
   if(act==='del'&&await confirmBox('حذف أصل',`هل تريد حذف الأصل <b class="mono">${esc(c)}</b> نهائياً من قاعدة البيانات؟`,'حذف')){assets=assets.filter(a=>a.code!==c);selected.delete(c);await commit();toast('تم حذف الأصل')}});
 $('#bPrintSel').onclick=()=>{queue=assets.filter(a=>selected.has(a.code)).map(a=>a.code);go('label')};
