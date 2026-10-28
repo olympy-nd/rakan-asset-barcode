@@ -37,7 +37,20 @@ button,input,select,textarea{font-family:inherit;font-size:inherit}
 .nav{all:unset;display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;cursor:pointer;color:#C9D4E5;font-weight:600}
 .nav:hover{background:rgba(255,255,255,.07);color:#fff}
 .nav.on{background:var(--gold);color:#fff}
+.side .nav[data-v=form] svg{color:#fff;background:var(--gold);border-radius:7px;padding:2px;width:22px;height:22px;box-shadow:0 2px 8px rgba(241,92,34,.45)}
+.side .nav[data-v=form].on svg{background:#fff;color:var(--gold)}
 .nav svg{width:18px;height:18px;flex:none}
+.credit{margin-top:auto;margin-bottom:12px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:linear-gradient(135deg,rgba(241,92,34,.22),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.credit .cr-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#FF8A57);color:#fff;font-weight:800;font-size:12.5px;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 3px 10px rgba(241,92,34,.4)}
+.credit small{display:block;font-size:10.5px;color:#CFE0F7;line-height:1.3}
+.credit b{display:block;font-size:14px;color:#fff;letter-spacing:0;line-height:1.4}
+.credit+.side-foot{margin-top:0}
+.cfoot{margin-top:26px;display:flex;justify-content:center}
+.cf-in{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;padding:9px 18px;border-radius:999px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);font-size:12.5px;color:var(--muted)}
+.cf-in b{color:var(--navy-2);font-weight:800}
+.cf-mark{width:24px;height:24px;border-radius:50%;background:var(--gold-soft);color:var(--gold);display:inline-flex;align-items:center;justify-content:center}
+.cf-mark svg{width:14px;height:14px}
+.cf-sep{width:4px;height:4px;border-radius:50%;background:var(--line)}
 .side-foot{margin-top:auto;font-size:11.5px;color:#9FB0C9;border-top:1px solid rgba(255,255,255,.12);padding-top:12px;line-height:1.7}
 
 /* Top */
@@ -277,6 +290,8 @@ html{-webkit-text-size-adjust:100%}
   .atbl td[data-l="تحديد"] input{width:20px;height:20px}
   .atbl .acts{gap:8px;justify-content:flex-start}
   .atbl thead{display:none}
+  .atbl tr:has(td.empty){display:block!important}
+  .atbl td.empty{display:block!important;text-align:center!important;padding:26px 10px!important}
   .atw{border:0!important}
   .atbl tr,.atbl tr:nth-child(even),.atbl tr:hover{background:#fff!important}
   .atbl td,.atbl tr:nth-child(even) td,.atbl tr:hover td{background:transparent!important}
@@ -294,6 +309,7 @@ html{-webkit-text-size-adjust:100%}
   .brand{padding:0 0 14px;margin-bottom:8px}
   .brand img{max-height:46px;padding:5px}
   .brand>div,.side-foot{display:none}
+  .credit{padding:6px;justify-content:center}.credit>div:last-child{display:none}
   .side .nav{font-size:0;justify-content:center;padding:12px;width:100%;box-sizing:border-box}
   .side .nav svg{width:22px;height:22px}
   main{padding:24px 20px 40px}
@@ -311,11 +327,16 @@ html{-webkit-text-size-adjust:100%}
   .mbar .mt small{font-size:11px;color:#CFE0F7}
   .mbar .dot{width:11px;height:11px;border:2px solid rgba(255,255,255,.7)}
   .app::before{display:none}
-  main{padding:14px 12px calc(86px + env(safe-area-inset-bottom))}
+  main{padding:14px 12px calc(96px + env(safe-area-inset-bottom))}
+  .cfoot{margin-top:18px}.cf-in{font-size:11.5px;padding:8px 14px;gap:7px}.cf-co{flex-basis:100%;text-align:center}.cf-sep{display:none}
   .bnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 18px rgba(8,56,111,.10);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
   .bnav .nav{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:12px;color:var(--muted);font-size:11px;font-weight:700;background:none}
   .bnav .nav svg{width:22px;height:22px}
-  .bnav .nav.on{color:var(--gold);background:var(--gold-soft)}
+  .bnav .nav.on{color:var(--navy);background:var(--tint)}
+  .bnav .nav[data-v=form]{color:var(--gold);background:none!important}
+  .bnav .nav[data-v=form] svg{width:54px;height:54px;padding:12px;margin-top:-26px;border-radius:50%;background:linear-gradient(135deg,#FF7A3D,var(--gold));color:#fff;border:4px solid #fff;box-shadow:0 6px 16px rgba(241,92,34,.45);transition:transform .15s}
+  .bnav .nav[data-v=form]:active svg{transform:scale(.92)}
+  .bnav .nav[data-v=form].on svg{box-shadow:0 0 0 4px var(--gold-soft),0 6px 16px rgba(241,92,34,.5)}
   .bnav .nav:hover{background:var(--tint);color:var(--navy)}
   /* header */
   .top{gap:10px;margin-bottom:12px}
@@ -393,7 +414,7 @@ html{-webkit-text-size-adjust:100%}
   .afilt,.aacts,.pvctl{grid-template-columns:1fr}
   .bnav .nav span{font-size:10px}
 }
-@media print{.mbar,.bnav{display:none!important}}
+@media print{.mbar,.bnav,.no-print,.credit,.cfoot{display:none!important}}
 
 @media print{
   html,body{background:#fff!important;margin:0!important;padding:0!important}
@@ -419,6 +440,10 @@ html{-webkit-text-size-adjust:100%}
     <button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>تسجيل أصل</button>
     <button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg>تصميم وطباعة الملصق</button>
     <button class="nav" data-v="settings" title="محمية بكلمة سر"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.4 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 1.7 14H1.6a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.4a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 1.7V1.6a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.2.9z"/></svg>الإعدادات</button>
+    <div class="credit no-print">
+      <div class="cr-av">أ.ع</div>
+      <div><small>إعداد وتطوير</small><b>أحمد العكاري</b></div>
+    </div>
     <div class="side-foot">
       الطابعة: <b style="color:#fff" id="sidePrinter">XPrinter</b><br>
       حراري مباشر · 203 DPI<br>
@@ -642,6 +667,15 @@ html{-webkit-text-size-adjust:100%}
           </div>
         </div>
         <div class="card">
+          <h3>المؤثرات الصوتية</h3>
+          <label class="row" style="gap:8px;cursor:pointer;font-size:13.5px;flex-wrap:nowrap"><input type="checkbox" id="oSound" style="width:18px;height:18px;flex:none"><span>تشغيل الأصوات عند الضغط على الأزرار وتنفيذ الإجراءات</span></label>
+          <div class="field" style="margin-top:12px"><label>مستوى الصوت: <b id="vVol">60%</b></label><input type="range" id="oVol" min="10" max="100" step="5"></div>
+          <div class="row" style="margin-top:10px;gap:6px">
+            <button class="btn sm" type="button" data-sfx="ok">نجاح</button><button class="btn sm" type="button" data-sfx="del">حذف</button><button class="btn sm" type="button" data-sfx="print">طباعة</button><button class="btn sm" type="button" data-sfx="err">خطأ</button><button class="btn sm" type="button" data-sfx="login">دخول</button>
+          </div>
+          <span class="hint" style="display:block;margin-top:6px">يُحفظ هذا الإعداد على هذا الجهاز فقط.</span>
+        </div>
+        <div class="card">
           <h3>هوية الشركة</h3>
           <div class="grid" style="gap:12px">
             <div class="field"><label>اسم الشركة على الملصق</label><input id="sCo"></div>
@@ -694,10 +728,18 @@ html{-webkit-text-size-adjust:100%}
         </div>
       </div>
     </section>
+    <footer class="cfoot no-print">
+      <div class="cf-in">
+        <span class="cf-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span>
+        <span>إعداد وتطوير <b>أحمد العكاري</b></span>
+        <span class="cf-sep"></span>
+        <span class="cf-co">© <span id="cfYear">2026</span> راكان لاستيراد المواد الغذائية والتوزيع</span>
+      </div>
+    </footer>
   </main>
 </div>
 
-<nav class="bnav"><button class="nav" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>لوحة</span></button><button class="nav" data-v="assets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>الأصول</span></button><button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>تسجيل</span></button><button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg><span>الطباعة</span></button><button class="nav" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>الإعدادات</span></button></nav>
+<nav class="bnav"><button class="nav" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>لوحة</span></button><button class="nav" data-v="assets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>الأصول</span></button><button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg><span>تسجيل</span></button><button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg><span>الطباعة</span></button><button class="nav" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>الإعدادات</span></button></nav>
 <div class="modal" id="loginM" style="background:rgba(8,56,111,.82)"><div class="card" style="max-width:400px;text-align:center;padding:26px 24px">
   <img id="loginLogo" alt="راكان" style="max-width:190px;max-height:90px;object-fit:contain;margin:0 auto 10px;display:block">
   <h3 style="justify-content:center;font-size:18px">الدخول إلى منظومة الأصول</h3>
@@ -3150,7 +3192,7 @@ function useEmbedded(){odoo=(EMB.recs||[]).map(r=>({...r}));odooMeta={last:EMB.m
 let settings = { odooMulti:false, company:'راكان لاستيراد المواد الغذائية والتوزيع', prefix:'RKN', digits:5, mode:'pattern', cats: DEFAULT_CATS.map(c=>({name:c[0],code:c[1]})) };
 let fileHandle = null, fileName = '', lastMod = 0, dirty = false, editingCode = null;
 let queue = []; // codes queued for printing
-const prefs = Object.assign({ w:70,h:40,orient:'l',fmt:'ODOO',logo:true,co:false,name:true,code:true,loc:false,odoo:false,nameSrc:'local',border:false,mono:true,showSync:false,fs:100,sz:{logo:100,name:100,odoo:100,code:100,meta:100,bar:100},pad:1.5,rot:0,copies:1,custom:[],printer:'XP-P322B',page:'driver' }, load('rkm_prefs')||{});
+const prefs = Object.assign({ w:70,h:40,orient:'l',fmt:'ODOO',logo:true,co:false,name:true,code:true,loc:false,odoo:false,nameSrc:'local',border:false,mono:true,showSync:false,sound:true,vol:60,fs:100,sz:{logo:100,name:100,odoo:100,code:100,meta:100,bar:100},pad:1.5,rot:0,copies:1,custom:[],printer:'XP-P322B',page:'driver' }, load('rkm_prefs')||{});
 const FS = 'showOpenFilePicker' in window;
 if(!prefs.sizeV3){prefs.w=70;prefs.h=40;prefs.orient='l';prefs.sizeV2=1;prefs.sizeV3=1;store('rkm_prefs',prefs)}
 if(prefs.fmt==='EAN13')prefs.fmt='ODOO';
@@ -3164,9 +3206,27 @@ function today(){const d=new Date();return d.toISOString().slice(0,10)}
 function nowStr(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`}
 function fmtNum(n){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2})}
 function logo(){return load('rkm_logo')||DEFAULT_LOGO||''}
-let tt; function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast on'+(err==='ok'?' ok':err?' err':'');clearTimeout(tt);tt=setTimeout(()=>t.className='toast',3200)}
+/* ---- sound effects (Web Audio, no files) ---- */
+const SFX={ctx:null,
+  ac(){if(!this.ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;this.ctx=new A()}if(this.ctx.state==='suspended')this.ctx.resume();return this.ctx},
+  tone(f1,f2,dur,{type='sine',gain=.18,at=0,attack=.004}={}){const c=this.ac();if(!c)return;const t=c.currentTime+at,o=c.createOscillator(),g=c.createGain(),lp=c.createBiquadFilter();
+    lp.type='lowpass';lp.frequency.value=4200;o.type=type;o.frequency.setValueAtTime(f1,t);if(f2!==f1)o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+    const v=gain*(prefs.vol/100);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(v,.0002),t+attack);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(lp);lp.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+.02)},
+  play(k){if(!prefs.sound)return;try{switch(k){
+    case 'tick':this.tone(1250,1100,.045,{type:'triangle',gain:.11});break;
+    case 'nav':this.tone(520,780,.09,{gain:.10});break;
+    case 'pop':this.tone(440,660,.11,{gain:.12});this.tone(880,880,.08,{gain:.05,at:.05});break;
+    case 'ok':[[784,0],[1046,.09],[1318,.18]].forEach(([f,a])=>this.tone(f,f,.22,{gain:.14,at:a,attack:.01}));break;
+    case 'err':this.tone(320,180,.22,{type:'square',gain:.06});this.tone(240,150,.24,{type:'sine',gain:.12,at:.04});break;
+    case 'del':this.tone(700,180,.32,{gain:.15});this.tone(1400,360,.22,{type:'triangle',gain:.04,at:.02});break;
+    case 'print':for(let i=0;i<5;i++)this.tone(1500+i*40,1450,.03,{type:'square',gain:.035,at:i*.055});this.tone(988,1318,.18,{gain:.11,at:.32});break;
+    case 'login':[[523,0],[659,.08],[784,.16],[1046,.24]].forEach(([f,a])=>this.tone(f,f,.26,{gain:.12,at:a,attack:.01}));break}}catch(e){}}};
+document.addEventListener('click',e=>{const b=e.target.closest('button,.sz,.ocb-it,.ocb-chip,input[type=checkbox],input[type=radio],select');if(!b||b.disabled||b.classList.contains('nav')||b.id==='cmYes'||b.id==='loginYes'||b.dataset.sfx)return;SFX.play('tick')},true);
+document.addEventListener('mousedown',e=>{if(e.target.closest('.ocb-it,.ocb-chip'))SFX.play('tick')},true);
+let tt; function toast(m,err){SFX.play(err==='ok'?'ok':err?'err':'');const t=$('#toast');t.textContent=m;t.className='toast on'+(err==='ok'?' ok':err?' err':'');clearTimeout(tt);tt=setTimeout(()=>t.className='toast',3200)}
 const CMI={save:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h8V3M7 21v-7h10v7"/></svg>',edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',del:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>'};
-function confirmBox(title,body,yes='تأكيد',type){return new Promise(r=>{const c=document.querySelector('#confirmM .cmc');c.className='card cmc'+(type?' t-'+type:'');$('#cmI').innerHTML=CMI[type]||'';$('#cmT').textContent=title;$('#cmB').innerHTML=body;$('#cmYes').textContent=yes;$('#confirmM').classList.add('on');
+function confirmBox(title,body,yes='تأكيد',type){SFX.play('pop');return new Promise(r=>{const c=document.querySelector('#confirmM .cmc');c.className='card cmc'+(type?' t-'+type:'');$('#cmI').innerHTML=CMI[type]||'';$('#cmT').textContent=title;$('#cmB').innerHTML=body;$('#cmYes').textContent=yes;$('#confirmM').classList.add('on');
   const done=v=>{$('#confirmM').classList.remove('on');$('#cmYes').onclick=$('#cmNo').onclick=null;r(v)};$('#cmYes').onclick=()=>done(true);$('#cmNo').onclick=()=>done(false)})}
 function catCode(name){const c=settings.cats.find(c=>c.name===name);return c?c.code:'OTH'}
 function eanCheck(d12){let s=0;for(let i=0;i<12;i++)s+=(+d12[i])*(i%2?3:1);return (10-s%10)%10}
@@ -3320,8 +3380,8 @@ async function doLogin(){if(loginBusy)return;const code=$('#loginIn').value.trim
       if(!ok){showLogin();return}await gsCall('init',{},c)}
     ds=c;store('rkm_ds',ds);$('#loginM').classList.remove('on');fileHandle=null;fileName='';
     const b=load('rkm_backup');if(b&&b.pending){gsRev=b.rev||'stale';dirty=true;await gsSave()}else await gsLoad(true);
-    toast('تم الدخول — متصل بقاعدة البيانات المشتركة ✓');renderAll();dsRender()}
-  catch(e){$('#loginM').classList.add('on');$('#loginErr').textContent=e.code==='unauthorized'?'رمز الدخول غير صحيح':e.message}
+    toast('تم الدخول — متصل بقاعدة البيانات المشتركة');SFX.play('login');renderAll();dsRender()}
+  catch(e){SFX.play('err');$('#loginM').classList.add('on');$('#loginErr').textContent=e.code==='unauthorized'?'رمز الدخول غير صحيح':e.message}
   finally{loginBusy=false;$('#loginYes').disabled=false}}
 $('#loginYes').onclick=doLogin;$('#loginIn').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 $('#loginExcel').onclick=()=>{ds.mode='excel';store('rkm_ds',ds);$('#loginM').classList.remove('on');setConn();renderAll();toast('مصدر البيانات: ملف Excel على هذا الجهاز')};
@@ -3395,7 +3455,7 @@ function fitText(root){
   });
 }
 /* ================= Printing ================= */
-async function doPrint(list,{test=false}={}){
+async function doPrint(list,{test=false}={}){SFX.play('print');
   if(!list.length)return toast('لا توجد أصول للطباعة',1);
   const un=prefs.fmt==='ODOO'?list.filter(a=>!a.odooId&&assets.includes(a)):[];
   if(un.length&&!await confirmBox('أصول غير مربوطة بأودو',`${un.length} من ${list.length} أصل غير مربوط بأودو، وستُطبع باسمها في المنظومة دون اسم أودو وكوده:<br><b dir="ltr">${un.slice(0,6).map(a=>esc(a.code)).join('، ')}${un.length>6?' …':''}</b><br>لربطها: سجل الأصول ← تعديل ← ربط بأصل في أودو.`,'طباعة على أي حال'))return;
@@ -3419,8 +3479,8 @@ let unlocked=false;
 function isUnlocked(){return unlocked}
 function askLock(next){lockNext=next;$('#lockIn').value='';$('#lockErr').textContent='';$('#lockM').classList.add('on');setTimeout(()=>$('#lockIn').focus(),50)}
 function tryUnlock(){const v=$('#lockIn').value.trim();$('#lockIn').value='';if(lockHash(v)===LOCK_H){unlocked=true;$('#lockM').classList.remove('on');const n=lockNext;lockNext=null;if(n)n()}
-  else{$('#lockErr').textContent='كلمة السر غير صحيحة';$('#lockIn').focus()}}
-function go(v){if(v==='settings'&&!isUnlocked())return askLock(()=>go('settings'));const mt=document.getElementById('mTitle');if(mt)mt.textContent=TITLES[v][0];$$('.nav').forEach(n=>n.classList.toggle('on',n.dataset.v===v));$$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));$('#vTitle').textContent=TITLES[v][0];$('#vSub').textContent=TITLES[v][1];if(v==='label')renderDesigner();if(v==='form'&&!editingCode)resetForm();window.scrollTo(0,0)}
+  else{SFX.play('err');$('#lockErr').textContent='كلمة السر غير صحيحة';$('#lockIn').focus()}}
+function go(v){if(v==='settings'&&!isUnlocked()){SFX.play('pop');return askLock(()=>go('settings'))}SFX.play('nav');const mt=document.getElementById('mTitle');if(mt)mt.textContent=TITLES[v][0];$$('.nav').forEach(n=>n.classList.toggle('on',n.dataset.v===v));$$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));$('#vTitle').textContent=TITLES[v][0];$('#vSub').textContent=TITLES[v][1];if(v==='label')renderDesigner();if(v==='form'&&!editingCode)resetForm();window.scrollTo(0,0)}
 function renderAll(){renderOdooList();renderMulti();renderDash();renderTable();renderFilters();renderCatTable();fillCatSelect();if($('#v-label').classList.contains('on'))renderDesigner()}
 function bars(el,map){const e=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,8),m=Math.max(1,...e.map(x=>x[1]));el.innerHTML=e.length?e.map(([k,v])=>`<div class="bar"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(k)}</span><div class="tr"><div class="fl" style="width:${v/m*100}%"></div></div><b>${v}</b></div>`).join(''):'<div class="hint">لا توجد بيانات بعد</div>'}
 function renderDash(){
@@ -3520,7 +3580,7 @@ function renderSetup(){
 function setPref(k,v){prefs[k]=v;store('rkm_prefs',prefs);renderDesigner()}
 
 /* ================= Settings ================= */
-function renderSettings(){$('#sCo').value=settings.company;$('#sPrefix').value=settings.prefix;$('#sDigits').value=settings.digits;$('#sMode').value=settings.mode;const lg=logo();if($('#mLogo')){$('#mLogo').src=lg||'';$('#mLogo').hidden=!lg}$('#sLogoPv').src=lg||'';$('#sLogoPv').hidden=!lg;$('#sideLogo').src=lg||'';$('#sideLogo').hidden=!lg;$('#sideCo').textContent=settings.company;$('#noLogo').style.display=lg?'none':'block';updEx()}
+function renderSettings(){try{renderSound()}catch(e){}const cy=document.getElementById('cfYear');if(cy)cy.textContent=new Date().getFullYear();$('#sCo').value=settings.company;$('#sPrefix').value=settings.prefix;$('#sDigits').value=settings.digits;$('#sMode').value=settings.mode;const lg=logo();if($('#mLogo')){$('#mLogo').src=lg||'';$('#mLogo').hidden=!lg}$('#sLogoPv').src=lg||'';$('#sLogoPv').hidden=!lg;$('#sideLogo').src=lg||'';$('#sideLogo').hidden=!lg;$('#sideCo').textContent=settings.company;$('#noLogo').style.display=lg?'none':'block';updEx()}
 function updEx(){const m=$('#sMode').value,p=$('#sPrefix').value||'RKN',d=+$('#sDigits').value||5;$('#sEx').textContent=m==='numeric'?'2900000000014':`${p}-IT-${'1'.padStart(d,'0')}`}
 
 /* ================= Odoo ================= */
@@ -3747,7 +3807,7 @@ $('#tb').addEventListener('click',async e=>{const tr=e.target.closest('tr[data-c
   const act=(e.target.closest('[data-a]')||{}).dataset?.a;if(act==='edit')editAsset(c);
   if(act==='print'){queue=[c];go('label')}
   const da=assets.find(a=>a.code===c);
-  if(act==='del'&&await confirmBox('تأكيد حذف الأصل',`هل تريد حذف هذا الأصل نهائياً من قاعدة البيانات؟<table class="cmsum"><tr><td>اسم الأصل</td><td><b>${esc(da?.name)}</b></td></tr><tr><td>رقم الباركود</td><td class="mono">${esc(c)}</td></tr>${da?.odooId?`<tr><td>رقم أودو</td><td>${esc(da.odooId)}</td></tr>`:''}</table><div style="color:var(--bad);font-size:12.5px;margin-top:8px">لا يمكن التراجع عن الحذف${+da?.printCount>0?'، والملصق المطبوع على الأصل لن يُعرَّف بعد الآن':''}.</div>`,'حذف نهائي','del')){assets=assets.filter(a=>a.code!==c);selected.delete(c);await commit();toast(`تم حذف الأصل ${c} بنجاح`,'ok')}});
+  if(act==='del'&&await confirmBox('تأكيد حذف الأصل',`هل تريد حذف هذا الأصل نهائياً من قاعدة البيانات؟<table class="cmsum"><tr><td>اسم الأصل</td><td><b>${esc(da?.name)}</b></td></tr><tr><td>رقم الباركود</td><td class="mono">${esc(c)}</td></tr>${da?.odooId?`<tr><td>رقم أودو</td><td>${esc(da.odooId)}</td></tr>`:''}</table><div style="color:var(--bad);font-size:12.5px;margin-top:8px">لا يمكن التراجع عن الحذف${+da?.printCount>0?'، والملصق المطبوع على الأصل لن يُعرَّف بعد الآن':''}.</div>`,'حذف نهائي','del')){assets=assets.filter(a=>a.code!==c);selected.delete(c);await commit();toast(`تم حذف الأصل ${c} بنجاح`);SFX.play('del')}});
 $('#bPrintSel').onclick=()=>{queue=assets.filter(a=>selected.has(a.code)).map(a=>a.code);go('label')};
 $('#af').addEventListener('submit',submitForm);$('#bCancel').onclick=()=>{editingCode=null;go('assets')};
 $('#bGen').onclick=()=>{$('#af').code.value=nextCode($('#af').category.value)};
@@ -3828,6 +3888,10 @@ function gsForm(){return {mode:'gsheet',url:$('#gsUrl').value.trim(),key:ds.key}
 document.querySelectorAll('input[name=dsMode]').forEach(r=>r.onchange=async e=>{
   if(e.target.value==='excel'){if(dirty&&GS()&&!await confirmBox('التحويل إلى Excel','توجد تغييرات لم تُحفظ في Google Sheets بعد. هل تريد المتابعة؟','متابعة'))return dsRender();ds.mode='excel';store('rkm_ds',ds);gsName='';setConn();dsRender();toast('مصدر البيانات: ملف Excel — افتح الملف أو أنشئ قاعدة جديدة')}
   else{ds.mode='gsheet';if(!ds.url)ds.url=DEFAULT_GS;store('rkm_ds',ds);dsRender();setConn();if(GS())await gsLoad();else if(ds.url)showLogin();else $('#gsUrl').focus()}});
+function renderSound(){$('#oSound').checked=!!prefs.sound;$('#oVol').value=prefs.vol;$('#vVol').textContent=prefs.vol+'%';$('#oVol').disabled=!prefs.sound}
+$('#oSound').onchange=e=>{prefs.sound=e.target.checked;store('rkm_prefs',prefs);renderSound();if(prefs.sound)SFX.play('ok')};
+$('#oVol').oninput=e=>{prefs.vol=+e.target.value;$('#vVol').textContent=prefs.vol+'%';store('rkm_prefs',prefs)};$('#oVol').onchange=()=>SFX.play('ok');
+document.querySelectorAll('[data-sfx]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();SFX.play(b.dataset.sfx)}));
 $('#oShowSync').onchange=e=>{prefs.showSync=e.target.checked;store('rkm_prefs',prefs);setConn();toast(e.target.checked?'تم إظهار زرّي الحفظ والتحديث':'تم إخفاء زرّي الحفظ والتحديث','ok')};
 $('#bGsLogout').onclick=async()=>{if(dirty&&!await confirmBox('تسجيل الخروج','توجد تغييرات لم تُحفظ بعد. هل تريد المتابعة؟','خروج'))return;logoutDevice('تم تسجيل الخروج من هذا الجهاز.');dsRender()};
 $('#bGsCode').onclick=async()=>{const code=$('#gasTpl').textContent;
