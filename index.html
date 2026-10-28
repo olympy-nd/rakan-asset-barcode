@@ -430,11 +430,11 @@ input[type=range]{accent-color:var(--navy)}
             </div>
             <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">خطوات الإعداد (مرة واحدة)</summary>
               <div class="infobox" style="margin-top:8px">
-                1. اضغط <b>توليد</b> لإنشاء مفتاح سري، ثم <b>نسخ كود Apps Script</b> (يُنسخ والمفتاح بداخله).<br>
+                1. اضغط <b>نسخ كود Apps Script</b>.<br>
                 2. افتح ملف Google Sheet ← <b>الإضافات (Extensions) ← Apps Script</b> ← احذف المحتوى والصق الكود ← حفظ.<br>
                 3. <b>نشر (Deploy) ← نشر جديد ← النوع: تطبيق ويب</b> · التنفيذ باسم: <b>أنا</b> · من يمكنه الوصول: <b>أي شخص</b> ← نشر ← وافق على الأذونات.<br>
-                4. انسخ <b>رابط تطبيق الويب</b> (ينتهي بـ /exec) والصقه هنا، ثم <b>حفظ والاتصال</b>.<br>
-                5. على كل جهاز آخر: أدخل الرابط والمفتاح نفسيهما مرة واحدة، وبعدها تتصل المنظومة تلقائياً عند فتحها.<br>
+                4. انسخ <b>رابط تطبيق الويب</b> (ينتهي بـ /exec) والصقه هنا، ثم <b>حفظ والاتصال</b>. تُنشئ المنظومة مفتاحاً سرياً تلقائياً ويُقفل في الشيت عند أول اتصال.<br>
+                5. على كل جهاز آخر: أدخل الرابط والمفتاح نفسيهما (انسخ المفتاح من هذا الجهاز) مرة واحدة، وبعدها تتصل المنظومة تلقائياً عند فتحها.<br>
                 <span style="color:#B23E10">احتفظ بالمفتاح سرياً: من يملك الرابط والمفتاح معاً يستطيع قراءة البيانات وتعديلها. عند تغيير الكود لاحقاً استخدم «إدارة عمليات النشر ← تعديل ← إصدار جديد» ليبقى الرابط نفسه.</span>
               </div>
             </details>
@@ -2817,8 +2817,9 @@ var qrcode = function() {
  * منظومة باركود الأصول — راكان لاستيراد المواد الغذائية والتوزيع
  * خادم Google Sheets (Apps Script). يُلصق داخل الشيت: الإضافات ← Apps Script
  * ثم: نشر ← نشر جديد ← تطبيق ويب ← التنفيذ باسم: أنا ← من يمكنه الوصول: أي شخص
+ * المفتاح السري يُنشأ في المنظومة ويُقفل هنا عند أول اتصال (لا يُكتب في الكود).
+ * لإعادة ضبط المفتاح: شغّل الدالة resetKey من محرر Apps Script ثم أعد الاتصال من المنظومة.
  */
-const KEY = '__KEY__'; // المفتاح السري — يجب أن يطابق المفتاح في إعدادات المنظومة
 const SHEETS = ['الأصول', 'أصول أودو', 'الفئات', 'سجل الطباعة', 'الإعدادات'];
 const TEXT_COL = /رقم|باركود|الكود|الرمز|تاريخ|التاريخ|آخر طباعة|المقاس/;
 
@@ -2830,8 +2831,17 @@ function doPost(e) {
 }
 
 function handle_(p) {
-  if (!p.key || p.key !== KEY) return out_({ ok: false, error: 'unauthorized' });
+  const props = PropertiesService.getScriptProperties(), stored = props.getProperty('key');
+  if (p.action === 'init') {
+    if (!p.key || String(p.key).length < 24) return out_({ ok: false, error: 'weak_key' });
+    if (stored && stored !== p.key) return out_({ ok: false, error: 'unauthorized' });
+    if (!stored) props.setProperty('key', p.key);
+  } else {
+    if (!stored) return out_({ ok: false, error: 'not_initialized' });
+    if (!p.key || p.key !== stored) return out_({ ok: false, error: 'unauthorized' });
+  }
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (p.action === 'init') return out_({ ok: true, name: ss.getName(), rev: rev_() });
   if (p.action === 'ping') return out_({ ok: true, name: ss.getName(), rev: rev_() });
   if (p.action === 'load') {
     const data = {};
@@ -2872,6 +2882,9 @@ function write_(ss, name, rows) {
   sh.setFrozenRows(1);
   sh.setRightToLeft(true);
 }
+
+/** يمسح المفتاح المحفوظ؛ أول جهاز يتصل بعدها يحدد المفتاح الجديد */
+function resetKey() { PropertiesService.getScriptProperties().deleteProperty('key'); }
 
 function rev_() { return PropertiesService.getScriptProperties().getProperty('rev') || bump_(); }
 function bump_() { const r = new Date().toISOString(); PropertiesService.getScriptProperties().setProperty('rev', r); return r; }
@@ -3030,7 +3043,7 @@ let gsRev='',gsName='',gsBusy=false,gsPending=false,gsTimer=null,gsState='';
 async function gsCall(action,payload={},cfg=ds){
   let r;try{r=await fetch(cfg.url,{method:'POST',body:JSON.stringify(Object.assign({key:cfg.key,action},payload)),redirect:'follow'})}catch(e){throw new Error('تعذّر الوصول إلى رابط Apps Script — تحقق من الرابط والاتصال بالإنترنت')}
   let j;try{j=await r.json()}catch(e){throw new Error('الرابط لا يعيد استجابة المنظومة — تأكد أنه رابط تطبيق الويب (ينتهي بـ /exec) وأن الوصول "أي شخص"')}
-  if(!j.ok){const m={unauthorized:'المفتاح السري غير مطابق للمفتاح في Apps Script',busy:'الشيت مشغول بحفظ آخر، حاول بعد لحظات'};const e=new Error(m[j.error]||j.error);e.code=j.error;throw e}
+  if(!j.ok){const m={unauthorized:'المفتاح السري غير مطابق للمفتاح المقفل في الشيت. إن فقدته شغّل resetKey في Apps Script ثم اتصل من جديد',busy:'الشيت مشغول بحفظ آخر، حاول بعد لحظات',not_initialized:'لم يُربط الشيت بمفتاح بعد — اضغط «حفظ والاتصال»',weak_key:'المفتاح قصير جداً — اضغط «توليد»'};const e=new Error(m[j.error]||j.error);e.code=j.error;throw e}
   return j;
 }
 function wbFromSheets(data){const wb=XLSX.utils.book_new();Object.entries(data||{}).forEach(([n,rows])=>{if(rows&&rows.length)XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),n)});return wb}
@@ -3450,12 +3463,13 @@ document.querySelectorAll('input[name=dsMode]').forEach(r=>r.onchange=async e=>{
   if(e.target.value==='excel'){if(dirty&&GS()&&!await confirmBox('التحويل إلى Excel','توجد تغييرات لم تُحفظ في Google Sheets بعد. هل تريد المتابعة؟','متابعة'))return dsRender();ds.mode='excel';store('rkm_ds',ds);gsName='';setConn();dsRender();toast('مصدر البيانات: ملف Excel — افتح الملف أو أنشئ قاعدة جديدة')}
   else{ds.mode='gsheet';dsRender();if(ds.url){store('rkm_ds',ds);await gsLoad()}else{setConn();$('#gsUrl').focus()}}});
 $('#bGsKey').onclick=()=>{const a=new Uint8Array(18);crypto.getRandomValues(a);$('#gsKey').value='rkn-'+[...a].map(b=>b.toString(16).padStart(2,'0')).join('')};
-$('#bGsCode').onclick=async()=>{const k=$('#gsKey').value.trim();if(k.length<12)return toast('اضغط «توليد» أولاً لإنشاء مفتاح سري',1);const code=$('#gasTpl').textContent.replace('__KEY__',k);
-  try{await navigator.clipboard.writeText(code);toast('تم نسخ كود Apps Script مع المفتاح ✓')}catch(e){const b=new Blob([code],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Code.gs';a.click();toast('تم تنزيل الكود كملف Code.gs')}};
+$('#bGsCode').onclick=async()=>{const code=$('#gasTpl').textContent;
+  try{await navigator.clipboard.writeText(code);toast('تم نسخ كود Apps Script ✓')}catch(e){const b=new Blob([code],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Code.gs';a.click();toast('تم تنزيل الكود كملف Code.gs')}};
 $('#bGsTest').onclick=async()=>{const c=gsForm();if(!/^https:\/\/script\.google(usercontent)?\.com\//.test(c.url))return toast('الرابط يجب أن يكون رابط تطبيق ويب من script.google.com',1);
   try{const j=await gsCall('ping',{},c);$('#gsInfo').textContent=`✓ الاتصال ناجح: «${j.name}»`;toast('الاتصال بـ Google Sheets ناجح ✓')}catch(e){$('#gsInfo').textContent='✗ '+e.message;toast(e.message,1)}};
-$('#bGsConnect').onclick=async()=>{const c=gsForm();if(!c.url||!c.key)return toast('أدخل الرابط والمفتاح',1);
-  try{const j=await gsCall('ping',{},c);ds=c;store('rkm_ds',ds);fileHandle=null;fileName='';
+$('#bGsConnect').onclick=async()=>{if(!$('#gsKey').value.trim())$('#bGsKey').click();const c=gsForm();if(!c.url)return toast('أدخل رابط تطبيق الويب',1);
+  if(!/^https:\/\/script\.google(usercontent)?\.com\//.test(c.url))return toast('الرابط يجب أن يكون رابط تطبيق ويب من script.google.com',1);
+  try{const j=await gsCall('init',{},c);ds=c;store('rkm_ds',ds);fileHandle=null;fileName='';
     const empty=(await gsCall('load')).data;const has=Object.values(empty||{}).some(r=>r&&r.length>1);
     if(!has&&(assets.length||odoo.length)&&await confirmBox('الشيت فارغ',`الشيت «${esc(j.name)}» لا يحتوي بيانات. هل تريد رفع البيانات الحالية إليه؟ (${assets.length} أصل · ${odoo.length} أصل أودو)`,'رفع البيانات')){gsName=j.name;gsRev=j.rev;await gsSave(true);toast('تم رفع البيانات إلى Google Sheets ✓')}
     else await gsLoad();dsRender()}catch(e){toast(e.message,1)}};

@@ -2,8 +2,9 @@
  * منظومة باركود الأصول — راكان لاستيراد المواد الغذائية والتوزيع
  * خادم Google Sheets (Apps Script). يُلصق داخل الشيت: الإضافات ← Apps Script
  * ثم: نشر ← نشر جديد ← تطبيق ويب ← التنفيذ باسم: أنا ← من يمكنه الوصول: أي شخص
+ * المفتاح السري يُنشأ في المنظومة ويُقفل هنا عند أول اتصال (لا يُكتب في الكود).
+ * لإعادة ضبط المفتاح: شغّل الدالة resetKey من محرر Apps Script ثم أعد الاتصال من المنظومة.
  */
-const KEY = '__KEY__'; // المفتاح السري — يجب أن يطابق المفتاح في إعدادات المنظومة
 const SHEETS = ['الأصول', 'أصول أودو', 'الفئات', 'سجل الطباعة', 'الإعدادات'];
 const TEXT_COL = /رقم|باركود|الكود|الرمز|تاريخ|التاريخ|آخر طباعة|المقاس/;
 
@@ -15,8 +16,17 @@ function doPost(e) {
 }
 
 function handle_(p) {
-  if (!p.key || p.key !== KEY) return out_({ ok: false, error: 'unauthorized' });
+  const props = PropertiesService.getScriptProperties(), stored = props.getProperty('key');
+  if (p.action === 'init') {
+    if (!p.key || String(p.key).length < 24) return out_({ ok: false, error: 'weak_key' });
+    if (stored && stored !== p.key) return out_({ ok: false, error: 'unauthorized' });
+    if (!stored) props.setProperty('key', p.key);
+  } else {
+    if (!stored) return out_({ ok: false, error: 'not_initialized' });
+    if (!p.key || p.key !== stored) return out_({ ok: false, error: 'unauthorized' });
+  }
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (p.action === 'init') return out_({ ok: true, name: ss.getName(), rev: rev_() });
   if (p.action === 'ping') return out_({ ok: true, name: ss.getName(), rev: rev_() });
   if (p.action === 'load') {
     const data = {};
@@ -57,6 +67,9 @@ function write_(ss, name, rows) {
   sh.setFrozenRows(1);
   sh.setRightToLeft(true);
 }
+
+/** يمسح المفتاح المحفوظ؛ أول جهاز يتصل بعدها يحدد المفتاح الجديد */
+function resetKey() { PropertiesService.getScriptProperties().deleteProperty('key'); }
 
 function rev_() { return PropertiesService.getScriptProperties().getProperty('rev') || bump_(); }
 function bump_() { const r = new Date().toISOString(); PropertiesService.getScriptProperties().setProperty('rev', r); return r; }
