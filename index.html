@@ -3489,7 +3489,14 @@ window.addEventListener('resize',()=>{if($('#v-label').classList.contains('on'))
   useEmbedded();
   if(!FS&&!GS())$('#fsWarn').style.display='block';if(location.protocol!=='file:'){$('#bSysSave').style.display='none';$('#sysState').style.display='none'}
   const b=load('rkm_backup');if(b&&b.assets){assets=b.assets;printLog=b.printLog||[];extraCols=b.extraCols||[];odoo=b.odoo||[];odooMeta=b.odooMeta||odooMeta;if(b.settings)Object.assign(settings,b.settings)}
-  if(GS()){renderSettings();renderSetup();setConn();renderAll();resetForm();sysState();dsRender();dsRender();await gsLoad(true);return}
+  const hm=location.hash.match(/(?:^#|&)gs=([^&]+)/);
+  if(hm){const u=decodeURIComponent(hm[1]);history.replaceState(null,'',location.pathname+location.search);
+    if(/^https:\/\/script\.google(usercontent)?\.com\/.+\/exec$/.test(u)&&!(GS()&&ds.url===u)){
+      const k=ds.url===u&&ds.key?ds.key:(()=>{const a=new Uint8Array(18);crypto.getRandomValues(a);return 'rkn-'+[...a].map(b=>b.toString(16).padStart(2,'0')).join('')})();
+      const c={mode:'gsheet',url:u,key:k};
+      try{await gsCall('init',{},c);ds=c;store('rkm_ds',ds);setTimeout(()=>toast('تم ربط المنظومة بـ Google Sheets ✓'),1500)}
+      catch(e){ds=Object.assign({},c,{key:''});store('rkm_ds',ds);setTimeout(()=>{go('settings');toast(e.code==='unauthorized'?'الشيت مربوط بمفتاح من جهاز آخر — أدخل المفتاح نفسه في الإعدادات':e.message,1)},400)}}}
+  if(GS()){renderSettings();renderSetup();setConn();renderAll();resetForm();sysState();dsRender();await gsLoad(true);return}
   if(FS){const h=await idbGet('handle');if(h){$('#lastName').textContent=h.name;let ok=false;
     try{if(await h.queryPermission({mode:'readwrite'})==='granted'){await attach(h);ok=true}}catch(e){}
     if(!ok){$('#reconnect').style.display='block';
