@@ -8,6 +8,7 @@
  */
 const A_SHEET = 'الأصول', CODE_H = 'رقم الباركود', VER_H = 'الإصدار', DEL_SHEET = '_محذوفات';
 const SECTIONS = { odoo: 'أصول أودو', settings: 'الإعدادات', cats: 'الفئات', log: 'سجل الطباعة' };
+const PH_ROOT = 'صور أصول راكان', TH_SHEET = '_مصغّرات';
 const LEGACY = ['الأصول', 'أصول أودو', 'الفئات', 'سجل الطباعة', 'الإعدادات'];
 const TEXT_COL = /رقم|باركود|الكود|الرمز|تاريخ|التاريخ|آخر طباعة|المقاس/;
 
@@ -34,6 +35,8 @@ function handle_(p) {
   if (a === 'init' || a === 'ping') return out_({ ok: true, name: ss.getName(), rev: rev_(), seq: seq_(), v: 2 });
   if (a === 'sync') { if (!seq_()) nextSeq_(); return out_(sync_(ss, +p.since || 0)); }
   if (a === 'load') return out_(legacyLoad_(ss));
+  if (a === 'thumbs') return out_(thumbs_(ss, p));
+  if (a === 'photoGet') return out_(photoGet_(p));
   // ---- writes ----
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
@@ -44,6 +47,8 @@ function handle_(p) {
     if (a === 'putSection') return out_(putSection_(ss, p));
     if (a === 'appendLog') return out_(appendLog_(ss, p));
     if (a === 'save') return out_(legacySave_(ss, p));
+    if (a === 'photoUpload') return out_(photoUpload_(ss, p));
+    if (a === 'photoDelete') return out_(photoDelete_(ss, p));
   } finally { lock.releaseLock(); }
   return out_({ ok: false, error: 'unknown_action' });
 }
@@ -64,7 +69,7 @@ function sheet_(ss, name, head) {
   if (!sh) {
     sh = ss.insertSheet(name);
     if (head && head.length) { sh.getRange(1, 1, 1, head.length).setValues([head]); fmtHead_(sh, head.length); textCols_(sh, head); }
-    if (name === DEL_SHEET) sh.hideSheet();
+    if (name === DEL_SHEET || name === TH_SHEET) sh.hideSheet();
   }
   return sh;
 }
@@ -264,5 +269,60 @@ function legacySave_(ss, p) {
   const n = nextSeq_(); P_().setProperty('sec_full', String(n));
   return { ok: true, rev: rev_(), seq: n };
 }
+
+/* ---------- صور الأصول (Google Drive) ----------
+   صور أصول راكان / <الفئة> / <رقم الأصل — اسمه> / <رقم>_<النوع>_<التاريخ>.jpg
+   الصور خاصة في Drive المالك (بدون مشاركة عامة)، والمصغّرات في ورقة مخفية لعرض سريع. */
+function safeName_(s) { return String(s || '').replace(/[\\/:*?"<>|#%]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 90); }
+function phRoot_() {
+  const P = P_(); const id = P.getProperty('ph_root');
+  if (id) { try { const f = DriveApp.getFolderById(id); if (!f.isTrashed()) return f; } catch (e) {} }
+  const it = DriveApp.getFoldersByName(PH_ROOT); const f = it.hasNext() ? it.next() : DriveApp.createFolder(PH_ROOT);
+  P.setProperty('ph_root', f.getId()); return f;
+}
+function child_(parent, name) { const it = parent.getFoldersByName(name); return it.hasNext() ? it.next() : parent.createFolder(name); }
+function assetFolder_(code, name, cat) {
+  const catF = child_(phRoot_(), safeName_(cat) || 'بدون فئة');
+  const want = safeName_(code + (name ? ' — ' + name : ''));
+  const P = P_(), k = 'phf_' + code; let f = null; const id = P.getProperty(k);
+  if (id) { try { f = DriveApp.getFolderById(id); if (f.isTrashed()) f = null; } catch (e) { f = null; } }
+  if (!f) { f = child_(catF, want); P.setProperty(k, f.getId()); return f; }
+  if (f.getName() !== want) f.setName(want);                       // تغيّر اسم الأصل
+  const ps = f.getParents(), par = ps.hasNext() ? ps.next() : null;
+  if (!par || par.getId() !== catF.getId()) f.moveTo(catF);        // تغيّرت الفئة
+  return f;
+}
+function photoUpload_(ss, p) {
+  const code = String(p.code || '').trim();
+  if (!code || !p.data) return { ok: false, error: 'bad_request' };
+  const f = assetFolder_(code, p.name, p.cat);
+  const t = safeName_(p.type) || 'صورة';
+  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd_HH-mm-ss');
+  const blob = Utilities.newBlob(Utilities.base64Decode(p.data), p.mime || 'image/jpeg', safeName_(code + '_' + t + '_' + stamp) + '.jpg');
+  const file = f.createFile(blob);
+  file.setDescription(code + ' | ' + t + (p.name ? ' | ' + p.name : ''));
+  if (p.thumb && String(p.thumb).length < 48000) sheet_(ss, TH_SHEET, ['معرّف الملف', 'رقم الباركود', 'مصغّرة']).appendRow([file.getId(), code, p.thumb]);
+  return { ok: true, id: file.getId(), name: file.getName(), folder: f.getId() };
+}
+function thumbs_(ss, p) {
+  const want = {}; (p.ids || []).forEach(id => want[id] = 1);
+  const sh = ss.getSheetByName(TH_SHEET), out = {};
+  if (sh && sh.getLastRow() > 1) sh.getRange(2, 1, sh.getLastRow() - 1, 3).getValues().forEach(r => { if (want[r[0]]) out[r[0]] = r[2]; });
+  return { ok: true, thumbs: out };
+}
+function photoGet_(p) {
+  try { const b = DriveApp.getFileById(String(p.id)).getBlob(); return { ok: true, mime: b.getContentType(), data: Utilities.base64Encode(b.getBytes()) }; }
+  catch (e) { return { ok: false, error: 'photo_missing' }; }
+}
+function photoDelete_(ss, p) {
+  const id = String(p.id || '');
+  try { DriveApp.getFileById(id).setTrashed(true); } catch (e) {}   // سلة Drive (قابلة للاسترجاع 30 يوماً)
+  const sh = ss.getSheetByName(TH_SHEET);
+  if (sh && sh.getLastRow() > 1) { const v = sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues();
+    for (let i = v.length - 1; i >= 0; i--) if (String(v[i][0]) === id) sh.deleteRow(i + 2); }
+  return { ok: true };
+}
+/** شغّلها مرة واحدة من المحرّر لمنح صلاحية Google Drive */
+function authorizeDrive() { phRoot_(); }
 
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
