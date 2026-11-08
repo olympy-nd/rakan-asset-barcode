@@ -186,6 +186,37 @@ tr.hl td{background:var(--gold-2)!important}
 .stage{background:repeating-conic-gradient(#E9EDF3 0% 25%,#F6F8FB 0% 50%) 50%/18px 18px;border-radius:10px;min-height:340px;display:flex;align-items:center;justify-content:center;padding:30px;border:1px solid var(--line)}
 .ruler{color:var(--muted);font-size:12px;text-align:center;margin-top:8px}
 .warnbox{background:var(--gold-soft);color:#B23E10;border:1px solid var(--gold-2);border-right:4px solid var(--gold);border-radius:9px;padding:9px 12px;font-size:12.5px}
+/* asset photos */
+.ph-box{border:1px dashed #b9c9e2;border-radius:12px;padding:10px;background:var(--tint)}
+.ph-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ph-tools select{width:auto;min-width:190px;padding:7px 10px}
+.ph-btn{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.ph-btn svg{width:17px;height:17px}
+.ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:9px;margin-top:10px}
+.ph-grid:empty{display:none}
+.ph-it{position:relative;border-radius:10px;overflow:hidden;background:#fff;border:1px solid var(--line);aspect-ratio:1;cursor:zoom-in}
+.ph-it img{width:100%;height:100%;object-fit:cover;display:block}
+.ph-it .ph-t{position:absolute;inset:auto 0 0 0;background:linear-gradient(transparent,rgba(8,30,60,.82));color:#fff;font-size:11px;font-weight:700;padding:14px 6px 5px;text-align:center;line-height:1.3}
+.ph-it .ph-x{position:absolute;top:5px;left:5px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(255,255,255,.94);color:var(--bad);font:700 15px/1 inherit;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.ph-it .ph-p{position:absolute;top:5px;right:5px;background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px}
+.ph-it.rm{opacity:.35}
+.th{width:38px;height:38px;border-radius:8px;object-fit:cover;display:block;margin:auto;background:var(--tint);border:1px solid var(--line);cursor:zoom-in}
+.th0{width:38px;height:38px;border-radius:8px;margin:auto;display:grid;place-items:center;color:#b3c0d4;background:var(--tint);border:1px dashed #cfd9e8}
+.th0 svg{width:18px;height:18px}
+.thn{position:relative;display:block;width:38px;margin:auto}.thn i{position:absolute;bottom:-4px;left:-4px;background:var(--navy);color:#fff;font:700 10px/1 Tajawal,sans-serif;font-style:normal;padding:2px 4px;border-radius:6px}
+#phM .phv{background:#0b1626;border-radius:16px;width:min(980px,96vw);max-height:94vh;display:flex;flex-direction:column;overflow:hidden;color:#fff}
+.phv-top{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0f2038}
+.phv-top .hint{color:#9fb3cf}
+.phv-st{position:relative;display:flex;align-items:center;justify-content:center;min-height:300px;flex:1}
+.phv-img{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:min(74vh,720px)}
+.phv-img img{max-width:100%;max-height:100%;object-fit:contain}
+.phv-load{position:absolute;color:#9fb3cf;font-size:13px}
+.phv-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:28px;cursor:pointer;z-index:2}
+#phvP{right:10px}#phvNx{left:10px}
+.phv-cap{padding:8px 14px 12px;font-size:12.5px;color:#c4d2e6;text-align:center}
+@media (max-width:820px){.ph-tools select{flex:1 1 100%}.ph-btn{flex:1;justify-content:center;padding:10px}.ph-grid{grid-template-columns:repeat(3,1fr)}.phv-top{flex-wrap:wrap}}
+@media (max-width:1180px){.atbl tr td[data-l="صورة"]{position:absolute;top:10px;left:46px;right:auto;width:auto!important;padding:0!important;border:0!important}.atbl td[data-l="صورة"] .thn{margin:0}.atbl td[data-l="صورة"]::before{display:none}.atbl td[data-l="صورة"] .th0{display:none}.atbl tr td[data-l="اسم الأصل"]{padding-left:98px!important}}
+@media print{#phM{display:none!important}}
 /* print offset */
 .offrow{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px;margin-bottom:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
 .offh{flex:1 1 100%;display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--navy)}
@@ -562,8 +593,8 @@ html{-webkit-text-size-adjust:100%}
           </div>
         </div>
         <div class="tbl-wrap atw"><table class="atbl">
-          <colgroup><col style="width:2.5%"><col style="width:9%"><col style="width:5%"><col style="width:14.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:7%"><col style="width:7%"><col style="width:6.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:5%"><col style="width:5.5%"><col style="width:8%"></colgroup>
-          <thead><tr><th><input type="checkbox" id="chkAll"></th><th>رقم الباركود</th><th>أودو</th><th>اسم الأصل</th><th>الفئة</th><th>الموقع</th><th>القسم</th><th>العهدة</th><th>الرقم التسلسلي</th><th>تاريخ الشراء</th><th>القيمة</th><th>الحالة</th><th>الطباعة</th><th>إجراءات</th></tr></thead>
+          <colgroup><col style="width:2.5%"><col style="width:4.5%"><col style="width:9%"><col style="width:5%"><col style="width:12%"><col style="width:7.5%"><col style="width:6.5%"><col style="width:6.5%"><col style="width:7%"><col style="width:6.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:5%"><col style="width:5.5%"><col style="width:8%"></colgroup>
+          <thead><tr><th><input type="checkbox" id="chkAll"></th><th>صورة</th><th>رقم الباركود</th><th>أودو</th><th>اسم الأصل</th><th>الفئة</th><th>الموقع</th><th>القسم</th><th>العهدة</th><th>الرقم التسلسلي</th><th>تاريخ الشراء</th><th>القيمة</th><th>الحالة</th><th>الطباعة</th><th>إجراءات</th></tr></thead>
           <tbody id="tb"></tbody>
         </table></div>
         <div class="hint" style="margin-top:8px" id="tblFoot"></div>
@@ -595,6 +626,17 @@ html{-webkit-text-size-adjust:100%}
             <div class="field"><label>تاريخ الشراء</label><input name="purchaseDate" type="date"></div>
             <div class="field"><label>القيمة</label><input name="value" type="number" step="0.01" min="0"></div>
             <div class="field" style="grid-column:span 2"><label>ملاحظات</label><input name="notes"></div>
+            <div class="field ph-field" style="grid-column:1/-1"><label>صور الأصل <span class="hint">— تُحفظ في Google Drive داخل مجلد منظّم حسب الفئة والأصل</span></label>
+              <div class="ph-box">
+                <div class="ph-tools" id="phTools">
+                  <select id="phType"></select>
+                  <label class="btn sm gold ph-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg><span>تصوير</span><input type="file" accept="image/*" capture="environment" id="phCam" hidden></label>
+                  <label class="btn sm ph-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg><span>رفع صور</span><input type="file" accept="image/*" multiple id="phUp" hidden></label>
+                  <span class="hint" id="phHint"></span>
+                </div>
+                <div class="ph-grid" id="phGrid"></div>
+              </div>
+            </div>
             <div class="field" style="grid-column:span 2">
               <label>رقم الباركود</label>
               <div class="row"><input name="code" class="mono" style="flex:1" placeholder="يُولَّد تلقائياً"><button type="button" class="btn sm" id="bGen">توليد</button></div>
@@ -805,6 +847,10 @@ html{-webkit-text-size-adjust:100%}
 </div>
 
 <nav class="bnav"><button class="nav" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>لوحة</span></button><button class="nav" data-v="assets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>الأصول</span></button><button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg><span>تسجيل</span></button><button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg><span>الطباعة</span></button><button class="nav" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>الإعدادات</span></button></nav>
+<div class="modal" id="phM"><div class="phv">
+  <div class="phv-top"><b id="phvT"></b><span id="phvN" class="hint"></span><span style="flex:1"></span><a id="phvDrive" class="btn sm" target="_blank" rel="noopener">فتح في Google Drive</a><button type="button" class="btn sm" id="phvX">إغلاق</button></div>
+  <div class="phv-st"><button type="button" class="phv-nav" id="phvP">‹</button><div class="phv-img"><img id="phvI" alt=""><div class="phv-load" id="phvL">جارٍ تحميل الصورة…</div></div><button type="button" class="phv-nav" id="phvNx">›</button></div>
+  <div class="phv-cap" id="phvC"></div></div></div>
 <div class="modal" id="loginM" style="background:rgba(8,56,111,.82)"><div class="card" style="max-width:400px;text-align:center;padding:26px 24px">
   <img id="loginLogo" alt="راكان" style="max-width:190px;max-height:90px;object-fit:contain;margin:0 auto 10px;display:block">
   <h3 style="justify-content:center;font-size:18px">الدخول إلى منظومة الأصول</h3>
@@ -3149,6 +3195,7 @@ var qrcode = function() {
  */
 const A_SHEET = 'الأصول', CODE_H = 'رقم الباركود', VER_H = 'الإصدار', DEL_SHEET = '_محذوفات';
 const SECTIONS = { odoo: 'أصول أودو', settings: 'الإعدادات', cats: 'الفئات', log: 'سجل الطباعة' };
+const PH_ROOT = 'صور أصول راكان', TH_SHEET = '_مصغّرات';
 const LEGACY = ['الأصول', 'أصول أودو', 'الفئات', 'سجل الطباعة', 'الإعدادات'];
 const TEXT_COL = /رقم|باركود|الكود|الرمز|تاريخ|التاريخ|آخر طباعة|المقاس/;
 
@@ -3175,6 +3222,8 @@ function handle_(p) {
   if (a === 'init' || a === 'ping') return out_({ ok: true, name: ss.getName(), rev: rev_(), seq: seq_(), v: 2 });
   if (a === 'sync') { if (!seq_()) nextSeq_(); return out_(sync_(ss, +p.since || 0)); }
   if (a === 'load') return out_(legacyLoad_(ss));
+  if (a === 'thumbs') return out_(thumbs_(ss, p));
+  if (a === 'photoGet') return out_(photoGet_(p));
   // ---- writes ----
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
@@ -3185,6 +3234,8 @@ function handle_(p) {
     if (a === 'putSection') return out_(putSection_(ss, p));
     if (a === 'appendLog') return out_(appendLog_(ss, p));
     if (a === 'save') return out_(legacySave_(ss, p));
+    if (a === 'photoUpload') return out_(photoUpload_(ss, p));
+    if (a === 'photoDelete') return out_(photoDelete_(ss, p));
   } finally { lock.releaseLock(); }
   return out_({ ok: false, error: 'unknown_action' });
 }
@@ -3205,7 +3256,7 @@ function sheet_(ss, name, head) {
   if (!sh) {
     sh = ss.insertSheet(name);
     if (head && head.length) { sh.getRange(1, 1, 1, head.length).setValues([head]); fmtHead_(sh, head.length); textCols_(sh, head); }
-    if (name === DEL_SHEET) sh.hideSheet();
+    if (name === DEL_SHEET || name === TH_SHEET) sh.hideSheet();
   }
   return sh;
 }
@@ -3406,6 +3457,61 @@ function legacySave_(ss, p) {
   return { ok: true, rev: rev_(), seq: n };
 }
 
+/* ---------- صور الأصول (Google Drive) ----------
+   صور أصول راكان / <الفئة> / <رقم الأصل — اسمه> / <رقم>_<النوع>_<التاريخ>.jpg
+   الصور خاصة في Drive المالك (بدون مشاركة عامة)، والمصغّرات في ورقة مخفية لعرض سريع. */
+function safeName_(s) { return String(s || '').replace(/[\\/:*?"<>|#%]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 90); }
+function phRoot_() {
+  const P = P_(); const id = P.getProperty('ph_root');
+  if (id) { try { const f = DriveApp.getFolderById(id); if (!f.isTrashed()) return f; } catch (e) {} }
+  const it = DriveApp.getFoldersByName(PH_ROOT); const f = it.hasNext() ? it.next() : DriveApp.createFolder(PH_ROOT);
+  P.setProperty('ph_root', f.getId()); return f;
+}
+function child_(parent, name) { const it = parent.getFoldersByName(name); return it.hasNext() ? it.next() : parent.createFolder(name); }
+function assetFolder_(code, name, cat) {
+  const catF = child_(phRoot_(), safeName_(cat) || 'بدون فئة');
+  const want = safeName_(code + (name ? ' — ' + name : ''));
+  const P = P_(), k = 'phf_' + code; let f = null; const id = P.getProperty(k);
+  if (id) { try { f = DriveApp.getFolderById(id); if (f.isTrashed()) f = null; } catch (e) { f = null; } }
+  if (!f) { f = child_(catF, want); P.setProperty(k, f.getId()); return f; }
+  if (f.getName() !== want) f.setName(want);                       // تغيّر اسم الأصل
+  const ps = f.getParents(), par = ps.hasNext() ? ps.next() : null;
+  if (!par || par.getId() !== catF.getId()) f.moveTo(catF);        // تغيّرت الفئة
+  return f;
+}
+function photoUpload_(ss, p) {
+  const code = String(p.code || '').trim();
+  if (!code || !p.data) return { ok: false, error: 'bad_request' };
+  const f = assetFolder_(code, p.name, p.cat);
+  const t = safeName_(p.type) || 'صورة';
+  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd_HH-mm-ss');
+  const blob = Utilities.newBlob(Utilities.base64Decode(p.data), p.mime || 'image/jpeg', safeName_(code + '_' + t + '_' + stamp) + '.jpg');
+  const file = f.createFile(blob);
+  file.setDescription(code + ' | ' + t + (p.name ? ' | ' + p.name : ''));
+  if (p.thumb && String(p.thumb).length < 48000) sheet_(ss, TH_SHEET, ['معرّف الملف', 'رقم الباركود', 'مصغّرة']).appendRow([file.getId(), code, p.thumb]);
+  return { ok: true, id: file.getId(), name: file.getName(), folder: f.getId() };
+}
+function thumbs_(ss, p) {
+  const want = {}; (p.ids || []).forEach(id => want[id] = 1);
+  const sh = ss.getSheetByName(TH_SHEET), out = {};
+  if (sh && sh.getLastRow() > 1) sh.getRange(2, 1, sh.getLastRow() - 1, 3).getValues().forEach(r => { if (want[r[0]]) out[r[0]] = r[2]; });
+  return { ok: true, thumbs: out };
+}
+function photoGet_(p) {
+  try { const b = DriveApp.getFileById(String(p.id)).getBlob(); return { ok: true, mime: b.getContentType(), data: Utilities.base64Encode(b.getBytes()) }; }
+  catch (e) { return { ok: false, error: 'photo_missing' }; }
+}
+function photoDelete_(ss, p) {
+  const id = String(p.id || '');
+  try { DriveApp.getFileById(id).setTrashed(true); } catch (e) {}   // سلة Drive (قابلة للاسترجاع 30 يوماً)
+  const sh = ss.getSheetByName(TH_SHEET);
+  if (sh && sh.getLastRow() > 1) { const v = sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues();
+    for (let i = v.length - 1; i >= 0; i--) if (String(v[i][0]) === id) sh.deleteRow(i + 2); }
+  return { ok: true };
+}
+/** شغّلها مرة واحدة من المحرّر لمنح صلاحية Google Drive */
+function authorizeDrive() { phRoot_(); }
+
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 </script>
 <script id="odooDefault" type="application/json">{"recs":[],"meta":{}}</script>
@@ -3418,7 +3524,7 @@ const DEFAULT_LOGO = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAM
 const FIELDS = [
   ['code','رقم الباركود'],['name','اسم الأصل'],['odooId','رقم الأصل في أودو'],['odooName','اسم الأصل في أودو'],['category','الفئة'],['location','الموقع'],['dept','الإدارة / القسم'],
   ['custodian','العهدة / المسؤول'],['serial','الرقم التسلسلي'],['purchaseDate','تاريخ الشراء'],['value','القيمة'],
-  ['status','الحالة'],['notes','ملاحظات'],['createdAt','تاريخ التسجيل'],['printCount','عدد مرات الطباعة'],['lastPrint','آخر طباعة'],['ver','الإصدار']
+  ['status','الحالة'],['notes','ملاحظات'],['createdAt','تاريخ التسجيل'],['printCount','عدد مرات الطباعة'],['lastPrint','آخر طباعة'],['photos','الصور'],['ver','الإصدار']
 ];
 const ALIASES = { // extra header spellings accepted on import
   code:['باركود','الباركود','رقم الأصل','كود','الكود','Barcode','Code','Asset Code','Asset Tag'],
@@ -3634,7 +3740,7 @@ function diffOps(){
   saveOps();saveSH();
 }
 function gsCommit(){diffOps();cacheState();setConn();pump()}
-function renameLocal(from,to){const a=assets.find(x=>x.code===from);if(!a)return;a.code=to;if(SH.base[from]){SH.base[to]=SH.base[from];delete SH.base[from]}
+function renameLocal(from,to){const a=assets.find(x=>x.code===from);if(!a)return;a.code=to;phRename(from,to);if(SH.base[from]){SH.base[to]=SH.base[from];delete SH.base[from]}
   if(selected.has(from)){selected.delete(from);selected.add(to)}queue=queue.map(c=>c===from?to:c);if($('#pvAsset').value===from)$('#pvAsset').value=to;
   OPS.forEach(o=>{if(o.code===from)o.code=to;if(o.codes)o.codes=o.codes.map(c=>c===from?to:c);if(o.news)o.news=o.news.map(c=>c===from?to:c)});
   if(editingCode===from)editingCode=to}
@@ -3713,8 +3819,113 @@ async function pull(full){
   catch(e){gsState='error';lastErr=e.message;if(SH.ok){syncing=false;document.body.classList.remove('syncing')}setConn();if(e.code==='unauthorized'||e.code==='not_initialized'){logoutDevice('تغيّر رمز الدخول للمنظومة — أدخل الرمز الحالي.');return false}return false}
   finally{pulling=false}}
 function waitCode(code,ms=20000){return new Promise((res,rej)=>{waiters[code]={resolve:res,reject:rej};setTimeout(()=>{if(waiters[code]){delete waiters[code];rej(new Error('timeout'))}},ms)})}
-function syncTick(){if(!GS()||document.hidden)return;if(OPS.length)pump();pull(false)}
+function syncTick(){if(!GS()||document.hidden)return;if(OPS.length)pump();pull(false);phPump()}
 setInterval(syncTick,7000);
+/* ===== صور الأصول: تصوير/رفع ← ضغط في المتصفح ← طابور على الجهاز ← Google Drive ===== */
+const PH_TYPES=['صورة الأصل','الرقم التسلسلي','لوحة البيانات / الموديل','الفاتورة / الضمان','صورة الملصق بعد التركيب'];
+const PH_MAX=15,PIX='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+const IC_PH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg>';
+function photosOf(a){if(!a||!a.photos)return[];if(Array.isArray(a.photos))return a.photos;try{const v=JSON.parse(a.photos);return Array.isArray(v)?v.filter(p=>p&&p.id):[]}catch(e){return[]}}
+function setPhotos(a,arr){a.photos=arr.length?JSON.stringify(arr):''}
+function mainPhoto(a){const p=photosOf(a);return p.find(x=>x.t===PH_TYPES[0])||p[0]||null}
+const TH={},FULL={};let PQ=[],phBusy=false;
+const IDB={db:null,
+  open(){if(this.db)return Promise.resolve(this.db);return new Promise((res,rej)=>{let q;try{q=indexedDB.open('rakan-photos',1)}catch(e){return rej(e)}
+    q.onupgradeneeded=()=>{const d=q.result;if(!d.objectStoreNames.contains('thumbs'))d.createObjectStore('thumbs');if(!d.objectStoreNames.contains('pq'))d.createObjectStore('pq',{keyPath:'qid'})};
+    q.onsuccess=()=>res(this.db=q.result);q.onerror=()=>rej(q.error)})},
+  run(store,fn){return this.open().then(d=>new Promise((res,rej)=>{const t=d.transaction(store,'readwrite');fn(t.objectStore(store));t.oncomplete=()=>res(true);t.onerror=()=>rej(t.error)})).catch(()=>false)},
+  put(store,v,k){return this.run(store,s=>k===undefined?s.put(v):s.put(v,k))},
+  del(store,k){return this.run(store,s=>s.delete(k))},
+  all(store){return this.open().then(d=>new Promise(res=>{const out=[],c=d.transaction(store,'readonly').objectStore(store).openCursor();
+    c.onsuccess=()=>{const x=c.result;if(x){out.push([x.key,x.value]);x.continue()}else res(out)};c.onerror=()=>res(out)})).catch(()=>[])}};
+async function phLoad(){(await IDB.all('thumbs')).forEach(([k,v])=>TH[k]=v);PQ=(await IDB.all('pq')).map(([,v])=>v).sort((a,b)=>a.at-b.at);
+  if(assets.length)renderTable();phPump()}
+/* ---- مصغّرات ---- */
+let thWant=new Set(),thTimer=null;const thInflight=new Set();
+function needThumbs(ids){ids.forEach(id=>{if(id&&!TH[id]&&!thInflight.has(id))thWant.add(id)});
+  if(!thWant.size||!GS()||needLogin())return Promise.resolve();
+  return new Promise(res=>{clearTimeout(thTimer);thTimer=setTimeout(async()=>{const list=[...thWant];thWant.clear();list.forEach(i=>thInflight.add(i));
+    try{for(let i=0;i<list.length;i+=60){const r=await gsCall('thumbs',{ids:list.slice(i,i+60)});Object.entries(r.thumbs||{}).forEach(([k,v])=>{TH[k]=v;IDB.put('thumbs',v,k)})}}catch(e){}
+    list.forEach(i=>thInflight.delete(i));paintThumbs();res()},80)})}
+function paintThumbs(){$$('img[data-ph]').forEach(im=>{const v=TH[im.dataset.ph];if(v&&im.getAttribute('src')!==v)im.src=v})}
+function thumbHTML(a){const all=photosOf(a),m=mainPhoto(a),pend=PQ.filter(q=>q.k==='up'&&q.code===a.code),n=all.length+pend.length;
+  if(m){if(!TH[m.id])needThumbs([m.id]);return `<span class="thn"><img class="th" data-ph="${esc(m.id)}" data-v="${esc(a.code)}" src="${TH[m.id]||PIX}" alt="" title="صور الأصل (${n})">${n>1?`<i>${n}</i>`:''}</span>`}
+  if(pend.length)return `<span class="thn"><img class="th" data-v="${esc(a.code)}" src="${pend[0].thumb}" alt="" title="بانتظار الرفع إلى Google Drive"><i>⏳</i></span>`;
+  return `<span class="th0" title="لا توجد صور">${IC_PH}</span>`}
+function repThumb(a){const m=mainPhoto(a);return m&&TH[m.id]?`<img src="${TH[m.id]}" alt="">`:'<span class="nop">—</span>'}
+/* ---- ضغط الصورة في المتصفح: الأصلية حتى 1600px، والمصغّرة 240px ---- */
+function phProcess(file){return new Promise((res,rej)=>{const url=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{try{const out=(max,q)=>{const W=im.naturalWidth,H=im.naturalHeight,k=Math.min(1,max/Math.max(W,H)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(W*k));c.height=Math.max(1,Math.round(H*k));
+      const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)};
+    const full=out(1600,.82),th=out(240,.72);URL.revokeObjectURL(url);res({data:full.slice(full.indexOf(',')+1),thumb:th})}catch(e){URL.revokeObjectURL(url);rej(e)}};
+  im.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('bad image'))};im.src=url})}
+/* ---- نموذج الأصل ---- */
+const PHS={code:'',list:[],staged:[],removed:new Set()};
+function phNextType(){const have=new Set([...PHS.list.filter(p=>!PHS.removed.has(p.id)).map(p=>p.t),...PHS.staged.map(p=>p.t),...PQ.filter(q=>q.k==='up'&&q.code===PHS.code).map(q=>q.t)]);return PH_TYPES.find(t=>!have.has(t))||PH_TYPES[0]}
+function phCount(){return PHS.list.filter(p=>!PHS.removed.has(p.id)).length+PHS.staged.length+PQ.filter(q=>q.k==='up'&&q.code===PHS.code).length}
+function phInitForm(a){PHS.code=a?a.code:'';PHS.list=a?photosOf(a).slice():[];PHS.staged=[];PHS.removed=new Set();
+  const sel=$('#phType');if(!sel.options.length)sel.innerHTML=PH_TYPES.map(t=>`<option>${t}</option>`).join('');sel.value=phNextType();phRenderForm()}
+function phItems(){return [...PHS.list.filter(p=>!PHS.removed.has(p.id)).map(p=>({...p,kind:'s'})),
+  ...PQ.filter(q=>q.k==='up'&&q.code===PHS.code).map(q=>({t:q.t,src:q.thumb,full:'data:image/jpeg;base64,'+q.data,qid:q.qid,kind:'q'})),
+  ...PHS.staged.map((p,i)=>({t:p.t,src:p.thumb,full:'data:image/jpeg;base64,'+p.data,si:i,kind:'n'}))]}
+function phRenderForm(){const on=GS()&&!needLogin(),items=phItems();
+  $$('#phTools .ph-btn').forEach(b=>{b.style.pointerEvents=on?'':'none';b.style.opacity=on?'':'.45'});$('#phType').disabled=!on;
+  $('#phHint').textContent=!on?'تتوفّر الصور عند الاتصال بقاعدة بيانات Google Sheets.':`${items.length} / ${PH_MAX} صورة · زر «تصوير» يفتح كاميرا الجوال مباشرة`;
+  const ids=items.filter(p=>p.kind==='s'&&!TH[p.id]).map(p=>p.id);if(ids.length)needThumbs(ids).then(()=>{if(ids.some(i=>TH[i]))phRenderForm()});
+  $('#phGrid').innerHTML=items.map((p,i)=>`<div class="ph-it" data-i="${i}"><img src="${p.kind==='s'?(TH[p.id]||PIX):p.src}" ${p.kind==='s'?`data-ph="${esc(p.id)}"`:''} alt="">${p.kind!=='s'?`<span class="ph-p">${p.kind==='n'?'جديدة':'بانتظار الرفع'}</span>`:''}<span class="ph-t">${esc(p.t)}</span><button type="button" class="ph-x" data-x="${i}" title="حذف الصورة">×</button></div>`).join('')}
+async function phAddFiles(files){const t=$('#phType').value;let n=0;
+  for(const f of files){if(!/^image\//.test(f.type)&&!/\.(heic|heif|jpe?g|png|webp|gif|bmp)$/i.test(f.name))continue;
+    if(phCount()>=PH_MAX){toast(`الحد الأقصى ${PH_MAX} صورة للأصل الواحد`,1);break}
+    try{const r=await phProcess(f);PHS.staged.push({t,data:r.data,thumb:r.thumb});n++}catch(e){toast('تعذّر قراءة الصورة '+f.name+' — جرّب صيغة JPG أو PNG',1)}}
+  if(n){SFX.play('pop');$('#phType').value=phNextType();phRenderForm();toast(n===1?'أُضيفت الصورة — ستُرفع عند حفظ الأصل':`أُضيفت ${n} صور — ستُرفع عند حفظ الأصل`)}}
+function phDelta(){return PHS.staged.length+PHS.removed.size}
+function phDeltaTxt(){const a=PHS.staged.length,r=PHS.removed.size;return [a?`إضافة ${a} صورة`:'',r?`حذف ${r} صورة`:''].filter(Boolean).join(' · ')}
+function phApplyForm(a){if(PHS.removed.size)setPhotos(a,photosOf(a).filter(p=>!PHS.removed.has(p.id)))}
+function phQueueForm(a){const now=Date.now();
+  [...PHS.removed].forEach((id,i)=>{const q={qid:'d'+now+i,k:'del',id,code:a.code,at:now+i};PQ.push(q);IDB.put('pq',q)});
+  PHS.staged.forEach((p,i)=>{const q={qid:'u'+now+'_'+i+Math.random().toString(36).slice(2,6),k:'up',code:a.code,t:p.t,data:p.data,thumb:p.thumb,at:now+100+i};PQ.push(q);IDB.put('pq',q)});
+  const had=PHS.staged.length;PHS.staged=[];PHS.removed=new Set();if(had)toast(`جارٍ رفع ${had===1?'الصورة':had+' صور'} إلى Google Drive…`);phPump()}
+function phRename(from,to){PQ.forEach(q=>{if(q.code===from){q.code=to;IDB.put('pq',q)}});if(PHS.code===from)PHS.code=to}
+async function phDrop(q){PQ=PQ.filter(x=>x.qid!==q.qid);await IDB.del('pq',q.qid)}
+/* ---- الرفع في الخلفية (يُستأنف تلقائياً بعد انقطاع الإنترنت) ---- */
+async function phPump(){if(phBusy||!GS()||needLogin()||syncing||!PQ.length||navigator.onLine===false)return;phBusy=true;let up=0,del=0,changed=false;
+  try{const pend=pendingCodes();
+    for(const q of PQ.slice()){
+      if(q.k==='up'){const a=assets.find(x=>x.code===q.code);if(!a){await phDrop(q);continue}if(pend.has(q.code))continue;
+        const r=await gsCall('photoUpload',{code:a.code,name:a.name,cat:a.category,type:q.t,data:q.data,thumb:q.thumb,mime:'image/jpeg'});
+        TH[r.id]=q.thumb;IDB.put('thumbs',q.thumb,r.id);const arr=photosOf(a);arr.push({id:r.id,t:q.t,d:today()});setPhotos(a,arr);await phDrop(q);up++;changed=true}
+      else if(q.k==='del'){await gsCall('photoDelete',{id:q.id});delete TH[q.id];IDB.del('thumbs',q.id);await phDrop(q);del++}}
+  }catch(e){lastErr=e.message}
+  finally{phBusy=false;if(changed)gsCommit();if(up||del){renderAll();if(PHS.code)phRenderForm()}
+    if(up)toast(up===1?'تم حفظ الصورة في Google Drive':`تم حفظ ${up} صور في Google Drive`,'ok')}}
+/* ---- عارض الصور ---- */
+let PV={list:[],i:0,code:''};
+function phOpen(list,i,code){if(!list.length)return;PV={list,i:Math.max(0,Math.min(i,list.length-1)),code};$('#phM').classList.add('on');phShow()}
+async function phShow(){const p=PV.list[PV.i],img=$('#phvI'),L=$('#phvL');
+  $('#phvT').textContent=p.t||'صورة';$('#phvN').textContent=`${PV.i+1} / ${PV.list.length} · ${PV.code}`;
+  $('#phvP').style.visibility=$('#phvNx').style.visibility=PV.list.length>1?'':'hidden';
+  const dl=$('#phvDrive');dl.hidden=!p.id;if(p.id)dl.href='https://drive.google.com/file/d/'+encodeURIComponent(p.id)+'/view';
+  $('#phvC').textContent=p.id?(p.d?'أُضيفت بتاريخ '+p.d:''):'لم تُرفع بعد — ستُحفظ في Google Drive عند الاتصال';
+  if(p.full){img.src=p.full;L.hidden=true;return}
+  if(FULL[p.id]){img.src=FULL[p.id];L.hidden=true;return}
+  img.src=TH[p.id]||PIX;L.hidden=false;L.textContent='جارٍ تحميل الصورة…';const want=p.id;
+  try{const r=await gsCall('photoGet',{id:p.id});FULL[want]=`data:${r.mime||'image/jpeg'};base64,${r.data}`;if(PV.list[PV.i]?.id===want){img.src=FULL[want];L.hidden=true}}
+  catch(e){if(PV.list[PV.i]?.id===want)L.textContent=e.code==='photo_missing'?'الصورة غير موجودة في Google Drive (ربما حُذفت)':'تعذّر تحميل الصورة: '+e.message}}
+function phNav(d){if(PV.list.length<2)return;PV.i=(PV.i+d+PV.list.length)%PV.list.length;phShow()}
+function assetGallery(a){return [...photosOf(a),...PQ.filter(q=>q.k==='up'&&q.code===a.code).map(q=>({t:q.t,full:'data:image/jpeg;base64,'+q.data}))]}
+$('#phvX').onclick=()=>$('#phM').classList.remove('on');$('#phM').addEventListener('click',e=>{if(e.target.id==='phM')$('#phM').classList.remove('on')});
+$('#phvP').onclick=()=>phNav(1);$('#phvNx').onclick=()=>phNav(-1);
+document.addEventListener('keydown',e=>{if(!$('#phM').classList.contains('on'))return;if(e.key==='Escape')$('#phM').classList.remove('on');if(e.key==='ArrowRight')phNav(-1);if(e.key==='ArrowLeft')phNav(1)});
+$('#phCam').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};$('#phUp').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};
+$('#phGrid').addEventListener('click',async e=>{const x=e.target.closest('[data-x]'),it=e.target.closest('.ph-it');if(!it)return;const items=phItems();
+  if(x){const p=items[+x.dataset.x];if(!p)return;
+    if(p.kind==='n'){PHS.staged.splice(p.si,1)}
+    else if(p.kind==='q'){if(!await confirmBox('حذف صورة لم تُرفع','ستُحذف هذه الصورة من الجهاز قبل رفعها إلى Google Drive.','حذف','del'))return;await phDrop(PQ.find(q=>q.qid===p.qid)||{qid:p.qid})}
+    else{if(!await confirmBox('حذف صورة الأصل',`ستُحذف صورة «${esc(p.t)}» من الأصل وتُنقل إلى سلة Google Drive عند حفظ الأصل (قابلة للاسترجاع 30 يوماً).`,'حذف','del'))return;PHS.removed.add(p.id)}
+    SFX.play('del');phRenderForm();return}
+  phOpen(items,+it.dataset.i,PHS.code||'أصل جديد')});
+$('#tb').addEventListener('click',e=>{const im=e.target.closest('img.th');if(!im)return;e.stopPropagation();const a=assets.find(x=>x.code===im.dataset.v);if(a)phOpen(assetGallery(a),0,a.code)},true);
+setTimeout(phLoad,0);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncTick()});
 window.addEventListener('online',()=>syncTick());
 /* ---- login on this device ---- */
@@ -3843,7 +4054,7 @@ function filtered(){const q=$('#q').value.trim().toLowerCase(),c=$('#fCat').valu
   return assets.filter(a=>(!q||[a.code,a.name,a.location,a.dept,a.custodian,a.serial,a.odooId,a.odooName].join(' ').toLowerCase().includes(q))&&(!c||a.category===c)&&(!l||a.location===l)&&(p===''||(p==='1')===(+a.printCount>0))&&(od===''||(od==='1')===!!a.odooId))}
 function renderTable(){
   const list=filtered();
-  $('#tb').innerHTML=list.length?list.map(a=>`<tr data-c="${esc(a.code)}"><td data-l="تحديد"><input type="checkbox" class="rc" ${selected.has(a.code)?'checked':''}></td><td data-l="رقم الباركود" class="mono"><b>${esc(a.code)}</b></td><td data-l="أودو">${a.odooId?`<span class="pill p-ok" dir="ltr">${esc(a.odooId)}</span>`:'<span class="hint">—</span>'}</td><td data-l="اسم الأصل"><b>${esc(a.name)}</b>${a.odooName&&cleanName(a.odooName)!==a.name?`<span class="on2">أودو: ${esc(a.odooName)}</span>`:''}</td><td data-l="الفئة"${a.category?'':' class="e"'}>${esc(a.category)||'—'}</td><td data-l="الموقع"${a.location?'':' class="e"'}>${esc(a.location)||'—'}</td><td data-l="القسم"${a.dept?'':' class="e"'}>${esc(a.dept)||'—'}</td><td data-l="العهدة"${a.custodian?'':' class="e"'}>${esc(a.custodian)||'—'}</td><td data-l="الرقم التسلسلي" class="mono${a.serial?'':' e'}">${esc(a.serial)||'—'}</td><td data-l="تاريخ الشراء" class="num${a.purchaseDate?'':' e'}">${esc(a.purchaseDate)||'—'}</td><td data-l="القيمة" class="num${a.value!==''&&a.value!=null?'':' e'}">${a.value!==''&&a.value!=null?`<b>${fmtNum(a.value)}</b> <small>د.ل</small>`:'—'}</td><td data-l="الحالة">${statusPill(a.status)||'—'}</td><td data-l="الطباعة">${+a.printCount>0?`<span class="pill p-ok">${a.printCount}×</span>`:'<span class="pill p-gray">لم يُطبع</span>'}</td><td data-l="إجراءات"><div class="acts"><button class="ib gold" data-a="print" title="طباعة الملصق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button><button class="ib" data-a="edit" title="تعديل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><button class="ib danger" data-a="del" title="حذف"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="14" class="empty">${assets.length?'لا توجد نتائج مطابقة للبحث':'لا توجد أصول بعد — افتح ملف Excel أو سجّل أول أصل'}</td></tr>`;
+  $('#tb').innerHTML=list.length?list.map(a=>`<tr data-c="${esc(a.code)}"><td data-l="تحديد"><input type="checkbox" class="rc" ${selected.has(a.code)?'checked':''}></td><td data-l="صورة" class="phc">${thumbHTML(a)}</td><td data-l="رقم الباركود" class="mono"><b>${esc(a.code)}</b></td><td data-l="أودو">${a.odooId?`<span class="pill p-ok" dir="ltr">${esc(a.odooId)}</span>`:'<span class="hint">—</span>'}</td><td data-l="اسم الأصل"><b>${esc(a.name)}</b>${a.odooName&&cleanName(a.odooName)!==a.name?`<span class="on2">أودو: ${esc(a.odooName)}</span>`:''}</td><td data-l="الفئة"${a.category?'':' class="e"'}>${esc(a.category)||'—'}</td><td data-l="الموقع"${a.location?'':' class="e"'}>${esc(a.location)||'—'}</td><td data-l="القسم"${a.dept?'':' class="e"'}>${esc(a.dept)||'—'}</td><td data-l="العهدة"${a.custodian?'':' class="e"'}>${esc(a.custodian)||'—'}</td><td data-l="الرقم التسلسلي" class="mono${a.serial?'':' e'}">${esc(a.serial)||'—'}</td><td data-l="تاريخ الشراء" class="num${a.purchaseDate?'':' e'}">${esc(a.purchaseDate)||'—'}</td><td data-l="القيمة" class="num${a.value!==''&&a.value!=null?'':' e'}">${a.value!==''&&a.value!=null?`<b>${fmtNum(a.value)}</b> <small>د.ل</small>`:'—'}</td><td data-l="الحالة">${statusPill(a.status)||'—'}</td><td data-l="الطباعة">${+a.printCount>0?`<span class="pill p-ok">${a.printCount}×</span>`:'<span class="pill p-gray">لم يُطبع</span>'}</td><td data-l="إجراءات"><div class="acts"><button class="ib gold" data-a="print" title="طباعة الملصق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button><button class="ib" data-a="edit" title="تعديل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><button class="ib danger" data-a="del" title="حذف"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="15" class="empty">${assets.length?'لا توجد نتائج مطابقة للبحث':'لا توجد أصول بعد — افتح ملف Excel أو سجّل أول أصل'}</td></tr>`;
   $('#tblFoot').textContent=`عرض ${list.length} من ${assets.length} أصل`;updSel();
 }
 function updSel(){selected=new Set([...selected].filter(c=>assets.some(a=>a.code===c)));$('#selInfo').textContent=selected.size?`محدد: ${selected.size}`:'لم يتم تحديد أصول';$('#bPrintSel').disabled=!selected.size}
@@ -3854,10 +4065,10 @@ function fillCatSelect(){const s=$('#af').category,v=s.value;s.innerHTML=setting
 function renderCatTable(){$('#catTb').innerHTML=settings.cats.map((c,i)=>`<tr><td>${esc(c.name)}</td><td class="mono"><b>${esc(c.code)}</b></td><td>${assets.filter(a=>a.category===c.name).length}</td><td><button class="btn sm danger" data-i="${i}">حذف</button></td></tr>`).join('')}
 
 /* ================= Form ================= */
-function resetForm(){const f=$('#af');f.reset();editingCode=null;$('#formTitle').textContent='تسجيل أصل جديد';fillCatSelect();f.status.value='جيد';f.code.value=nextCode(f.category.value);f.code.readOnly=false;setOdooPick('');$('#codeHint').textContent='يُولَّد الرقم تلقائياً حسب الفئة ويُتحقق من عدم تكراره.'}
+function resetForm(){const f=$('#af');f.reset();editingCode=null;phInitForm(null);$('#formTitle').textContent='تسجيل أصل جديد';fillCatSelect();f.status.value='جيد';f.code.value=nextCode(f.category.value);f.code.readOnly=false;setOdooPick('');$('#codeHint').textContent='يُولَّد الرقم تلقائياً حسب الفئة ويُتحقق من عدم تكراره.'}
 function editAsset(code){const a=assets.find(x=>x.code===code);if(!a)return;go('form');editingCode=code;const f=$('#af');$('#formTitle').textContent='تعديل أصل: '+a.code;fillCatSelect();
   ['odooId','name','category','status','location','dept','custodian','serial','purchaseDate','value','notes','code'].forEach(k=>{if(f[k])f[k].value=a[k]??''});
-  setOdooPick(a.odooId);
+  setOdooPick(a.odooId);phInitForm(a);
   if(a.category&&!settings.cats.some(c=>c.name===a.category)){f.category.insertAdjacentHTML('beforeend',`<option>${esc(a.category)}</option>`);f.category.value=a.category}
   $('#codeHint').textContent=+a.printCount>0?'تنبيه: هذا الأصل له ملصق مطبوع. تغيير الرقم يتطلب إعادة طباعة الملصق.':'يمكنك تعديل الرقم ما دام غير مكرر.'}
 async function submitForm(e){
@@ -3873,14 +4084,14 @@ async function submitForm(e){
   const row=(k,v)=>`<tr><td>${LBL[k]}</td><td>${v}</td></tr>`;
   if(editingCode){const o=assets.find(x=>x.code===editingCode);
     const ch=Object.keys(LBL).filter(k=>String(o[k]??'')!==String(d[k]??''));
-    if(!ch.length)return toast('لا توجد تغييرات لحفظها');
-    if(!await confirmBox('تأكيد تعديل الأصل',`سيتم حفظ التعديلات التالية على الأصل <b class="mono">${esc(o.code)}</b>:<table class="cmsum">${ch.map(k=>row(k,`<span class="old">${esc(o[k])||'—'}</span><span class="new">${esc(d[k])||'—'}</span>`)).join('')}</table>`,'حفظ التعديلات','edit'))return}
-  else if(!await confirmBox('تأكيد حفظ الأصل',`سيتم تسجيل الأصل التالي في قاعدة البيانات:<table class="cmsum">${row('name',`<b>${esc(d.name)}</b>`)}${row('code',`<b class="mono">${esc(d.code)}</b>`)}${row('category',esc(d.category))}${d.odooId?row('odooId',esc(d.odooId)):''}${d.location?row('location',esc(d.location)):''}${d.custodian?row('custodian',esc(d.custodian)):''}</table>`,andPrint?'حفظ وطباعة':'حفظ','save'))return;
+    const phD=phDelta();if(!ch.length&&!phD)return toast('لا توجد تغييرات لحفظها');
+    if(!await confirmBox('تأكيد تعديل الأصل',`سيتم حفظ التعديلات التالية على الأصل <b class="mono">${esc(o.code)}</b>:<table class="cmsum">${ch.map(k=>row(k,`<span class="old">${esc(o[k])||'—'}</span><span class="new">${esc(d[k])||'—'}</span>`)).join('')}${phD?`<tr><td>الصور</td><td>${phDeltaTxt()}</td></tr>`:''}</table>`,'حفظ التعديلات','edit'))return}
+  else if(!await confirmBox('تأكيد حفظ الأصل',`سيتم تسجيل الأصل التالي في قاعدة البيانات:<table class="cmsum">${row('name',`<b>${esc(d.name)}</b>`)}${row('code',`<b class="mono">${esc(d.code)}</b>`)}${row('category',esc(d.category))}${PHS.staged.length?`<tr><td>الصور</td><td>${PHS.staged.length} صورة ستُرفع إلى Google Drive</td></tr>`:''}${d.odooId?row('odooId',esc(d.odooId)):''}${d.location?row('location',esc(d.location)):''}${d.custodian?row('custodian',esc(d.custodian)):''}</table>`,andPrint?'حفظ وطباعة':'حفظ','save'))return;
   let a;
   if(GS()&&syncing)return toast('انتظر لحظة حتى يكتمل تحديث البيانات…',1);
   if(editingCode){a=assets.find(x=>x.code===editingCode);if(a.code!==d.code)renameHint[d.code]=a.code;if(a.code!==d.code&&+a.printCount>0&&!await confirmBox('تغيير رقم مطبوع','سيُستبدل الرقم <b class="mono">'+esc(a.code)+'</b> بالرقم <b class="mono">'+esc(d.code)+'</b>. الملصق الملصوق حالياً على الأصل لن يكون صالحاً.','تغيير'))return;Object.assign(a,d)}
   else{a=Object.assign({createdAt:today(),printCount:0,lastPrint:'',_x:{}},d);assets.push(a)}
-  const was=!!editingCode;editingCode=null;await commit();toast(was?`تم حفظ تعديلات الأصل ${a.code} بنجاح`:`تم حفظ الأصل ${a.code} بنجاح`,'ok');
+  const was=!!editingCode;editingCode=null;phApplyForm(a);await commit();phQueueForm(a);toast(was?`تم حفظ تعديلات الأصل ${a.code} بنجاح`:`تم حفظ الأصل ${a.code} بنجاح`,'ok');
   if(andPrint){let code=a.code;
     if(GS()&&!was){toast('جارٍ تأكيد رقم الباركود من قاعدة البيانات…');try{code=await waitCode(a.code)}catch(e){toast('تم حفظ الأصل على هذا الجهاز، وسيُرفع عند عودة الاتصال. اطبع ملصقه بعد تأكيد رقمه.',1);resetForm();return}}
     queue=[code];go('label');$('#pvAsset').value=code;acbLabel();renderPreview()}else{resetForm();f.name.focus()}
@@ -4054,7 +4265,7 @@ async function bulkOdoo(){
 }
 
 /* ================= Assets report ================= */
-function reportHTML(list){
+function reportHTML(list){const PHC=list.some(a=>mainPhoto(a))?1:0;
   const fonts=[...document.styleSheets].flatMap(sh=>{try{return [...sh.cssRules]}catch(e){return []}}).filter(r=>r.type===5).map(r=>r.cssText).join('\n');
   const now=new Date(),p2=n=>String(n).padStart(2,'0'),dIss=`${p2(now.getDate())}/${p2(now.getMonth()+1)}/${now.getFullYear()}`;
   const repNo=`أ.ث / ${now.getFullYear()} / ${p2(now.getMonth()+1)}${p2(now.getDate())}${p2(now.getHours())}${p2(now.getMinutes())}`;
@@ -4067,9 +4278,9 @@ function reportHTML(list){
   const flt=[];if($('#q').value.trim())flt.push('بحث: «'+esc($('#q').value.trim())+'»');['fCat','fLoc','fPrint','fOdoo'].forEach(id=>{const el=$('#'+id);if(el.value)flt.push(esc(el.options[el.selectedIndex].text))});
   const scope=flt.length?`نطاق التقرير: ${flt.join(' · ')}`:'نطاق التقرير: جميع الأصول المسجلة في المنظومة';
   const lg=logo();let n=0;
-  const det=gk.map(k=>{const g=groups[k];return `<tbody><tr class="grp"><td colspan="11">${esc(k)} <span class="gc">(${g.length})</span></td></tr>`+
-    g.map(a=>`<tr><td class="c">${++n}</td><td class="mono">${esc(a.code)}</td><td class="c">${a.odooId?esc(a.odooId):'<span class="mu">—</span>'}</td><td class="nm">${esc(a.name)}</td><td>${esc(a.location)||'<span class="mu">—</span>'}</td><td>${esc(a.dept)||'<span class="mu">—</span>'}</td><td>${esc(a.custodian)||'<span class="mu">—</span>'}</td><td class="c">${esc(a.purchaseDate)||'<span class="mu">—</span>'}</td><td class="m">${money(a.value)}</td><td class="c">${esc(a.status)||'<span class="mu">—</span>'}</td><td class="c">${+a.printCount>0?'مطبوع':'<span class="mu">لم يُطبع</span>'}</td></tr>`).join('')+
-    `<tr class="sub"><td colspan="8">إجمالي ${esc(k)}</td><td class="m">${money(sum(g))}</td><td colspan="2"></td></tr></tbody>`}).join('');
+  const det=gk.map(k=>{const g=groups[k];return `<tbody><tr class="grp"><td colspan="${11+PHC}">${esc(k)} <span class="gc">(${g.length})</span></td></tr>`+
+    g.map(a=>`<tr><td class="c">${++n}</td>${PHC?`<td class="pc">${repThumb(a)}</td>`:''}<td class="mono">${esc(a.code)}</td><td class="c">${a.odooId?esc(a.odooId):'<span class="mu">—</span>'}</td><td class="nm">${esc(a.name)}</td><td>${esc(a.location)||'<span class="mu">—</span>'}</td><td>${esc(a.dept)||'<span class="mu">—</span>'}</td><td>${esc(a.custodian)||'<span class="mu">—</span>'}</td><td class="c">${esc(a.purchaseDate)||'<span class="mu">—</span>'}</td><td class="m">${money(a.value)}</td><td class="c">${esc(a.status)||'<span class="mu">—</span>'}</td><td class="c">${+a.printCount>0?'مطبوع':'<span class="mu">لم يُطبع</span>'}</td></tr>`).join('')+
+    `<tr class="sub"><td colspan="${8+PHC}">إجمالي ${esc(k)}</td><td class="m">${money(sum(g))}</td><td colspan="2"></td></tr></tbody>`}).join('');
   const sumRows=gk.map(k=>{const g=groups[k];return `<tr><td>${esc(k)}</td><td class="c">${g.length}</td><td class="c">${g.filter(a=>a.odooId).length}</td><td class="c">${g.filter(a=>+a.printCount>0).length}</td><td class="m">${money(sum(g))}</td><td class="c">${total?((sum(g)/total)*100).toFixed(1)+'%':'—'}</td></tr>`}).join('');
   return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>تقرير سجل الأصول الثابتة</title><style>${fonts}
 :root{--blue:#0C4CA2;--blue-deep:#08386F;--orange:#F15C22;--ink:#1B2433;--muted:#5B6678;--line:#DCE3EE;--tint:#F2F6FC;--orange-tint:#FEF1EB}
@@ -4104,7 +4315,7 @@ tfoot td,.tot td{background:var(--orange-tint);border-top:2px solid var(--orange
 .sig{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:34px;break-inside:avoid}
 .sig div{border-top:1.5px solid var(--ink);padding-top:6px;text-align:center}.sig b{display:block}.sig span{color:var(--muted);font-size:10px}
 .note{font-size:9.5px;color:var(--muted);margin-top:8px}
-</style></head><body>
+.pc{text-align:center;padding:2px!important}.pc img{width:12mm;height:12mm;object-fit:cover;border-radius:1.5mm;display:block;margin:auto}.pc .nop{color:#B7C2D3}</style></head><body>
 <div class="bar"></div>
 <div class="hd">${lg?`<img src="${lg}" alt="راكان">`:'<b>راكان لاستيراد المواد الغذائية والتوزيع</b>'}<div class="meta">رقم التقرير: <b>${repNo}</b><br>تاريخ الإصدار: <b>${dIss}</b><br><span class="pill">سري — للاستخدام الداخلي</span></div></div>
 <div class="kick">تقرير مرفوع إلى الإدارة المالية</div>
@@ -4115,15 +4326,16 @@ tfoot td,.tot td{background:var(--orange-tint);border-top:2px solid var(--orange
 <table class="sumt"><thead><tr><th>الفئة</th><th style="text-align:center">عدد الأصول</th><th style="text-align:center">مربوط بأودو</th><th style="text-align:center">ملصقات مطبوعة</th><th>القيمة</th><th style="text-align:center">النسبة من القيمة</th></tr></thead>
 <tbody>${sumRows}</tbody><tfoot><tr><td>الإجمالي</td><td class="c">${list.length}</td><td class="c">${linked}</td><td class="c">${printed}</td><td class="m">${money(total)}</td><td class="c">${total?'100%':'—'}</td></tr></tfoot></table>
 <h2><i>2</i>تفاصيل الأصول</h2>
-<table><thead><tr><th style="width:3%;text-align:center">م</th><th style="width:10%">رقم الباركود</th><th style="width:5%;text-align:center">أودو</th><th>اسم الأصل</th><th style="width:11%">الموقع</th><th style="width:8%">القسم</th><th style="width:9%">العهدة</th><th style="width:7.5%;text-align:center">تاريخ الشراء</th><th style="width:9.5%">القيمة</th><th style="width:5.5%;text-align:center">الحالة</th><th style="width:6%;text-align:center">الملصق</th></tr></thead>
-${det||'<tbody><tr><td colspan="11" class="c">لا توجد أصول ضمن نطاق التقرير</td></tr></tbody>'}
-<tbody><tr class="tot"><td colspan="8">الإجمالي العام (${list.length} أصل)</td><td class="m">${money(total)}</td><td colspan="2"></td></tr></tbody></table>
+<table><thead><tr><th style="width:3%;text-align:center">م</th>${PHC?'<th style="width:5.5%;text-align:center">صورة</th>':''}<th style="width:10%">رقم الباركود</th><th style="width:5%;text-align:center">أودو</th><th>اسم الأصل</th><th style="width:11%">الموقع</th><th style="width:8%">القسم</th><th style="width:9%">العهدة</th><th style="width:7.5%;text-align:center">تاريخ الشراء</th><th style="width:9.5%">القيمة</th><th style="width:5.5%;text-align:center">الحالة</th><th style="width:6%;text-align:center">الملصق</th></tr></thead>
+${det||'<tbody><tr><td colspan="${11+PHC}" class="c">لا توجد أصول ضمن نطاق التقرير</td></tr></tbody>'}
+<tbody><tr class="tot"><td colspan="${8+PHC}">الإجمالي العام (${list.length} أصل)</td><td class="m">${money(total)}</td><td colspan="2"></td></tr></tbody></table>
 <div class="note">القيم المعروضة هي القيم المسجلة في المنظومة (القيمة الأصلية للأصل). أُعدّ هذا التقرير آلياً من منظومة ترميز الأصول بتاريخ ${dIss}.</div>
 <div class="sig"><div><b>أعدّه</b><span>الاسم / التوقيع</span></div><div><b>راجعه: رئيس قسم الحسابات</b><span>الاسم / التوقيع</span></div><div><b>اعتمده: المدير المالي</b><span>الاسم / التوقيع</span></div></div>
 </body></html>`;
 }
-function printReport(){
+async function printReport(){
   const list=filtered();if(!list.length)return toast('لا توجد أصول ضمن الفلاتر الحالية لطباعة تقرير عنها',1);
+  if(list.some(a=>mainPhoto(a))){toast('جارٍ تجهيز صور الأصول للتقرير…');await needThumbs(list.map(a=>mainPhoto(a)?.id).filter(Boolean))}
   const old=document.getElementById('repFrame');if(old)old.remove();
   const f=document.createElement('iframe');f.id='repFrame';f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
   document.body.appendChild(f);const w=f.contentWindow;w.document.open();w.document.write(reportHTML(list));w.document.close();
