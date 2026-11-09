@@ -37,6 +37,8 @@ function handle_(p) {
   if (a === 'load') return out_(legacyLoad_(ss));
   if (a === 'thumbs') return out_(thumbs_(ss, p));
   if (a === 'photoGet') return out_(photoGet_(p));
+  if (a === 'videoChunk') return out_(videoChunk_(p));      // خارج القفل: رفع جزء قد يستغرق ثوانٍ
+  if (a === 'videoStatus') return out_(videoStatus_(p));
   // ---- writes ----
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
@@ -49,6 +51,8 @@ function handle_(p) {
     if (a === 'save') return out_(legacySave_(ss, p));
     if (a === 'photoUpload') return out_(photoUpload_(ss, p));
     if (a === 'photoDelete') return out_(photoDelete_(ss, p));
+    if (a === 'videoStart') return out_(videoStart_(ss, p));
+    if (a === 'videoDone') return out_(videoDone_(ss, p));
   } finally { lock.releaseLock(); }
   return out_({ ok: false, error: 'unknown_action' });
 }
@@ -322,7 +326,53 @@ function photoDelete_(ss, p) {
     for (let i = v.length - 1; i >= 0; i--) if (String(v[i][0]) === id) sh.deleteRow(i + 2); }
   return { ok: true };
 }
+/* ---------- فيديو الأصول: رفع مباشر إلى Drive على أجزاء (Resumable Upload) ----------
+   الخادم يفتح جلسة رفع لملف واحد داخل مجلد الأصل، والمتصفح يرسل الأجزاء مباشرة إلى Drive
+   (أو عبر الخادم إن تعذّر الاتصال المباشر). رابط الجلسة يسمح برفع هذا الملف فقط. */
+const UP_RE = /^https:\/\/www\.googleapis\.com\/upload\/drive\/v3\/files\?/;
+function videoStart_(ss, p) {
+  const code = String(p.code || '').trim(), size = Math.floor(+p.size || 0);
+  if (!code || !size) return { ok: false, error: 'bad_request' };
+  if (size > 1024 * 1024 * 1024) return { ok: false, error: 'too_large' };
+  const f = assetFolder_(code, p.name, p.cat);
+  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd_HH-mm-ss');
+  const ext = String(p.ext || 'mp4').replace(/[^a-z0-9]/gi, '').slice(0, 5).toLowerCase() || 'mp4';
+  const name = safeName_(code + '_' + (safeName_(p.type) || 'فيديو') + '_' + stamp) + '.' + ext;
+  const headers = { Authorization: 'Bearer ' + ScriptApp.getOAuthToken(), 'X-Upload-Content-Type': p.mime || 'video/mp4', 'X-Upload-Content-Length': String(size) };
+  if (/^https:\/\/[a-z0-9.\-]+(:\d+)?$/i.test(String(p.origin || ''))) headers.Origin = p.origin;   // للسماح للمتصفح بالرفع المباشر (CORS)
+  const r = UrlFetchApp.fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true&fields=id,name,size', {
+    method: 'post', contentType: 'application/json; charset=UTF-8', headers: headers, muteHttpExceptions: true,
+    payload: JSON.stringify({ name: name, parents: [f.getId()], description: code + ' | ' + (p.type || 'فيديو') + (p.name ? ' | ' + p.name : '') }) });
+  const h = r.getAllHeaders(), loc = h.Location || h.location;
+  if (r.getResponseCode() !== 200 || !loc) return { ok: false, error: 'upload_init_failed', detail: r.getResponseCode() + ' ' + r.getContentText().slice(0, 200) };
+  return { ok: true, url: loc, name: name };
+}
+function upResult_(r, fallbackNext) {
+  const c = r.getResponseCode(), h = r.getAllHeaders();
+  if (c === 308) { const rg = String(h.Range || h.range || ''); return { ok: true, done: false, next: rg ? (+rg.split('-')[1] + 1) : fallbackNext }; }
+  if (c === 200 || c === 201) { const j = JSON.parse(r.getContentText()); return { ok: true, done: true, id: j.id }; }
+  if (c === 404 || c === 410) return { ok: false, error: 'upload_expired' };
+  return { ok: false, error: 'chunk_failed', detail: c + ' ' + r.getContentText().slice(0, 200) };
+}
+function videoChunk_(p) {
+  if (!UP_RE.test(String(p.url || ''))) return { ok: false, error: 'bad_request' };
+  const bytes = Utilities.base64Decode(p.data), start = Math.floor(+p.start || 0), total = Math.floor(+p.total || 0), end = start + bytes.length - 1;
+  const r = UrlFetchApp.fetch(p.url, { method: 'put', contentType: p.mime || 'application/octet-stream', payload: bytes,
+    headers: { 'Content-Range': 'bytes ' + start + '-' + end + '/' + total }, muteHttpExceptions: true });
+  return upResult_(r, end + 1);
+}
+function videoStatus_(p) {
+  if (!UP_RE.test(String(p.url || ''))) return { ok: false, error: 'bad_request' };
+  const r = UrlFetchApp.fetch(p.url, { method: 'put', payload: '', headers: { 'Content-Range': 'bytes */' + Math.floor(+p.total || 0) }, muteHttpExceptions: true });
+  return upResult_(r, 0);
+}
+function videoDone_(ss, p) {
+  const id = String(p.id || ''); let file;
+  try { file = DriveApp.getFileById(id); } catch (e) { return { ok: false, error: 'video_missing' }; }
+  if (p.thumb && String(p.thumb).length < 48000) sheet_(ss, TH_SHEET, ['معرّف الملف', 'رقم الباركود', 'مصغّرة']).appendRow([id, String(p.code || ''), p.thumb]);
+  return { ok: true, id: id, name: file.getName(), size: file.getSize() };
+}
 /** شغّلها مرة واحدة من المحرّر لمنح صلاحية Google Drive */
-function authorizeDrive() { phRoot_(); }
+function authorizeDrive() { phRoot_(); UrlFetchApp.fetch('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest', { muteHttpExceptions: true }); }
 
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
