@@ -39,6 +39,7 @@ function handle_(p) {
   if (a === 'photoGet') return out_(photoGet_(p));
   if (a === 'videoChunk') return out_(videoChunk_(p));      // خارج القفل: رفع جزء قد يستغرق ثوانٍ
   if (a === 'videoStatus') return out_(videoStatus_(p));
+  if (a === 'shareAll') return out_(shareAll_());
   // ---- writes ----
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
@@ -303,7 +304,7 @@ function photoUpload_(ss, p) {
   const t = safeName_(p.type) || 'صورة';
   const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd_HH-mm-ss');
   const blob = Utilities.newBlob(Utilities.base64Decode(p.data), p.mime || 'image/jpeg', safeName_(code + '_' + t + '_' + stamp) + '.jpg');
-  const file = f.createFile(blob);
+  const file = f.createFile(blob); shareLink_(file);
   file.setDescription(code + ' | ' + t + (p.name ? ' | ' + p.name : ''));
   if (p.thumb && String(p.thumb).length < 48000) sheet_(ss, TH_SHEET, ['معرّف الملف', 'رقم الباركود', 'مصغّرة']).appendRow([file.getId(), code, p.thumb]);
   return { ok: true, id: file.getId(), name: file.getName(), folder: f.getId() };
@@ -369,9 +370,24 @@ function videoStatus_(p) {
 function videoDone_(ss, p) {
   const id = String(p.id || ''); let file;
   try { file = DriveApp.getFileById(id); } catch (e) { return { ok: false, error: 'video_missing' }; }
+  shareLink_(file);
   if (p.thumb && String(p.thumb).length < 48000) sheet_(ss, TH_SHEET, ['معرّف الملف', 'رقم الباركود', 'مصغّرة']).appendRow([id, String(p.code || ''), p.thumb]);
   return { ok: true, id: id, name: file.getName(), size: file.getSize() };
 }
+/* عرض بدون تسجيل دخول: كل ملف (صورة/فيديو) يُتاح «لأي شخص لديه الرابط — عرض فقط».
+   المجلدات تبقى خاصة (لا يمكن تصفّحها)، والملف لا يُفتح إلا برابطه الفريد. */
+function shareLink_(file) { try { if (file.getSharingAccess() !== DriveApp.Access.ANYONE_WITH_LINK) file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); return true; } catch (e) { return false; } }
+function shareAll_() {
+  const P = P_(); if (P.getProperty('ph_shared') === '1') return { ok: true, done: true, n: 0 };
+  const t0 = Date.now(); let n = 0, fail = 0, more = false;
+  const walk = f => { const fs = f.getFiles(); while (fs.hasNext()) { if (Date.now() - t0 > 240000) { more = true; return; } shareLink_(fs.next()) ? n++ : fail++; }
+    const ds = f.getFolders(); while (ds.hasNext() && !more) walk(ds.next()); };
+  walk(phRoot_());
+  if (!more) P.setProperty('ph_shared', '1');
+  return { ok: true, done: !more, n: n, fail: fail };
+}
+/** إتاحة عرض كل الصور والفيديو الحالية بدون تسجيل دخول (تعمل تلقائياً من المنظومة مرة واحدة) */
+function shareMedia() { P_().deleteProperty('ph_shared'); Logger.log(JSON.stringify(shareAll_())); }
 /** شغّلها مرة واحدة من المحرّر لمنح صلاحية Google Drive */
 function authorizeDrive() { phRoot_(); UrlFetchApp.fetch('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest', { muteHttpExceptions: true }); }
 
