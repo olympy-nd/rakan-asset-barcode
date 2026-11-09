@@ -186,6 +186,55 @@ tr.hl td{background:var(--gold-2)!important}
 .stage{background:repeating-conic-gradient(#E9EDF3 0% 25%,#F6F8FB 0% 50%) 50%/18px 18px;border-radius:10px;min-height:340px;display:flex;align-items:center;justify-content:center;padding:30px;border:1px solid var(--line)}
 .ruler{color:var(--muted);font-size:12px;text-align:center;margin-top:8px}
 .warnbox{background:var(--gold-soft);color:#B23E10;border:1px solid var(--gold-2);border-right:4px solid var(--gold);border-radius:9px;padding:9px 12px;font-size:12.5px}
+/* photo display styles in the assets table */
+@media (min-width:1181px){.atbl[data-ts="name"] .cph,.atbl[data-ts="chip"] .cph{padding:0!important;border-left:0!important;border-right:0!important;font-size:0;overflow:hidden}.atbl[data-ts="name"] .cph>*,.atbl[data-ts="chip"] .cph>*{display:none!important}}
+.atbl[data-ts="col"] .th,.atbl[data-ts="col"] .th0{width:54px;height:54px;border-radius:11px}
+.atbl[data-ts="col"] .thn{width:54px}
+.nmx{display:flex;align-items:center;gap:11px}
+.nmi{position:relative;flex:none;width:48px;height:48px;border-radius:11px;overflow:hidden;border:1px solid #d5deeb;background:var(--tint);box-shadow:0 1px 3px rgba(12,76,162,.10);cursor:zoom-in}
+.nmi img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s}
+.nmi:hover img{transform:scale(1.08)}
+.nmi0{display:grid;place-items:center;color:#c3cede;border-style:dashed;box-shadow:none;cursor:default}.nmi0 svg{width:19px;height:19px}
+.nmi .pl,.thn .pl{position:absolute;inset:0;margin:auto;width:20px;height:20px;border-radius:50%;background:rgba(8,30,60,.6)}
+.nmi .pl::after{content:"";position:absolute;inset:0;margin:auto;left:2px;width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent #fff}
+.nmt{min-width:0;display:flex;flex-direction:column;gap:1px}
+.mbs{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
+.mb{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:var(--navy-2);background:var(--tint);border:1px solid var(--line);border-radius:999px;padding:0 7px 0 6px;line-height:19px;white-space:nowrap}
+.mb svg{width:12px;height:12px}
+.mb.pend{color:#b45309;background:#fff7ed;border-color:#fed7aa}
+.pchip{display:inline-flex;gap:4px;cursor:zoom-in}.pchip:hover .mb{border-color:var(--gold);color:var(--gold)}
+#hovPop{position:fixed;z-index:80;width:320px;background:#fff;border:1px solid #d9e2ef;border-radius:16px;overflow:hidden;box-shadow:0 22px 50px rgba(8,30,60,.28),0 2px 6px rgba(8,30,60,.08);pointer-events:none;opacity:0;transform:scale(.97) translateX(6px);transform-origin:right center;transition:opacity .16s,transform .16s}
+#hovPop.on{opacity:1;transform:none}
+.hp-im{position:relative;height:220px;background:linear-gradient(135deg,#eef3fa,#dde6f2)}
+.hp-im img{width:100%;height:100%;object-fit:cover;display:block}
+.hp-im::after{content:"";position:absolute;inset:auto 0 0 0;height:60px;background:linear-gradient(transparent,rgba(8,30,60,.55))}
+.hp-t{position:absolute;bottom:9px;right:11px;z-index:1;color:#fff;font-size:12px;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.hp-pl{position:absolute;inset:0;margin:auto;width:46px;height:46px;border-radius:50%;background:rgba(241,92,34,.95);z-index:1}
+.hp-pl::after{content:"";position:absolute;inset:0;margin:auto;left:4px;width:0;height:0;border-style:solid;border-width:9px 0 9px 14px;border-color:transparent transparent transparent #fff}
+.hp-b{padding:11px 13px 12px}
+.hp-b>b{display:block;color:var(--navy);font-size:14px;line-height:1.4}
+.hp-m{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px;font-size:11.5px;color:var(--muted)}
+.hp-c{font-family:Consolas,'Courier New',monospace;font-weight:700;color:#fff;background:var(--navy);border-radius:5px;padding:0 7px;direction:ltr}
+.hp-s{display:flex;gap:6px;margin-top:9px}
+.hp-s span{position:relative;width:52px;height:40px;border-radius:7px;overflow:hidden;border:1px solid var(--line);background:var(--tint)}
+.hp-s img{width:100%;height:100%;object-fit:cover;display:block}
+.hp-s span i{position:absolute;inset:0;margin:auto;width:16px;height:16px;border-radius:50%;background:rgba(241,92,34,.95)}
+.hp-s em{align-self:center;font-style:normal;font-weight:800;color:var(--navy-2);font-size:12px}
+.hp-f{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
+.hp-f>span{display:flex;gap:5px}.hp-f small{color:var(--gold);font-weight:700;font-size:11px}
+@media (max-width:1180px){.nmi,.atbl .pchip{display:none}}
+/* video */
+.ph-vbtn{border-color:#c7d5ea}
+.ph-it .pv{position:absolute;inset:0;margin:auto;width:34px;height:34px;border-radius:50%;background:rgba(241,92,34,.95);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.ph-it .pv::after{content:"";position:absolute;inset:0;margin:auto;left:3px;width:0;height:0;border-style:solid;border-width:7px 0 7px 11px;border-color:transparent transparent transparent #fff}
+.ph-it .du{position:absolute;top:6px;left:34px;background:rgba(0,0,0,.65);color:#fff;font:700 10px/1 Tajawal,sans-serif;padding:3px 5px;border-radius:5px;direction:ltr}
+.ph-it .pg{position:absolute;left:6px;right:6px;bottom:28px;height:5px;border-radius:3px;background:rgba(255,255,255,.55);overflow:hidden}.ph-it .pg i{display:block;height:100%;background:var(--gold);width:0}
+#upBar{position:fixed;left:18px;bottom:92px;z-index:70;width:300px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 13px;box-shadow:0 14px 34px rgba(8,30,60,.22);display:none}
+#upBar.on{display:block}.ub-h{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--navy)}.ub-h span{font-weight:800;color:var(--gold);direction:ltr}
+.ub-t{height:7px;border-radius:4px;background:var(--tint);overflow:hidden;margin:7px 0 5px}.ub-t i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ff8a50);transition:width .3s}
+#upBar small{font-size:11px;color:var(--muted)}
+.phv-img iframe,.phv-img video{width:100%;height:100%;border:0;background:#000}
+@media (max-width:820px){#upBar{left:10px;right:10px;width:auto;bottom:150px}}
 /* asset photos */
 .ph-box{border:1px dashed #b9c9e2;border-radius:12px;padding:10px;background:var(--tint)}
 .ph-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
@@ -589,12 +638,13 @@ html{-webkit-text-size-adjust:100%}
             <button class="btn gold" id="bPrintSel" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>طباعة المحدد</button>
             <button class="btn" id="bImport" title="دمج أصول من سجل Excel آخر">استيراد سجل</button>
             <button class="btn" id="bExport">تصدير نسخة</button>
+            <button class="btn" id="bRepSel" disabled title="تقرير مفصّل لكل أصل محدد مع صوره"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>تقرير مفصّل للمحدد</button>
             <button class="btn pri" id="bReport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>طباعة تقرير</button>
           </div>
         </div>
         <div class="tbl-wrap atw"><table class="atbl">
-          <colgroup><col style="width:2.5%"><col style="width:4.5%"><col style="width:9%"><col style="width:5%"><col style="width:12%"><col style="width:7.5%"><col style="width:6.5%"><col style="width:6.5%"><col style="width:7%"><col style="width:6.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:5%"><col style="width:5.5%"><col style="width:8%"></colgroup>
-          <thead><tr><th><input type="checkbox" id="chkAll"></th><th>صورة</th><th>رقم الباركود</th><th>أودو</th><th>اسم الأصل</th><th>الفئة</th><th>الموقع</th><th>القسم</th><th>العهدة</th><th>الرقم التسلسلي</th><th>تاريخ الشراء</th><th>القيمة</th><th>الحالة</th><th>الطباعة</th><th>إجراءات</th></tr></thead>
+          <colgroup><col style="width:2.5%"><col id="cPh" style="width:4.5%"><col style="width:9%"><col style="width:5%"><col id="cNm" style="width:12%"><col style="width:7.5%"><col style="width:6.5%"><col style="width:6.5%"><col style="width:7%"><col style="width:6.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:5%"><col style="width:5.5%"><col style="width:8%"></colgroup>
+          <thead><tr><th><input type="checkbox" id="chkAll"></th><th class="cph">صورة</th><th>رقم الباركود</th><th>أودو</th><th>اسم الأصل</th><th>الفئة</th><th>الموقع</th><th>القسم</th><th>العهدة</th><th>الرقم التسلسلي</th><th>تاريخ الشراء</th><th>القيمة</th><th>الحالة</th><th>الطباعة</th><th>إجراءات</th></tr></thead>
           <tbody id="tb"></tbody>
         </table></div>
         <div class="hint" style="margin-top:8px" id="tblFoot"></div>
@@ -626,12 +676,13 @@ html{-webkit-text-size-adjust:100%}
             <div class="field"><label>تاريخ الشراء</label><input name="purchaseDate" type="date"></div>
             <div class="field"><label>القيمة</label><input name="value" type="number" step="0.01" min="0"></div>
             <div class="field" style="grid-column:span 2"><label>ملاحظات</label><input name="notes"></div>
-            <div class="field ph-field" style="grid-column:1/-1"><label>صور الأصل <span class="hint">— تُحفظ في Google Drive داخل مجلد منظّم حسب الفئة والأصل</span></label>
+            <div class="field ph-field" style="grid-column:1/-1"><label>صور وفيديو الأصل <span class="hint">— تُحفظ في Google Drive داخل مجلد منظّم حسب الفئة والأصل</span></label>
               <div class="ph-box">
                 <div class="ph-tools" id="phTools">
                   <select id="phType"></select>
                   <label class="btn sm gold ph-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg><span>تصوير</span><input type="file" accept="image/*" capture="environment" id="phCam" hidden></label>
                   <label class="btn sm ph-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg><span>رفع صور</span><input type="file" accept="image/*" multiple id="phUp" hidden></label>
+                  <label class="btn sm ph-btn ph-vbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5.5" width="13.5" height="13" rx="2"/><path d="m16 10 5.5-3v10L16 14"/></svg><span>فيديو</span><input type="file" accept="video/*" id="phVid" hidden></label>
                   <span class="hint" id="phHint"></span>
                 </div>
                 <div class="ph-grid" id="phGrid"></div>
@@ -761,6 +812,9 @@ html{-webkit-text-size-adjust:100%}
               <span class="hint" id="gsInfo"></span>
             </div>
             <label class="row" style="margin-top:12px;gap:8px;cursor:pointer;font-size:13px;flex-wrap:nowrap"><input type="checkbox" id="oShowSync" style="width:18px;height:18px;flex:none"><span>إظهار زرّي <b>«حفظ»</b> و<b>«تحديث من الشيت»</b> أعلى الصفحة <span class="hint">(الحفظ والتحديث يتمّان تلقائياً، فالزرّان للاستخدام اليدوي عند الحاجة فقط)</span></span></label>
+            <label class="row" style="margin-top:12px;gap:10px;font-size:13px;flex-wrap:wrap"><span style="font-weight:700;color:var(--navy)">عرض صور الأصول في سجل الأصول:</span>
+              <select id="oThumbStyle" style="width:auto;min-width:220px"><option value="col">عمود صورة مستقل (كبير)</option><option value="name">صورة داخل خانة اسم الأصل</option><option value="chip">شارة صغيرة + معاينة عند المرور</option></select></label>
+            <label class="row" style="margin-top:10px;gap:8px;cursor:pointer;font-size:13px;flex-wrap:nowrap"><input type="checkbox" id="oHover" style="width:18px;height:18px;flex:none"><span>تفعيل <b>معاينة الصورة عند مرور المؤشر</b> في سجل الأصول <span class="hint">(بطاقة معاينة كبيرة بالصورة وبيانات الأصل وبقية الصور — على الكمبيوتر)</span></span></label>
             <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">خطوات الإعداد (مرة واحدة)</summary>
               <div class="infobox" style="margin-top:8px">
                 1. اضغط <b>نسخ كود Apps Script</b>.<br>
@@ -847,6 +901,7 @@ html{-webkit-text-size-adjust:100%}
 </div>
 
 <nav class="bnav"><button class="nav" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>لوحة</span></button><button class="nav" data-v="assets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>الأصول</span></button><button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg><span>تسجيل</span></button><button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg><span>الطباعة</span></button><button class="nav" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>الإعدادات</span></button></nav>
+<div id="upBar"><div class="ub-h"><b id="ubT">رفع الفيديو</b><span id="ubP">0%</span></div><div class="ub-t"><i id="ubF"></i></div><small id="ubS"></small></div>
 <div class="modal" id="phM"><div class="phv">
   <div class="phv-top"><b id="phvT"></b><span id="phvN" class="hint"></span><span style="flex:1"></span><a id="phvDrive" class="btn sm" target="_blank" rel="noopener">فتح في Google Drive</a><button type="button" class="btn sm" id="phvX">إغلاق</button></div>
   <div class="phv-st"><button type="button" class="phv-nav" id="phvP">‹</button><div class="phv-img"><img id="phvI" alt=""><div class="phv-load" id="phvL">جارٍ تحميل الصورة…</div></div><button type="button" class="phv-nav" id="phvNx">›</button></div>
@@ -3224,6 +3279,8 @@ function handle_(p) {
   if (a === 'load') return out_(legacyLoad_(ss));
   if (a === 'thumbs') return out_(thumbs_(ss, p));
   if (a === 'photoGet') return out_(photoGet_(p));
+  if (a === 'videoChunk') return out_(videoChunk_(p));      // خارج القفل: رفع جزء قد يستغرق ثوانٍ
+  if (a === 'videoStatus') return out_(videoStatus_(p));
   // ---- writes ----
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
@@ -3236,6 +3293,8 @@ function handle_(p) {
     if (a === 'save') return out_(legacySave_(ss, p));
     if (a === 'photoUpload') return out_(photoUpload_(ss, p));
     if (a === 'photoDelete') return out_(photoDelete_(ss, p));
+    if (a === 'videoStart') return out_(videoStart_(ss, p));
+    if (a === 'videoDone') return out_(videoDone_(ss, p));
   } finally { lock.releaseLock(); }
   return out_({ ok: false, error: 'unknown_action' });
 }
@@ -3509,8 +3568,54 @@ function photoDelete_(ss, p) {
     for (let i = v.length - 1; i >= 0; i--) if (String(v[i][0]) === id) sh.deleteRow(i + 2); }
   return { ok: true };
 }
+/* ---------- فيديو الأصول: رفع مباشر إلى Drive على أجزاء (Resumable Upload) ----------
+   الخادم يفتح جلسة رفع لملف واحد داخل مجلد الأصل، والمتصفح يرسل الأجزاء مباشرة إلى Drive
+   (أو عبر الخادم إن تعذّر الاتصال المباشر). رابط الجلسة يسمح برفع هذا الملف فقط. */
+const UP_RE = /^https:\/\/www\.googleapis\.com\/upload\/drive\/v3\/files\?/;
+function videoStart_(ss, p) {
+  const code = String(p.code || '').trim(), size = Math.floor(+p.size || 0);
+  if (!code || !size) return { ok: false, error: 'bad_request' };
+  if (size > 1024 * 1024 * 1024) return { ok: false, error: 'too_large' };
+  const f = assetFolder_(code, p.name, p.cat);
+  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd_HH-mm-ss');
+  const ext = String(p.ext || 'mp4').replace(/[^a-z0-9]/gi, '').slice(0, 5).toLowerCase() || 'mp4';
+  const name = safeName_(code + '_' + (safeName_(p.type) || 'فيديو') + '_' + stamp) + '.' + ext;
+  const headers = { Authorization: 'Bearer ' + ScriptApp.getOAuthToken(), 'X-Upload-Content-Type': p.mime || 'video/mp4', 'X-Upload-Content-Length': String(size) };
+  if (/^https:\/\/[a-z0-9.\-]+(:\d+)?$/i.test(String(p.origin || ''))) headers.Origin = p.origin;   // للسماح للمتصفح بالرفع المباشر (CORS)
+  const r = UrlFetchApp.fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true&fields=id,name,size', {
+    method: 'post', contentType: 'application/json; charset=UTF-8', headers: headers, muteHttpExceptions: true,
+    payload: JSON.stringify({ name: name, parents: [f.getId()], description: code + ' | ' + (p.type || 'فيديو') + (p.name ? ' | ' + p.name : '') }) });
+  const h = r.getAllHeaders(), loc = h.Location || h.location;
+  if (r.getResponseCode() !== 200 || !loc) return { ok: false, error: 'upload_init_failed', detail: r.getResponseCode() + ' ' + r.getContentText().slice(0, 200) };
+  return { ok: true, url: loc, name: name };
+}
+function upResult_(r, fallbackNext) {
+  const c = r.getResponseCode(), h = r.getAllHeaders();
+  if (c === 308) { const rg = String(h.Range || h.range || ''); return { ok: true, done: false, next: rg ? (+rg.split('-')[1] + 1) : fallbackNext }; }
+  if (c === 200 || c === 201) { const j = JSON.parse(r.getContentText()); return { ok: true, done: true, id: j.id }; }
+  if (c === 404 || c === 410) return { ok: false, error: 'upload_expired' };
+  return { ok: false, error: 'chunk_failed', detail: c + ' ' + r.getContentText().slice(0, 200) };
+}
+function videoChunk_(p) {
+  if (!UP_RE.test(String(p.url || ''))) return { ok: false, error: 'bad_request' };
+  const bytes = Utilities.base64Decode(p.data), start = Math.floor(+p.start || 0), total = Math.floor(+p.total || 0), end = start + bytes.length - 1;
+  const r = UrlFetchApp.fetch(p.url, { method: 'put', contentType: p.mime || 'application/octet-stream', payload: bytes,
+    headers: { 'Content-Range': 'bytes ' + start + '-' + end + '/' + total }, muteHttpExceptions: true });
+  return upResult_(r, end + 1);
+}
+function videoStatus_(p) {
+  if (!UP_RE.test(String(p.url || ''))) return { ok: false, error: 'bad_request' };
+  const r = UrlFetchApp.fetch(p.url, { method: 'put', payload: '', headers: { 'Content-Range': 'bytes */' + Math.floor(+p.total || 0) }, muteHttpExceptions: true });
+  return upResult_(r, 0);
+}
+function videoDone_(ss, p) {
+  const id = String(p.id || ''); let file;
+  try { file = DriveApp.getFileById(id); } catch (e) { return { ok: false, error: 'video_missing' }; }
+  if (p.thumb && String(p.thumb).length < 48000) sheet_(ss, TH_SHEET, ['معرّف الملف', 'رقم الباركود', 'مصغّرة']).appendRow([id, String(p.code || ''), p.thumb]);
+  return { ok: true, id: id, name: file.getName(), size: file.getSize() };
+}
 /** شغّلها مرة واحدة من المحرّر لمنح صلاحية Google Drive */
-function authorizeDrive() { phRoot_(); }
+function authorizeDrive() { phRoot_(); UrlFetchApp.fetch('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest', { muteHttpExceptions: true }); }
 
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 </script>
@@ -3827,18 +3932,19 @@ const PH_MAX=15,PIX='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAAL
 const IC_PH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg>';
 function photosOf(a){if(!a||!a.photos)return[];if(Array.isArray(a.photos))return a.photos;try{const v=JSON.parse(a.photos);return Array.isArray(v)?v.filter(p=>p&&p.id):[]}catch(e){return[]}}
 function setPhotos(a,arr){a.photos=arr.length?JSON.stringify(arr):''}
-function mainPhoto(a){const p=photosOf(a);return p.find(x=>x.t===PH_TYPES[0])||p[0]||null}
+function mainPhoto(a){const p=photosOf(a);return p.find(x=>x.t===PH_TYPES[0]&&!x.v)||p.find(x=>!x.v)||p[0]||null}
 const TH={},FULL={};let PQ=[],phBusy=false;
 const IDB={db:null,
-  open(){if(this.db)return Promise.resolve(this.db);return new Promise((res,rej)=>{let q;try{q=indexedDB.open('rakan-photos',1)}catch(e){return rej(e)}
-    q.onupgradeneeded=()=>{const d=q.result;if(!d.objectStoreNames.contains('thumbs'))d.createObjectStore('thumbs');if(!d.objectStoreNames.contains('pq'))d.createObjectStore('pq',{keyPath:'qid'})};
+  open(){if(this.db)return Promise.resolve(this.db);return new Promise((res,rej)=>{let q;try{q=indexedDB.open('rakan-photos',2)}catch(e){return rej(e)}
+    q.onupgradeneeded=()=>{const d=q.result;if(!d.objectStoreNames.contains('thumbs'))d.createObjectStore('thumbs');if(!d.objectStoreNames.contains('pq'))d.createObjectStore('pq',{keyPath:'qid'});if(!d.objectStoreNames.contains('blobs'))d.createObjectStore('blobs')};
     q.onsuccess=()=>res(this.db=q.result);q.onerror=()=>rej(q.error)})},
   run(store,fn){return this.open().then(d=>new Promise((res,rej)=>{const t=d.transaction(store,'readwrite');fn(t.objectStore(store));t.oncomplete=()=>res(true);t.onerror=()=>rej(t.error)})).catch(()=>false)},
   put(store,v,k){return this.run(store,s=>k===undefined?s.put(v):s.put(v,k))},
   del(store,k){return this.run(store,s=>s.delete(k))},
+  get(store,k){return this.open().then(d=>new Promise(res=>{const r=d.transaction(store,'readonly').objectStore(store).get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>res(undefined)})).catch(()=>undefined)},
   all(store){return this.open().then(d=>new Promise(res=>{const out=[],c=d.transaction(store,'readonly').objectStore(store).openCursor();
     c.onsuccess=()=>{const x=c.result;if(x){out.push([x.key,x.value]);x.continue()}else res(out)};c.onerror=()=>res(out)})).catch(()=>[])}};
-async function phLoad(){(await IDB.all('thumbs')).forEach(([k,v])=>TH[k]=v);PQ=(await IDB.all('pq')).map(([,v])=>v).sort((a,b)=>a.at-b.at);
+async function phLoad(){(await IDB.all('thumbs')).forEach(([k,v])=>TH[k]=v);PQ=(await IDB.all('pq')).map(([,v])=>v).sort((a,b)=>a.at-b.at);for(const q of PQ)if(q.k==='vid'&&!q.blob)q.blob=await IDB.get('blobs',q.qid);
   if(assets.length)renderTable();phPump()}
 /* ---- مصغّرات ---- */
 let thWant=new Set(),thTimer=null;const thInflight=new Set();
@@ -3848,11 +3954,19 @@ function needThumbs(ids){ids.forEach(id=>{if(id&&!TH[id]&&!thInflight.has(id))th
     try{for(let i=0;i<list.length;i+=60){const r=await gsCall('thumbs',{ids:list.slice(i,i+60)});Object.entries(r.thumbs||{}).forEach(([k,v])=>{TH[k]=v;IDB.put('thumbs',v,k)})}}catch(e){}
     list.forEach(i=>thInflight.delete(i));paintThumbs();res()},80)})}
 function paintThumbs(){$$('img[data-ph]').forEach(im=>{const v=TH[im.dataset.ph];if(v&&im.getAttribute('src')!==v)im.src=v})}
+const IC_VID='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5.5" width="13.5" height="13" rx="2"/><path d="m16 10 5.5-3v10L16 14"/></svg>';
+function mediaCounts(a){const all=photosOf(a),pend=PQ.filter(q=>(q.k==='up'||q.k==='vid')&&q.code===a.code);return {p:all.filter(x=>!x.v).length,v:all.filter(x=>x.v).length,pend:pend.length}}
+function mediaBadges(c){return (c.p?`<span class="mb" title="صور">${IC_PH}${c.p}</span>`:'')+(c.v?`<span class="mb" title="فيديو">${IC_VID}${c.v}</span>`:'')+(c.pend?`<span class="mb pend" title="بانتظار الرفع">⏳ ${c.pend}</span>`:'')}
+function thumbSrc(a){const m=mainPhoto(a);if(m){if(!TH[m.id])needThumbs([m.id]);return {id:m.id,src:TH[m.id]||PIX,v:!!m.v}}const q=PQ.find(q=>(q.k==='up'||q.k==='vid')&&q.code===a.code);return q?{src:q.thumb,v:q.k==='vid'}:null}
+function nameCell(a){const TS=prefs.thumbStyle||'col',od=a.odooName&&cleanName(a.odooName)!==a.name?`<span class="on2">أودو: ${esc(a.odooName)}</span>`:'',nm=`<b>${esc(a.name)}</b>`;
+  if(TS==='col')return nm+od;const c=mediaCounts(a),src=thumbSrc(a),has=c.p||c.v||c.pend;
+  if(TS==='name')return `<div class="nmx">${src?`<span class="nmi" data-v="${esc(a.code)}"><img ${src.id?`data-ph="${esc(src.id)}"`:''} src="${src.src}" alt="">${src.v?'<i class="pl"></i>':''}</span>`:`<span class="nmi nmi0">${IC_PH}</span>`}<div class="nmt">${nm}${od}${has?`<div class="mbs">${mediaBadges(c)}</div>`:''}</div></div>`;
+  return nm+od+(has?`<div class="mbs"><span class="pchip" data-v="${esc(a.code)}">${mediaBadges(c)}</span></div>`:'')}
 function thumbHTML(a){const all=photosOf(a),m=mainPhoto(a),pend=PQ.filter(q=>q.k==='up'&&q.code===a.code),n=all.length+pend.length;
   if(m){if(!TH[m.id])needThumbs([m.id]);return `<span class="thn"><img class="th" data-ph="${esc(m.id)}" data-v="${esc(a.code)}" src="${TH[m.id]||PIX}" alt="" title="صور الأصل (${n})">${n>1?`<i>${n}</i>`:''}</span>`}
   if(pend.length)return `<span class="thn"><img class="th" data-v="${esc(a.code)}" src="${pend[0].thumb}" alt="" title="بانتظار الرفع إلى Google Drive"><i>⏳</i></span>`;
   return `<span class="th0" title="لا توجد صور">${IC_PH}</span>`}
-function repThumb(a){const m=mainPhoto(a);return m&&TH[m.id]?`<img src="${TH[m.id]}" alt="">`:'<span class="nop">—</span>'}
+function repThumb(a){const m=mainPhoto(a),c=mediaCounts(a),n=c.p+c.v;return m&&TH[m.id]?`<img src="${TH[m.id]}" alt="">${n>1?`<span class="pn">${c.p?c.p+' صور':''}${c.p&&c.v?' · ':''}${c.v?c.v+' فيديو':''}</span>`:''}`:'<span class="nop"></span>'}
 /* ---- ضغط الصورة في المتصفح: الأصلية حتى 1600px، والمصغّرة 240px ---- */
 function phProcess(file){return new Promise((res,rej)=>{const url=URL.createObjectURL(file),im=new Image();
   im.onload=()=>{try{const out=(max,q)=>{const W=im.naturalWidth,H=im.naturalHeight,k=Math.min(1,max/Math.max(W,H)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(W*k));c.height=Math.max(1,Math.round(H*k));
@@ -3866,57 +3980,126 @@ function phCount(){return PHS.list.filter(p=>!PHS.removed.has(p.id)).length+PHS.
 function phInitForm(a){PHS.code=a?a.code:'';PHS.list=a?photosOf(a).slice():[];PHS.staged=[];PHS.removed=new Set();
   const sel=$('#phType');if(!sel.options.length)sel.innerHTML=PH_TYPES.map(t=>`<option>${t}</option>`).join('');sel.value=phNextType();phRenderForm()}
 function phItems(){return [...PHS.list.filter(p=>!PHS.removed.has(p.id)).map(p=>({...p,kind:'s'})),
-  ...PQ.filter(q=>q.k==='up'&&q.code===PHS.code).map(q=>({t:q.t,src:q.thumb,full:'data:image/jpeg;base64,'+q.data,qid:q.qid,kind:'q'})),
-  ...PHS.staged.map((p,i)=>({t:p.t,src:p.thumb,full:'data:image/jpeg;base64,'+p.data,si:i,kind:'n'}))]}
+  ...PQ.filter(q=>(q.k==='up'||q.k==='vid')&&q.code===PHS.code).map(q=>q.k==='vid'?{t:q.t,src:q.thumb,v:1,blob:q.blob,dur:q.dur,qid:q.qid,kind:'q',prog:q.size?q.sent/q.size:0}:{t:q.t,src:q.thumb,full:'data:image/jpeg;base64,'+q.data,qid:q.qid,kind:'q'}),
+  ...PHS.staged.map((p,i)=>p.v?{t:p.t,src:p.thumb,v:1,blob:p.blob,dur:p.dur,si:i,kind:'n'}:{t:p.t,src:p.thumb,full:'data:image/jpeg;base64,'+p.data,si:i,kind:'n'})]}
 function phRenderForm(){const on=GS()&&!needLogin(),items=phItems();
   $$('#phTools .ph-btn').forEach(b=>{b.style.pointerEvents=on?'':'none';b.style.opacity=on?'':'.45'});$('#phType').disabled=!on;
-  $('#phHint').textContent=!on?'تتوفّر الصور عند الاتصال بقاعدة بيانات Google Sheets.':`${items.length} / ${PH_MAX} صورة · زر «تصوير» يفتح كاميرا الجوال مباشرة`;
+  $('#phHint').textContent=!on?'تتوفّر الصور عند الاتصال بقاعدة بيانات Google Sheets.':`${items.length} / ${PH_MAX} · «تصوير» يفتح كاميرا الجوال مباشرة · الفيديو حتى 1 جيجابايت`;
   const ids=items.filter(p=>p.kind==='s'&&!TH[p.id]).map(p=>p.id);if(ids.length)needThumbs(ids).then(()=>{if(ids.some(i=>TH[i]))phRenderForm()});
-  $('#phGrid').innerHTML=items.map((p,i)=>`<div class="ph-it" data-i="${i}"><img src="${p.kind==='s'?(TH[p.id]||PIX):p.src}" ${p.kind==='s'?`data-ph="${esc(p.id)}"`:''} alt="">${p.kind!=='s'?`<span class="ph-p">${p.kind==='n'?'جديدة':'بانتظار الرفع'}</span>`:''}<span class="ph-t">${esc(p.t)}</span><button type="button" class="ph-x" data-x="${i}" title="حذف الصورة">×</button></div>`).join('')}
+  $('#phGrid').innerHTML=items.map((p,i)=>`<div class="ph-it" data-i="${i}"><img src="${p.kind==='s'?(TH[p.id]||PIX):p.src}" ${p.kind==='s'?`data-ph="${esc(p.id)}"`:''} alt="">${p.v?'<i class="pv"></i>':''}${p.v&&p.dur?`<span class="du">${fmtDur(p.dur)}</span>`:''}${p.kind!=='s'?`<span class="ph-p">${p.kind==='n'?(p.v?'جديد':'جديدة'):'بانتظار الرفع'}</span>`:''}${p.kind==='q'&&p.v?`<span class="pg" data-q="${p.qid}"><i style="width:${Math.round((p.prog||0)*100)}%"></i></span>`:''}<span class="ph-t">${esc(p.t)}</span><button type="button" class="ph-x" data-x="${i}" title="حذف الصورة">×</button></div>`).join('')}
 async function phAddFiles(files){const t=$('#phType').value;let n=0;
   for(const f of files){if(!/^image\//.test(f.type)&&!/\.(heic|heif|jpe?g|png|webp|gif|bmp)$/i.test(f.name))continue;
     if(phCount()>=PH_MAX){toast(`الحد الأقصى ${PH_MAX} صورة للأصل الواحد`,1);break}
     try{const r=await phProcess(f);PHS.staged.push({t,data:r.data,thumb:r.thumb});n++}catch(e){toast('تعذّر قراءة الصورة '+f.name+' — جرّب صيغة JPG أو PNG',1)}}
   if(n){SFX.play('pop');$('#phType').value=phNextType();phRenderForm();toast(n===1?'أُضيفت الصورة — ستُرفع عند حفظ الأصل':`أُضيفت ${n} صور — ستُرفع عند حفظ الأصل`)}}
 function phDelta(){return PHS.staged.length+PHS.removed.size}
-function phDeltaTxt(){const a=PHS.staged.length,r=PHS.removed.size;return [a?`إضافة ${a} صورة`:'',r?`حذف ${r} صورة`:''].filter(Boolean).join(' · ')}
+function phDeltaTxt(){const v=PHS.staged.filter(p=>p.v).length,a=PHS.staged.length-v,r=PHS.removed.size;return [a?`إضافة ${a} صورة`:'',v?`إضافة ${v} فيديو`:'',r?`حذف ${r} من الوسائط`:''].filter(Boolean).join(' · ')}
 function phApplyForm(a){if(PHS.removed.size)setPhotos(a,photosOf(a).filter(p=>!PHS.removed.has(p.id)))}
 function phQueueForm(a){const now=Date.now();
-  [...PHS.removed].forEach((id,i)=>{const q={qid:'d'+now+i,k:'del',id,code:a.code,at:now+i};PQ.push(q);IDB.put('pq',q)});
-  PHS.staged.forEach((p,i)=>{const q={qid:'u'+now+'_'+i+Math.random().toString(36).slice(2,6),k:'up',code:a.code,t:p.t,data:p.data,thumb:p.thumb,at:now+100+i};PQ.push(q);IDB.put('pq',q)});
-  const had=PHS.staged.length;PHS.staged=[];PHS.removed=new Set();if(had)toast(`جارٍ رفع ${had===1?'الصورة':had+' صور'} إلى Google Drive…`);phPump()}
-function phRename(from,to){PQ.forEach(q=>{if(q.code===from){q.code=to;IDB.put('pq',q)}});if(PHS.code===from)PHS.code=to}
-async function phDrop(q){PQ=PQ.filter(x=>x.qid!==q.qid);await IDB.del('pq',q.qid)}
+  [...PHS.removed].forEach((id,i)=>{const q={qid:'d'+now+i,k:'del',id,code:a.code,at:now+i};PQ.push(q);pqSave(q)});
+  PHS.staged.forEach((p,i)=>{const qid=(p.v?'v':'u')+now+'_'+i+Math.random().toString(36).slice(2,6);
+    const q=p.v?{qid,k:'vid',code:a.code,t:p.t,blob:p.blob,thumb:p.thumb,dur:p.dur,mime:p.mime,ext:p.ext,size:p.size,url:null,sent:0,at:now+200+i}:{qid,k:'up',code:a.code,t:p.t,data:p.data,thumb:p.thumb,at:now+100+i};
+    PQ.push(q);if(p.v)IDB.put('blobs',p.blob,qid);pqSave(q)});
+  const np=PHS.staged.filter(p=>!p.v).length,nv=PHS.staged.length-np;PHS.staged=[];PHS.removed=new Set();
+  if(np||nv)toast('جارٍ رفع '+[np?(np===1?'الصورة':np+' صور'):'',nv?(nv===1?'الفيديو':nv+' مقاطع فيديو'):''].filter(Boolean).join(' و')+' إلى Google Drive…');phPump()}
+function phRename(from,to){PQ.forEach(q=>{if(q.code===from){q.code=to;pqSave(q)}});if(PHS.code===from)PHS.code=to}
+function pqSave(q){const {blob,...m}=q;return IDB.put('pq',m)}
+async function phDrop(q){PQ=PQ.filter(x=>x.qid!==q.qid);await IDB.del('pq',q.qid);if(q.k==='vid')IDB.del('blobs',q.qid)}
 /* ---- الرفع في الخلفية (يُستأنف تلقائياً بعد انقطاع الإنترنت) ---- */
-async function phPump(){if(phBusy||!GS()||needLogin()||syncing||!PQ.length||navigator.onLine===false)return;phBusy=true;let up=0,del=0,changed=false;
+async function phPump(){if(phBusy||!GS()||needLogin()||syncing||!PQ.length||navigator.onLine===false)return;phBusy=true;let up=0,del=0,vids=0,changed=false,cur=null;
   try{const pend=pendingCodes();
-    for(const q of PQ.slice()){
+    for(const q of [...PQ.filter(x=>x.k!=='vid'),...PQ.filter(x=>x.k==='vid')]){cur=q;
       if(q.k==='up'){const a=assets.find(x=>x.code===q.code);if(!a){await phDrop(q);continue}if(pend.has(q.code))continue;
         const r=await gsCall('photoUpload',{code:a.code,name:a.name,cat:a.category,type:q.t,data:q.data,thumb:q.thumb,mime:'image/jpeg'});
         TH[r.id]=q.thumb;IDB.put('thumbs',q.thumb,r.id);const arr=photosOf(a);arr.push({id:r.id,t:q.t,d:today()});setPhotos(a,arr);await phDrop(q);up++;changed=true}
-      else if(q.k==='del'){await gsCall('photoDelete',{id:q.id});delete TH[q.id];IDB.del('thumbs',q.id);await phDrop(q);del++}}
-  }catch(e){lastErr=e.message}
-  finally{phBusy=false;if(changed)gsCommit();if(up||del){renderAll();if(PHS.code)phRenderForm()}
-    if(up)toast(up===1?'تم حفظ الصورة في Google Drive':`تم حفظ ${up} صور في Google Drive`,'ok')}}
+      else if(q.k==='del'){await gsCall('photoDelete',{id:q.id});delete TH[q.id];IDB.del('thumbs',q.id);await phDrop(q);del++}
+      else if(q.k==='vid'){const a=assets.find(x=>x.code===q.code);if(!a){await phDrop(q);continue}if(pend.has(q.code)||!q.blob)continue;
+        if(changed){gsCommit();changed=false}
+        upShow(q);const r=await phUploadVideo(q,a);
+        const arr=photosOf(a);arr.push({id:r.id,t:q.t,v:1,d:today(),dur:Math.round(q.dur||0)});setPhotos(a,arr);await phDrop(q);vids++;changed=true;gsCommit();changed=false;upHide()}}
+    cur=null;
+  }catch(e){lastErr=e.message;if(cur&&cur.k==='vid'){cur.resumed=true;pqSave(cur);upErr(cur,e)}}
+  finally{phBusy=false;if(changed)gsCommit();if(up||del||vids){renderAll();if(PHS.code)phRenderForm()}
+    if(up||vids)toast([up?(up===1?'تم حفظ الصورة':`تم حفظ ${up} صور`):'',vids?(vids===1?'تم حفظ الفيديو':`تم حفظ ${vids} مقاطع فيديو`):''].filter(Boolean).join(' و')+' في Google Drive','ok')}}
+/* ---- رفع الفيديو: جلسة Resumable إلى Drive، أجزاء 8MB مباشرة أو 4MB عبر الخادم، مع الاستئناف ---- */
+function xhrPut(url,blob,start,end,total,mime,onp){return new Promise(res=>{const x=new XMLHttpRequest();
+  try{x.open('PUT',url);x.setRequestHeader('Content-Range',`bytes ${start}-${end-1}/${total}`);if(mime)x.setRequestHeader('Content-Type',mime)}catch(e){return res({status:0})}
+  x.upload.onprogress=e=>onp&&onp(e.loaded);
+  x.onload=()=>{let rg=null;try{const h=x.getResponseHeader('Range');if(h)rg=+h.split('-')[1]}catch(e){}res({status:x.status,text:x.responseText,range:rg})};
+  x.onerror=x.onabort=x.ontimeout=()=>res({status:0});x.send(blob)})}
+function xhrStatus(url,total){return new Promise(res=>{const x=new XMLHttpRequest();try{x.open('PUT',url);x.setRequestHeader('Content-Range','bytes */'+total)}catch(e){return res({status:0})}
+  x.onload=()=>{let rg=null,has=false;try{const h=x.getResponseHeader('Range');if(h){rg=+h.split('-')[1];has=true}else has=x.getAllResponseHeaders().toLowerCase().includes('range')}catch(e){}res({status:x.status,text:x.responseText,range:rg,hasRange:has||rg!=null})};
+  x.onerror=x.onabort=()=>res({status:0});x.send()})}
+function blobB64(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const s=r.result;res(s.slice(s.indexOf(',')+1))};r.onerror=()=>rej(r.error);r.readAsDataURL(b)})}
+async function phUploadVideo(q,a){
+  if(!q.url){const r=await gsCall('videoStart',{code:a.code,name:a.name,cat:a.category,type:q.t,mime:q.mime,size:q.size,ext:q.ext,origin:location.origin});q.url=r.url;q.sent=0;q.resumed=false;await pqSave(q)}
+  else if(q.resumed){let st=null;
+    if(q.mode!=='proxy'){const r=await xhrStatus(q.url,q.size);if(r.status===308&&r.range!=null)st={next:r.range+1};else if(r.status===200||r.status===201){try{st={done:true,id:JSON.parse(r.text).id}}catch(e){}}else if(r.status===404||r.status===410){q.url=null;q.sent=0;await pqSave(q);return phUploadVideo(q,a)}}
+    if(!st){try{st=await gsCall('videoStatus',{url:q.url,total:q.size})}catch(e){if(e.code==='upload_expired'){q.url=null;q.sent=0;await pqSave(q);return phUploadVideo(q,a)}throw e}}
+    if(st.done)q.fid=st.id;else q.sent=st.next||0;q.resumed=false;await pqSave(q)}
+  while(!q.fid&&q.sent<q.size){
+    const CH=(q.mode==='proxy'?4:8)*1024*1024,start=q.sent,end=Math.min(q.size,start+CH),part=q.blob.slice(start,end);
+    if(q.mode!=='proxy'){const r=await xhrPut(q.url,part,start,end,q.size,q.mime,b=>upProg(q,start+b));
+      if(r.status===0){if(navigator.onLine===false)throw new Error('انقطع الاتصال بالإنترنت');q.mode='proxy';await pqSave(q);continue}
+      if(r.status===308)q.sent=r.range!=null?r.range+1:end;
+      else if(r.status===200||r.status===201){q.sent=q.size;try{q.fid=JSON.parse(r.text).id}catch(e){}}
+      else if(r.status===404||r.status===410){q.url=null;q.sent=0;await pqSave(q);return phUploadVideo(q,a)}
+      else throw new Error('تعذّر رفع جزء من الفيديو ('+r.status+')')}
+    else{const res=await gsCall('videoChunk',{url:q.url,data:await blobB64(part),start,total:q.size,mime:q.mime});if(res.done){q.sent=q.size;q.fid=res.id}else q.sent=res.next}
+    upProg(q,q.sent);await pqSave(q)}
+  if(!q.fid){const st=await gsCall('videoStatus',{url:q.url,total:q.size});if(!st.done)throw new Error('لم يكتمل رفع الفيديو');q.fid=st.id}
+  await gsCall('videoDone',{id:q.fid,code:a.code,thumb:q.thumb});TH[q.fid]=q.thumb;IDB.put('thumbs',q.thumb,q.fid);return {id:q.fid}}
+const mb=n=>(n/1048576).toFixed(n<10485760?1:0);let upActive=null;
+function upShow(q){upActive=q;$('#upBar').classList.add('on');$('#ubT').textContent=`رفع فيديو الأصل ${q.code}`;upProg(q,q.sent||0)}
+function upProg(q,b){const pc=q.size?Math.min(100,Math.round(b/q.size*100)):0;$('#ubP').textContent=pc+'%';$('#ubF').style.width=pc+'%';
+  $('#ubS').textContent=`${mb(b)} من ${mb(q.size)} ميجابايت${q.mode==='proxy'?' · عبر الخادم':''} — يمكنك متابعة العمل`;
+  const g=document.querySelector(`.pg[data-q="${q.qid}"] i`);if(g)g.style.width=pc+'%'}
+function upHide(){upActive=null;$('#upBar').classList.remove('on')}
+function upErr(q,e){$('#ubT').textContent='توقّف رفع الفيديو مؤقتاً';$('#ubS').textContent=(e&&e.message?e.message+' — ':'')+'سيُستأنف تلقائياً من حيث توقّف';setTimeout(()=>{if(!phBusy)upHide()},6000)}
+window.addEventListener('beforeunload',e=>{if(upActive){e.preventDefault();e.returnValue=''}});
+/* ---- اختيار فيديو: استخراج صورة مصغّرة ومدة المقطع ---- */
+function vidMeta(file){return new Promise(res=>{const v=document.createElement('video'),url=URL.createObjectURL(file);let done=false;
+  const fin=(thumb,dur)=>{if(done)return;done=true;URL.revokeObjectURL(url);res({thumb,dur})};
+  const generic=()=>{const c=document.createElement('canvas');c.width=320;c.height=180;const x=c.getContext('2d');const g=x.createLinearGradient(0,0,320,180);g.addColorStop(0,'#0C4CA2');g.addColorStop(1,'#08386F');x.fillStyle=g;x.fillRect(0,0,320,180);x.fillStyle='rgba(255,255,255,.9)';x.beginPath();x.moveTo(140,62);x.lineTo(190,90);x.lineTo(140,118);x.fill();return c.toDataURL('image/jpeg',.8)};
+  setTimeout(()=>fin(generic(),v.duration||0),9000);
+  v.muted=true;v.playsInline=true;v.preload='auto';
+  v.onloadedmetadata=()=>{const d=isFinite(v.duration)?v.duration:0;try{v.currentTime=Math.min(1.2,d/3||0)}catch(e){fin(generic(),d)}};
+  v.onseeked=()=>{try{const k=Math.min(1,360/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(v.videoWidth*k));c.height=Math.max(1,Math.round(v.videoHeight*k));
+    c.getContext('2d').drawImage(v,0,0,c.width,c.height);let t=c.toDataURL('image/jpeg',.72);if(t.length>45000)t=c.toDataURL('image/jpeg',.5);fin(c.width>1?t:generic(),isFinite(v.duration)?v.duration:0)}catch(e){fin(generic(),v.duration||0)}};
+  v.onerror=()=>fin(generic(),0);v.src=url})}
+async function phAddVideo(file){if(!file)return;
+  if(file.size>1024*1024*1024)return toast('حجم الفيديو أكبر من 1 جيجابايت — قصّ المقطع أو صوّره بجودة أقل',1);
+  if(phCount()>=PH_MAX)return toast(`الحد الأقصى ${PH_MAX} صورة/فيديو للأصل الواحد`,1);
+  toast('جارٍ تجهيز الفيديو…');const m=await vidMeta(file);
+  const ext=(file.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'mp4';
+  PHS.staged.push({v:1,t:'فيديو الأصل',blob:file,thumb:m.thumb,dur:m.dur,mime:file.type||'video/mp4',ext,size:file.size});
+  SFX.play('pop');phRenderForm();toast(`أُضيف الفيديو (${mb(file.size)} ميجابايت${m.dur?' · '+fmtDur(m.dur):''}) — سيُرفع عند حفظ الأصل`)}
 /* ---- عارض الصور ---- */
 let PV={list:[],i:0,code:''};
 function phOpen(list,i,code){if(!list.length)return;PV={list,i:Math.max(0,Math.min(i,list.length-1)),code};$('#phM').classList.add('on');phShow()}
-async function phShow(){const p=PV.list[PV.i],img=$('#phvI'),L=$('#phvL');
+function phStopMedia(){$$('.phv-img iframe,.phv-img video').forEach(x=>{if(x.tagName==='VIDEO'){x.pause();URL.revokeObjectURL(x.src)}x.remove()})}
+async function phShow(){const p=PV.list[PV.i],img=$('#phvI'),L=$('#phvL');phStopMedia();img.hidden=false;
   $('#phvT').textContent=p.t||'صورة';$('#phvN').textContent=`${PV.i+1} / ${PV.list.length} · ${PV.code}`;
   $('#phvP').style.visibility=$('#phvNx').style.visibility=PV.list.length>1?'':'hidden';
   const dl=$('#phvDrive');dl.hidden=!p.id;if(p.id)dl.href='https://drive.google.com/file/d/'+encodeURIComponent(p.id)+'/view';
   $('#phvC').textContent=p.id?(p.d?'أُضيفت بتاريخ '+p.d:''):'لم تُرفع بعد — ستُحفظ في Google Drive عند الاتصال';
+  if(p.v){img.hidden=true;L.hidden=true;const box=$('.phv-img');
+    if(p.blob){const vd=document.createElement('video');vd.controls=true;vd.playsInline=true;vd.src=URL.createObjectURL(p.blob);box.appendChild(vd)}
+    else{const fr=document.createElement('iframe');fr.src='https://drive.google.com/file/d/'+encodeURIComponent(p.id)+'/preview';fr.allow='autoplay; fullscreen';fr.allowFullscreen=true;box.appendChild(fr);
+      $('#phvC').textContent=(p.d?'أُضيف بتاريخ '+p.d+(p.dur?' · المدة '+fmtDur(p.dur):'')+' — ':'')+'للمشاهدة يلزم تسجيل الدخول بحساب Google لديه صلاحية على مجلد «صور أصول راكان».'}
+    return}
   if(p.full){img.src=p.full;L.hidden=true;return}
   if(FULL[p.id]){img.src=FULL[p.id];L.hidden=true;return}
   img.src=TH[p.id]||PIX;L.hidden=false;L.textContent='جارٍ تحميل الصورة…';const want=p.id;
   try{const r=await gsCall('photoGet',{id:p.id});FULL[want]=`data:${r.mime||'image/jpeg'};base64,${r.data}`;if(PV.list[PV.i]?.id===want){img.src=FULL[want];L.hidden=true}}
   catch(e){if(PV.list[PV.i]?.id===want)L.textContent=e.code==='photo_missing'?'الصورة غير موجودة في Google Drive (ربما حُذفت)':'تعذّر تحميل الصورة: '+e.message}}
 function phNav(d){if(PV.list.length<2)return;PV.i=(PV.i+d+PV.list.length)%PV.list.length;phShow()}
-function assetGallery(a){return [...photosOf(a),...PQ.filter(q=>q.k==='up'&&q.code===a.code).map(q=>({t:q.t,full:'data:image/jpeg;base64,'+q.data}))]}
-$('#phvX').onclick=()=>$('#phM').classList.remove('on');$('#phM').addEventListener('click',e=>{if(e.target.id==='phM')$('#phM').classList.remove('on')});
+function assetGallery(a){return [...photosOf(a),...PQ.filter(q=>(q.k==='up'||q.k==='vid')&&q.code===a.code).map(q=>q.k==='vid'?{t:q.t,v:1,blob:q.blob}:{t:q.t,full:'data:image/jpeg;base64,'+q.data})]}
+const phClose=()=>{phStopMedia();$('#phM').classList.remove('on')};$('#phvX').onclick=phClose;$('#phM').addEventListener('click',e=>{if(e.target.id==='phM')phClose()});
 $('#phvP').onclick=()=>phNav(1);$('#phvNx').onclick=()=>phNav(-1);
-document.addEventListener('keydown',e=>{if(!$('#phM').classList.contains('on'))return;if(e.key==='Escape')$('#phM').classList.remove('on');if(e.key==='ArrowRight')phNav(-1);if(e.key==='ArrowLeft')phNav(1)});
-$('#phCam').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};$('#phUp').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};
+{let sx=0,sy=0;const st=$('.phv-st');st.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});st.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)phNav(dx>0?-1:1)},{passive:true})}
+document.addEventListener('keydown',e=>{if(!$('#phM').classList.contains('on'))return;if(e.key==='Escape')phClose();if(e.key==='ArrowRight')phNav(-1);if(e.key==='ArrowLeft')phNav(1)});
+$('#phCam').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};$('#phVid').onchange=e=>{phAddVideo(e.target.files[0]);e.target.value=''};$('#phUp').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};
 $('#phGrid').addEventListener('click',async e=>{const x=e.target.closest('[data-x]'),it=e.target.closest('.ph-it');if(!it)return;const items=phItems();
   if(x){const p=items[+x.dataset.x];if(!p)return;
     if(p.kind==='n'){PHS.staged.splice(p.si,1)}
@@ -3924,7 +4107,23 @@ $('#phGrid').addEventListener('click',async e=>{const x=e.target.closest('[data-
     else{if(!await confirmBox('حذف صورة الأصل',`ستُحذف صورة «${esc(p.t)}» من الأصل وتُنقل إلى سلة Google Drive عند حفظ الأصل (قابلة للاسترجاع 30 يوماً).`,'حذف','del'))return;PHS.removed.add(p.id)}
     SFX.play('del');phRenderForm();return}
   phOpen(items,+it.dataset.i,PHS.code||'أصل جديد')});
-$('#tb').addEventListener('click',e=>{const im=e.target.closest('img.th');if(!im)return;e.stopPropagation();const a=assets.find(x=>x.code===im.dataset.v);if(a)phOpen(assetGallery(a),0,a.code)},true);
+$('#tb').addEventListener('click',e=>{const im=e.target.closest('img.th,.nmi[data-v],.pchip');if(!im)return;e.stopPropagation();const a=assets.find(x=>x.code===im.dataset.v);if(a)phOpen(assetGallery(a),0,a.code)},true);
+const hov=document.createElement('div');hov.id='hovPop';document.body.appendChild(hov);let hovT=null,hovCode='';
+function hovHide(){clearTimeout(hovT);hovCode='';hov.classList.remove('on')}
+function hovShow(el,a){const all=photosOf(a),m=mainPhoto(a),c=mediaCounts(a),src=thumbSrc(a);if(!src)return;hovCode=a.code;
+  const big=m&&!m.v&&FULL[m.id]?FULL[m.id]:src.src,others=all.filter(p=>p!==m).slice(0,4);others.forEach(p=>{if(!TH[p.id])needThumbs([p.id])});
+  hov.innerHTML=`<div class="hp-im"><img id="hpBig" ${m?`data-ph="${esc(m.id)}"`:''} src="${big}" alt="">${src.v?'<i class="hp-pl"></i>':''}<span class="hp-t">${esc(m?m.t:'بانتظار الرفع')}</span></div>
+   <div class="hp-b"><b>${esc(a.name)}</b><div class="hp-m"><span class="hp-c">${esc(a.code)}</span>${a.category?`<span>${esc(a.category)}</span>`:''}</div>
+   ${others.length?`<div class="hp-s">${others.map(p=>`<span><img data-ph="${esc(p.id)}" src="${TH[p.id]||PIX}" alt="">${p.v?'<i></i>':''}</span>`).join('')}${all.length>5?`<em>+${all.length-5}</em>`:''}</div>`:''}
+   <div class="hp-f"><span>${mediaBadges(c)}</span><small>اضغط لفتح المعرض</small></div></div>`;
+  const r=el.getBoundingClientRect(),W=320,H=hov.offsetHeight||330;let left=r.left-W-12;if(left<8)left=Math.min(innerWidth-W-8,r.right+12);
+  hov.style.left=left+'px';hov.style.top=Math.max(8,Math.min(innerHeight-H-8,r.top+r.height/2-H/2))+'px';hov.classList.add('on');
+  if(m&&!m.v&&!FULL[m.id]&&GS())gsCall('photoGet',{id:m.id}).then(res=>{FULL[m.id]=`data:${res.mime||'image/jpeg'};base64,${res.data}`;if(hovCode===a.code){const b=document.getElementById('hpBig');if(b)b.src=FULL[m.id]}}).catch(()=>{})}
+$('#tb').addEventListener('mouseover',e=>{if(matchMedia('(hover:none)').matches||innerWidth<=1180)return;const el=e.target.closest('.pchip,.thn,.nmi[data-v]');
+  const on=el&&(el.classList.contains('pchip')||prefs.hoverPreview);if(!on){hovHide();return}
+  const code=el.dataset.v||el.querySelector('[data-v]')?.dataset.v,a=assets.find(x=>x.code===code);if(!a||hovCode===code)return;
+  clearTimeout(hovT);hovT=setTimeout(()=>hovShow(el,a),160)});
+$('#tb').addEventListener('mouseleave',hovHide);addEventListener('scroll',hovHide,true);
 setTimeout(phLoad,0);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncTick()});
 window.addEventListener('online',()=>syncTick());
@@ -4052,12 +4251,13 @@ function statusPill(s){const m={'جديد':'p-ok','جيد':'p-ok','متوسط':'
 let selected=new Set();
 function filtered(){const q=$('#q').value.trim().toLowerCase(),c=$('#fCat').value,l=$('#fLoc').value,p=$('#fPrint').value,od=$('#fOdoo').value;
   return assets.filter(a=>(!q||[a.code,a.name,a.location,a.dept,a.custodian,a.serial,a.odooId,a.odooName].join(' ').toLowerCase().includes(q))&&(!c||a.category===c)&&(!l||a.location===l)&&(p===''||(p==='1')===(+a.printCount>0))&&(od===''||(od==='1')===!!a.odooId))}
-function renderTable(){
+function renderTable(){const TS=prefs.thumbStyle||'col',tb=$('#tb').closest('table');if(tb.dataset.ts!==TS){tb.dataset.ts=TS;$('#cPh').style.width=TS==='col'?'6.5%':'0';$('#cNm').style.width=TS==='col'?'11%':'16.5%'}
   const list=filtered();
-  $('#tb').innerHTML=list.length?list.map(a=>`<tr data-c="${esc(a.code)}"><td data-l="تحديد"><input type="checkbox" class="rc" ${selected.has(a.code)?'checked':''}></td><td data-l="صورة" class="phc">${thumbHTML(a)}</td><td data-l="رقم الباركود" class="mono"><b>${esc(a.code)}</b></td><td data-l="أودو">${a.odooId?`<span class="pill p-ok" dir="ltr">${esc(a.odooId)}</span>`:'<span class="hint">—</span>'}</td><td data-l="اسم الأصل"><b>${esc(a.name)}</b>${a.odooName&&cleanName(a.odooName)!==a.name?`<span class="on2">أودو: ${esc(a.odooName)}</span>`:''}</td><td data-l="الفئة"${a.category?'':' class="e"'}>${esc(a.category)||'—'}</td><td data-l="الموقع"${a.location?'':' class="e"'}>${esc(a.location)||'—'}</td><td data-l="القسم"${a.dept?'':' class="e"'}>${esc(a.dept)||'—'}</td><td data-l="العهدة"${a.custodian?'':' class="e"'}>${esc(a.custodian)||'—'}</td><td data-l="الرقم التسلسلي" class="mono${a.serial?'':' e'}">${esc(a.serial)||'—'}</td><td data-l="تاريخ الشراء" class="num${a.purchaseDate?'':' e'}">${esc(a.purchaseDate)||'—'}</td><td data-l="القيمة" class="num${a.value!==''&&a.value!=null?'':' e'}">${a.value!==''&&a.value!=null?`<b>${fmtNum(a.value)}</b> <small>د.ل</small>`:'—'}</td><td data-l="الحالة">${statusPill(a.status)||'—'}</td><td data-l="الطباعة">${+a.printCount>0?`<span class="pill p-ok">${a.printCount}×</span>`:'<span class="pill p-gray">لم يُطبع</span>'}</td><td data-l="إجراءات"><div class="acts"><button class="ib gold" data-a="print" title="طباعة الملصق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button><button class="ib" data-a="edit" title="تعديل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><button class="ib danger" data-a="del" title="حذف"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="15" class="empty">${assets.length?'لا توجد نتائج مطابقة للبحث':'لا توجد أصول بعد — افتح ملف Excel أو سجّل أول أصل'}</td></tr>`;
+  $('#tb').innerHTML=list.length?list.map(a=>`<tr data-c="${esc(a.code)}"><td data-l="تحديد"><input type="checkbox" class="rc" ${selected.has(a.code)?'checked':''}></td><td data-l="صورة" class="phc cph">${thumbHTML(a)}</td><td data-l="رقم الباركود" class="mono"><b>${esc(a.code)}</b></td><td data-l="أودو">${a.odooId?`<span class="pill p-ok" dir="ltr">${esc(a.odooId)}</span>`:'<span class="hint">—</span>'}</td><td data-l="اسم الأصل">${nameCell(a)}</td><td data-l="الفئة"${a.category?'':' class="e"'}>${esc(a.category)||'—'}</td><td data-l="الموقع"${a.location?'':' class="e"'}>${esc(a.location)||'—'}</td><td data-l="القسم"${a.dept?'':' class="e"'}>${esc(a.dept)||'—'}</td><td data-l="العهدة"${a.custodian?'':' class="e"'}>${esc(a.custodian)||'—'}</td><td data-l="الرقم التسلسلي" class="mono${a.serial?'':' e'}">${esc(a.serial)||'—'}</td><td data-l="تاريخ الشراء" class="num${a.purchaseDate?'':' e'}">${esc(a.purchaseDate)||'—'}</td><td data-l="القيمة" class="num${a.value!==''&&a.value!=null?'':' e'}">${a.value!==''&&a.value!=null?`<b>${fmtNum(a.value)}</b> <small>د.ل</small>`:'—'}</td><td data-l="الحالة">${statusPill(a.status)||'—'}</td><td data-l="الطباعة">${+a.printCount>0?`<span class="pill p-ok">${a.printCount}×</span>`:'<span class="pill p-gray">لم يُطبع</span>'}</td><td data-l="إجراءات"><div class="acts"><button class="ib gold" data-a="print" title="طباعة الملصق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button><button class="ib" data-a="rep" title="تقرير الأصل مع الصور"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></button><button class="ib" data-a="edit" title="تعديل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><button class="ib danger" data-a="del" title="حذف"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="15" class="empty">${assets.length?'لا توجد نتائج مطابقة للبحث':'لا توجد أصول بعد — افتح ملف Excel أو سجّل أول أصل'}</td></tr>`;
   $('#tblFoot').textContent=`عرض ${list.length} من ${assets.length} أصل`;updSel();
 }
 function updSel(){selected=new Set([...selected].filter(c=>assets.some(a=>a.code===c)));$('#selInfo').textContent=selected.size?`محدد: ${selected.size}`:'لم يتم تحديد أصول';$('#bPrintSel').disabled=!selected.size}
+{const _u=updSel;updSel=function(){_u();const b=$('#bRepSel');if(b)b.disabled=!selected.size}}
 function renderFilters(){const keep=(id,vals,first)=>{const s=$(id),v=s.value;s.innerHTML=`<option value="">${first}</option>`+vals.map(x=>`<option>${esc(x)}</option>`).join('');s.value=vals.includes(v)?v:''};
   const uniq=k=>[...new Set(assets.map(a=>a[k]).filter(Boolean))].sort();keep('#fCat',settings.cats.map(c=>c.name),'كل الفئات');keep('#fLoc',uniq('location'),'كل المواقع');
   $('#dlLoc').innerHTML=uniq('location').map(x=>`<option value="${esc(x)}">`).join('');$('#dlDept').innerHTML=uniq('dept').map(x=>`<option value="${esc(x)}">`).join('');$('#dlCust').innerHTML=uniq('custodian').map(x=>`<option value="${esc(x)}">`).join('')}
@@ -4086,7 +4286,7 @@ async function submitForm(e){
     const ch=Object.keys(LBL).filter(k=>String(o[k]??'')!==String(d[k]??''));
     const phD=phDelta();if(!ch.length&&!phD)return toast('لا توجد تغييرات لحفظها');
     if(!await confirmBox('تأكيد تعديل الأصل',`سيتم حفظ التعديلات التالية على الأصل <b class="mono">${esc(o.code)}</b>:<table class="cmsum">${ch.map(k=>row(k,`<span class="old">${esc(o[k])||'—'}</span><span class="new">${esc(d[k])||'—'}</span>`)).join('')}${phD?`<tr><td>الصور</td><td>${phDeltaTxt()}</td></tr>`:''}</table>`,'حفظ التعديلات','edit'))return}
-  else if(!await confirmBox('تأكيد حفظ الأصل',`سيتم تسجيل الأصل التالي في قاعدة البيانات:<table class="cmsum">${row('name',`<b>${esc(d.name)}</b>`)}${row('code',`<b class="mono">${esc(d.code)}</b>`)}${row('category',esc(d.category))}${PHS.staged.length?`<tr><td>الصور</td><td>${PHS.staged.length} صورة ستُرفع إلى Google Drive</td></tr>`:''}${d.odooId?row('odooId',esc(d.odooId)):''}${d.location?row('location',esc(d.location)):''}${d.custodian?row('custodian',esc(d.custodian)):''}</table>`,andPrint?'حفظ وطباعة':'حفظ','save'))return;
+  else if(!await confirmBox('تأكيد حفظ الأصل',`سيتم تسجيل الأصل التالي في قاعدة البيانات:<table class="cmsum">${row('name',`<b>${esc(d.name)}</b>`)}${row('code',`<b class="mono">${esc(d.code)}</b>`)}${row('category',esc(d.category))}${PHS.staged.length?`<tr><td>الصور والفيديو</td><td>${phDeltaTxt().replace('إضافة ','')} — ستُرفع إلى Google Drive</td></tr>`:''}${d.odooId?row('odooId',esc(d.odooId)):''}${d.location?row('location',esc(d.location)):''}${d.custodian?row('custodian',esc(d.custodian)):''}</table>`,andPrint?'حفظ وطباعة':'حفظ','save'))return;
   let a;
   if(GS()&&syncing)return toast('انتظر لحظة حتى يكتمل تحديث البيانات…',1);
   if(editingCode){a=assets.find(x=>x.code===editingCode);if(a.code!==d.code)renameHint[d.code]=a.code;if(a.code!==d.code&&+a.printCount>0&&!await confirmBox('تغيير رقم مطبوع','سيُستبدل الرقم <b class="mono">'+esc(a.code)+'</b> بالرقم <b class="mono">'+esc(d.code)+'</b>. الملصق الملصوق حالياً على الأصل لن يكون صالحاً.','تغيير'))return;Object.assign(a,d)}
@@ -4315,7 +4515,7 @@ tfoot td,.tot td{background:var(--orange-tint);border-top:2px solid var(--orange
 .sig{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:34px;break-inside:avoid}
 .sig div{border-top:1.5px solid var(--ink);padding-top:6px;text-align:center}.sig b{display:block}.sig span{color:var(--muted);font-size:10px}
 .note{font-size:9.5px;color:var(--muted);margin-top:8px}
-.pc{text-align:center;padding:2px!important}.pc img{width:12mm;height:12mm;object-fit:cover;border-radius:1.5mm;display:block;margin:auto}.pc .nop{color:#B7C2D3}</style></head><body>
+.pc{text-align:center;padding:3px!important}.pc img{width:15mm;height:15mm;object-fit:cover;border-radius:2mm;display:block;margin:auto;border:.3mm solid #C9D3E3}.pc .nop{display:block;width:15mm;height:15mm;margin:auto;border-radius:2mm;border:.3mm dashed #C9D3E3;background:#F7F9FC}.pc .pn{display:block;font-size:7.5px;color:#5B6678;margin-top:1px}</style></head><body>
 <div class="bar"></div>
 <div class="hd">${lg?`<img src="${lg}" alt="راكان">`:'<b>راكان لاستيراد المواد الغذائية والتوزيع</b>'}<div class="meta">رقم التقرير: <b>${repNo}</b><br>تاريخ الإصدار: <b>${dIss}</b><br><span class="pill">سري — للاستخدام الداخلي</span></div></div>
 <div class="kick">تقرير مرفوع إلى الإدارة المالية</div>
@@ -4326,7 +4526,7 @@ tfoot td,.tot td{background:var(--orange-tint);border-top:2px solid var(--orange
 <table class="sumt"><thead><tr><th>الفئة</th><th style="text-align:center">عدد الأصول</th><th style="text-align:center">مربوط بأودو</th><th style="text-align:center">ملصقات مطبوعة</th><th>القيمة</th><th style="text-align:center">النسبة من القيمة</th></tr></thead>
 <tbody>${sumRows}</tbody><tfoot><tr><td>الإجمالي</td><td class="c">${list.length}</td><td class="c">${linked}</td><td class="c">${printed}</td><td class="m">${money(total)}</td><td class="c">${total?'100%':'—'}</td></tr></tfoot></table>
 <h2><i>2</i>تفاصيل الأصول</h2>
-<table><thead><tr><th style="width:3%;text-align:center">م</th>${PHC?'<th style="width:5.5%;text-align:center">صورة</th>':''}<th style="width:10%">رقم الباركود</th><th style="width:5%;text-align:center">أودو</th><th>اسم الأصل</th><th style="width:11%">الموقع</th><th style="width:8%">القسم</th><th style="width:9%">العهدة</th><th style="width:7.5%;text-align:center">تاريخ الشراء</th><th style="width:9.5%">القيمة</th><th style="width:5.5%;text-align:center">الحالة</th><th style="width:6%;text-align:center">الملصق</th></tr></thead>
+<table><thead><tr><th style="width:3%;text-align:center">م</th>${PHC?'<th style="width:7%;text-align:center">الصورة</th>':''}<th style="width:10%">رقم الباركود</th><th style="width:5%;text-align:center">أودو</th><th>اسم الأصل</th><th style="width:11%">الموقع</th><th style="width:8%">القسم</th><th style="width:9%">العهدة</th><th style="width:7.5%;text-align:center">تاريخ الشراء</th><th style="width:9.5%">القيمة</th><th style="width:5.5%;text-align:center">الحالة</th><th style="width:6%;text-align:center">الملصق</th></tr></thead>
 ${det||'<tbody><tr><td colspan="${11+PHC}" class="c">لا توجد أصول ضمن نطاق التقرير</td></tr></tbody>'}
 <tbody><tr class="tot"><td colspan="${8+PHC}">الإجمالي العام (${list.length} أصل)</td><td class="m">${money(total)}</td><td colspan="2"></td></tr></tbody></table>
 <div class="note">القيم المعروضة هي القيم المسجلة في المنظومة (القيمة الأصلية للأصل). أُعدّ هذا التقرير آلياً من منظومة ترميز الأصول بتاريخ ${dIss}.</div>
@@ -4336,12 +4536,120 @@ ${det||'<tbody><tr><td colspan="${11+PHC}" class="c">لا توجد أصول ضم
 async function printReport(){
   const list=filtered();if(!list.length)return toast('لا توجد أصول ضمن الفلاتر الحالية لطباعة تقرير عنها',1);
   if(list.some(a=>mainPhoto(a))){toast('جارٍ تجهيز صور الأصول للتقرير…');await needThumbs(list.map(a=>mainPhoto(a)?.id).filter(Boolean))}
+  openReport(reportHTML(list));
+}
+function openReport(html){
   const old=document.getElementById('repFrame');if(old)old.remove();
   const f=document.createElement('iframe');f.id='repFrame';f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
-  document.body.appendChild(f);const w=f.contentWindow;w.document.open();w.document.write(reportHTML(list));w.document.close();
+  document.body.appendChild(f);const w=f.contentWindow;w.document.open();w.document.write(html);w.document.close();
   toast('جارٍ تجهيز التقرير… اختر طابعة A4 أو «حفظ بتنسيق PDF»');
   const go=async()=>{try{await w.document.fonts.ready}catch(e){}const imgs=[...w.document.images];await Promise.all(imgs.map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));setTimeout(()=>{w.focus();w.print()},150)};
   if(w.document.readyState==='complete')go();else f.onload=go;
+}
+/* ================= تقرير الأصل (بطاقة أصل مع الصور والفيديو) ================= */
+function barcodeSVG(v){try{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');JsBarcode(s,v,{format:'CODE128',displayValue:false,margin:0,height:44,width:1.5,background:'#fff',lineColor:'#000'});return s.outerHTML}catch(e){return ''}}
+function qrSVG(t){try{const q=qrcode(0,'M');q.addData(t);q.make();return q.createSvgTag({cellSize:3,margin:0})}catch(e){return ''}}
+function fmtDur(s){s=Math.round(+s||0);return s?`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`:''}
+async function printAssetReport(codes){
+  const list=codes.map(c=>assets.find(a=>a.code===c)).filter(Boolean);if(!list.length)return;
+  const media=list.flatMap(a=>photosOf(a));
+  if(media.length){toast(`جارٍ تجهيز ${media.length} من صور ومقاطع الأصل للتقرير…`);await needThumbs(media.map(p=>p.id));
+    const need=media.filter(p=>!p.v&&!FULL[p.id]);let i=0;
+    await Promise.all(Array.from({length:Math.min(4,need.length)},async()=>{while(i<need.length){const p=need[i++];try{const r=await gsCall('photoGet',{id:p.id});FULL[p.id]=`data:${r.mime||'image/jpeg'};base64,${r.data}`}catch(e){}}}))}
+  openReport(assetReportHTML(list));
+}
+function assetReportHTML(list){
+  const fonts=[...document.styleSheets].flatMap(sh=>{try{return [...sh.cssRules]}catch(e){return []}}).filter(r=>r.type===5).map(r=>r.cssText).join('\n');
+  const now=new Date(),p2=n=>String(n).padStart(2,'0'),dIss=`${p2(now.getDate())}/${p2(now.getMonth()+1)}/${now.getFullYear()}`,lg=logo();
+  const mu='<span class="mu">—</span>',v=x=>x===''||x==null?mu:esc(x);
+  const money=x=>x===''||x==null||isNaN(+x)?mu:`<span dir="ltr">${(+x).toLocaleString('en-US',{maximumFractionDigits:2})}</span> <span class="cur">د.ل</span>`;
+  const stCls=s=>/صيانة|تالف|معطل/.test(s||'')?'warn':/جيد|ممتاز|جديد/.test(s||'')?'ok':'';
+  const pages=list.map((a,ix)=>{
+    const all=photosOf(a),photos=all.filter(p=>!p.v),vids=all.filter(p=>p.v),main=mainPhoto(a);
+    const mainSrc=main&&!main.v?(FULL[main.id]||TH[main.id]):(main?TH[main.id]:'');
+    const repNo=`أ.ث / ${a.code} / ${now.getFullYear()}${p2(now.getMonth()+1)}${p2(now.getDate())}`;
+    const kv=[['رقم الباركود',`<span class="mono">${esc(a.code)}</span>`],['الفئة',v(a.category)],['الحالة',a.status?`<span class="st ${stCls(a.status)}">${esc(a.status)}</span>`:mu],
+      ['الموقع',v(a.location)],['الإدارة / القسم',v(a.dept)],['العهدة / المسؤول',v(a.custodian)],['الرقم التسلسلي للمصنع',a.serial?`<span class="mono">${esc(a.serial)}</span>`:mu],
+      ['تاريخ الشراء',v(a.purchaseDate)],['القيمة',money(a.value)],['ربط أودو',a.odooId?`<span class="mono">${esc(a.odooId)}</span>${a.odooName?` — ${esc(a.odooName)}`:''}`:'<span class="mu">غير مربوط</span>'],
+      ['تاريخ التسجيل',v(a.createdAt)],['ملصق الباركود',+a.printCount?`طُبع ${+a.printCount} مرة${a.lastPrint?` · آخرها ${esc(a.lastPrint)}`:''}`:'<span class="mu">لم يُطبع بعد</span>']];
+    const gal=photos.map((p,i)=>`<figure class="ph"><div class="im">${FULL[p.id]||TH[p.id]?`<img src="${FULL[p.id]||TH[p.id]}" alt="">`:'<span class="mu">تعذّر تحميل الصورة</span>'}<span class="no">${i+1}</span></div><figcaption><b>${esc(p.t||'صورة')}</b><span>${esc(p.d||'')}</span></figcaption></figure>`).join('');
+    const vid=vids.map((p,i)=>{const url='https://drive.google.com/file/d/'+p.id+'/view';return `<div class="vd"><div class="vt">${TH[p.id]?`<img src="${TH[p.id]}" alt="">`:''}<i></i>${p.dur?`<em>${fmtDur(p.dur)}</em>`:''}</div><div class="vi"><b>${esc(p.t||'مقطع فيديو')} ${vids.length>1?i+1:''}</b><span>تاريخ الإضافة: ${esc(p.d||'—')}${p.dur?` · المدة: ${fmtDur(p.dur)}`:''}</span><small>محفوظ في Google Drive — امسح الرمز لمشاهدة المقطع</small><span class="u" dir="ltr">${url}</span></div><div class="qr">${qrSVG(url)}</div></div>`}).join('');
+    let sec=0;
+    return `<section class="pg${ix?' brk':''}">
+<div class="bar"></div>
+<div class="hd">${lg?`<img src="${lg}" alt="راكان">`:'<b>راكان لاستيراد المواد الغذائية والتوزيع</b>'}<div class="meta">رقم التقرير: <b>${repNo}</b><br>تاريخ الإصدار: <b>${dIss}</b><br><span class="pill">بطاقة أصل ثابت</span></div></div>
+<div class="ttl"><div><div class="kick">سجل الأصول الثابتة — تقرير أصل</div><h1>${esc(a.name)}</h1><div class="sub1"><span class="codep">${esc(a.code)}</span>${a.category?`<span>${esc(a.category)}</span>`:''}${a.location?`<span>${esc(a.location)}</span>`:''}</div></div>
+<div class="bc">${barcodeSVG(a.code)}<span>${esc(a.code)}</span></div></div>
+<div class="hero">
+  <div class="mp">${mainSrc?`<img src="${mainSrc}" alt="">`:`<div class="nop">لا توجد صورة للأصل</div>`}<div class="cap">${main?esc(main.t):'الصورة الرئيسية'}</div></div>
+  <table class="kv">${kv.map(([k,x])=>`<tr><th>${k}</th><td>${x}</td></tr>`).join('')}${a.notes?`<tr><th>ملاحظات</th><td>${esc(a.notes)}</td></tr>`:''}</table>
+</div>
+<div class="stats"><div><b>${photos.length}</b><small>صورة</small></div><div><b>${vids.length}</b><small>مقطع فيديو</small></div><div><b>${+a.printCount||0}</b><small>مرات طباعة الملصق</small></div><div><b>${a.odooId?'نعم':'لا'}</b><small>مربوط بأودو</small></div></div>
+${photos.length>1?`<h2><i>${++sec}</i>صور الأصل <span class="cnt">(${photos.length})</span></h2><div class="gal ${photos.length===1?'g1':photos.length===2||photos.length===4?'g2':'g3'}">${gal}</div>`:''}
+${vids.length?`<h2><i>${++sec}</i>مقاطع الفيديو <span class="cnt">(${vids.length})</span></h2><div class="vids">${vid}</div>`:''}
+${!photos.length&&!vids.length?`<div class="empty">لم تُرفع صور أو مقاطع فيديو لهذا الأصل بعد.</div>`:''}
+<div class="sig"><div><b>أمين العهدة</b><span>الاسم / التوقيع / التاريخ</span></div><div><b>مسؤول الأصول</b><span>الاسم / التوقيع / التاريخ</span></div><div><b>اعتماد المدير المالي</b><span>الاسم / التوقيع / التاريخ</span></div></div>
+<div class="note">أُعدّ هذا التقرير آلياً من منظومة ترميز الأصول بتاريخ ${dIss}. الصور الأصلية محفوظة في Google Drive ضمن مجلد «صور أصول راكان / ${esc(a.category||'بدون فئة')} / ${esc(a.code)}».</div>
+</section>`}).join('');
+  return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>${list.length===1?'تقرير الأصل '+esc(list[0].code):'تقارير الأصول المحددة'}</title><style>${fonts}
+:root{--blue:#0C4CA2;--blue-deep:#08386F;--orange:#F15C22;--ink:#1B2433;--muted:#5B6678;--line:#DCE3EE;--tint:#F2F6FC;--orange-tint:#FEF1EB}
+@page{size:A4 portrait;margin:11mm 12mm 14mm;@bottom-right{content:"راكان لاستيراد المواد الغذائية والتوزيع — تقرير أصل ثابت";font:8px Tajawal,sans-serif;color:#5B6678}@bottom-left{content:"صفحة " counter(page) " من " counter(pages);font:8px Tajawal,sans-serif;color:#5B6678}}
+*{box-sizing:border-box}body{margin:0;font-family:'Tajawal',sans-serif;font-size:10.5px;line-height:1.6;color:var(--ink);background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.brk{break-before:page}
+.bar{height:7px;background:linear-gradient(to left,var(--blue) 0 72%,var(--orange) 72% 100%)}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:9px 0 8px;border-bottom:1px solid var(--line)}
+.hd img{width:150px;max-height:62px;object-fit:contain}
+.meta{text-align:left;font-size:9.5px;color:var(--muted);line-height:1.85}.meta b{color:var(--ink)}
+.pill{display:inline-block;border:1.5px solid var(--orange);color:var(--orange);border-radius:999px;padding:0 10px;font-weight:700;font-size:9.5px}
+.ttl{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-top:10px}
+.kick{color:var(--orange);font-weight:700;font-size:10.5px}
+h1{margin:1px 0 4px;color:var(--blue-deep);font-weight:900;font-size:22px;line-height:1.3}
+.sub1{display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--muted);font-size:10px}
+.sub1 span:not(.codep)::before{content:"•";margin-left:6px;color:#B7C2D3}
+.codep{font-family:Consolas,'Courier New',monospace;font-weight:700;color:#fff;background:var(--blue);border-radius:5px;padding:1px 8px;direction:ltr;font-size:10.5px}
+.bc{text-align:center;flex:none}.bc svg{display:block;height:13mm;width:auto;max-width:62mm}.bc span{font-family:Consolas,'Courier New',monospace;font-size:9px;letter-spacing:1.5px;direction:ltr;display:block}
+.hero{display:grid;grid-template-columns:44% 1fr;gap:12px;margin-top:11px;break-inside:avoid}
+.mp{border:1px solid var(--line);border-radius:3mm;overflow:hidden;background:var(--tint);display:flex;flex-direction:column}
+.mp img{width:100%;height:76mm;object-fit:cover;display:block}
+.mp .nop{height:76mm;display:flex;align-items:center;justify-content:center;color:#9AA4B5;font-weight:700}
+.mp .cap{padding:4px 8px;font-size:9.5px;font-weight:700;color:var(--blue-deep);background:#fff;border-top:1px solid var(--line);text-align:center}
+.kv{width:100%;border-collapse:collapse;border:1px solid var(--line);align-self:start}
+.kv th{width:36%;background:var(--tint);color:var(--blue-deep);font-weight:700;text-align:right;padding:4.2px 8px;border-bottom:1px solid var(--line);font-size:9.8px;white-space:nowrap}
+.kv td{padding:4.2px 8px;border-bottom:1px solid var(--line);font-size:10px}
+.mono{font-family:Consolas,'Courier New',monospace;direction:ltr;unicode-bidi:embed;font-size:9.6px}
+.mu{color:#9AA4B5}.cur{font-size:.8em;color:var(--muted)}
+.st{display:inline-block;padding:0 8px;border-radius:999px;font-weight:700;font-size:9.5px;background:#EEF2F7;color:var(--ink)}.st.ok{background:#E7F6EE;color:#13804B}.st.warn{background:#FFF3E0;color:#B45309}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);margin-top:10px;break-inside:avoid}
+.stats div{padding:6px 12px;border-left:1px solid var(--line);display:flex;align-items:baseline;gap:6px}.stats div:last-child{border-left:0}
+.stats b{font-size:17px;font-weight:800;color:var(--blue-deep)}.stats small{color:var(--muted);font-size:9.5px}
+.stats div:first-child{background:var(--blue)}.stats div:first-child b{color:#fff}.stats div:first-child small{color:#CFE0F7}
+h2{color:var(--blue);font-weight:800;font-size:13px;margin:14px 0 7px;display:flex;align-items:center;gap:8px;break-after:avoid}
+h2 i{font-style:normal;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+h2 .cnt{color:var(--muted);font-weight:600;font-size:11px}
+.gal{display:grid;gap:8px}
+.gal.g1{grid-template-columns:62%}.gal.g2{grid-template-columns:1fr 1fr}.gal.g3{grid-template-columns:1fr 1fr 1fr}
+.gal.g1 .im{height:70mm}.gal.g2 .im{height:56mm}.gal.g3 .im{height:44mm}
+.ph{margin:0;border:1px solid var(--line);border-radius:2.5mm;overflow:hidden;break-inside:avoid;background:#fff}
+.ph .im{position:relative;background:var(--tint);display:flex;align-items:center;justify-content:center}
+.ph img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;display:block}
+.ph .no{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:var(--orange);color:#fff;font-weight:800;font-size:10px;display:flex;align-items:center;justify-content:center}
+.ph figcaption{display:flex;justify-content:space-between;gap:8px;padding:5px 9px;border-top:1px solid var(--line);font-size:9.8px}
+.ph figcaption b{color:var(--blue-deep)}.ph figcaption span{color:var(--muted);direction:ltr}
+.vids{display:flex;flex-direction:column;gap:8px}
+.vd{display:grid;grid-template-columns:44mm 1fr 24mm;gap:12px;align-items:center;border:1px solid var(--line);border-radius:2.5mm;padding:7px;break-inside:avoid}
+.vt{position:relative;height:26mm;border-radius:2mm;overflow:hidden;background:#0b1626}
+.vt img{width:100%;height:100%;object-fit:cover;display:block;opacity:.9}
+.vt i{position:absolute;inset:0;margin:auto;width:10mm;height:10mm;border-radius:50%;background:rgba(241,92,34,.95)}
+.vt i::after{content:"";position:absolute;inset:0;margin:auto;left:1mm;width:0;height:0;border-style:solid;border-width:2.2mm 0 2.2mm 3.6mm;border-color:transparent transparent transparent #fff}
+.vt em{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.7);color:#fff;font-style:normal;font-size:8.5px;padding:0 5px;border-radius:3px;direction:ltr}
+.vi{display:flex;flex-direction:column;gap:2px;min-width:0}.vi b{color:var(--blue-deep);font-size:11px}.vi span{color:var(--ink);font-size:9.8px}.vi small{color:var(--muted);font-size:9px}
+.vi .u{font-family:Consolas,monospace;font-size:7.5px;color:#7a8597;overflow-wrap:anywhere}
+.qr svg{width:22mm;height:22mm;display:block}
+.empty{margin-top:12px;border:1px dashed #C9D3E3;border-radius:3mm;padding:16px;text-align:center;color:var(--muted)}
+.sig{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:22px;break-inside:avoid}
+.sig div{border-top:1.5px solid var(--ink);padding-top:6px;text-align:center}.sig b{display:block}.sig span{color:var(--muted);font-size:9.5px}
+.note{font-size:9px;color:var(--muted);margin-top:10px}
+</style></head><body>${pages}</body></html>`;
 }
 /* ================= Import ================= */
 async function importFile(file){
@@ -4371,8 +4679,10 @@ $('#tb').addEventListener('click',async e=>{const tr=e.target.closest('tr[data-c
   if(e.target.classList.contains('rc')){e.target.checked?selected.add(c):selected.delete(c);updSel();return}
   const act=(e.target.closest('[data-a]')||{}).dataset?.a;if(act==='edit')editAsset(c);
   if(act==='print'){queue=[c];go('label')}
+  if(act==='rep'){printAssetReport([c]);return}
   const da=assets.find(a=>a.code===c);
   if(act==='del'&&await confirmBox('تأكيد حذف الأصل',`هل تريد حذف هذا الأصل نهائياً من قاعدة البيانات؟<table class="cmsum"><tr><td>اسم الأصل</td><td><b>${esc(da?.name)}</b></td></tr><tr><td>رقم الباركود</td><td class="mono">${esc(c)}</td></tr>${da?.odooId?`<tr><td>رقم أودو</td><td>${esc(da.odooId)}</td></tr>`:''}</table><div style="color:var(--bad);font-size:12.5px;margin-top:8px">لا يمكن التراجع عن الحذف${+da?.printCount>0?'، والملصق المطبوع على الأصل لن يُعرَّف بعد الآن':''}.</div>`,'حذف نهائي','del')){assets=assets.filter(a=>a.code!==c);selected.delete(c);await commit();toast(`تم حذف الأصل ${c} بنجاح`);SFX.play('del')}});
+$('#bRepSel').onclick=()=>printAssetReport(assets.filter(a=>selected.has(a.code)).map(a=>a.code));
 $('#bPrintSel').onclick=()=>{queue=assets.filter(a=>selected.has(a.code)).map(a=>a.code);go('label')};
 $('#af').addEventListener('submit',submitForm);$('#bCancel').onclick=()=>{editingCode=null;go('assets')};
 $('#bGen').onclick=()=>{$('#af').code.value=nextCode($('#af').category.value)};
@@ -4450,7 +4760,7 @@ document.querySelectorAll('input[name=oMulti]').forEach(r=>r.onchange=async e=>{
 function renderMulti(){document.querySelectorAll('input[name=oMulti]').forEach(r=>{r.checked=(r.value==='1')===!!settings.odooMulti;r.closest('label').classList.toggle('on',r.checked)})}
 function dsRender(){document.querySelectorAll('input[name=dsMode]').forEach(r=>{r.checked=r.value===ds.mode;r.closest('label').classList.toggle('on',r.checked)});
   $('#gsBox').style.display=ds.mode==='gsheet'?'':'none';$('#gsUrl').value=ds.url||'';
-  $('#oShowSync').checked=!!prefs.showSync;
+  $('#oShowSync').checked=!!prefs.showSync;$('#oThumbStyle').value=prefs.thumbStyle||'col';$('#oHover').checked=!!prefs.hoverPreview;
   const dv=$('#gsDev');dv.className='pill '+(GS()?'p-ok':'p-warn');dv.textContent=GS()?'متصل ومسجّل الدخول':'غير مسجّل الدخول';$('#bGsLogout').style.display=GS()?'':'none';
   $('#gsInfo').textContent=GS()?(gsName?`متصل بـ «${gsName}»`:''):''}
 function gsForm(){return {mode:'gsheet',url:$('#gsUrl').value.trim(),key:ds.key}}
@@ -4461,6 +4771,8 @@ function renderSound(){$('#oSound').checked=!!prefs.sound;$('#oVol').value=prefs
 $('#oSound').onchange=e=>{prefs.sound=e.target.checked;store('rkm_prefs',prefs);renderSound();if(prefs.sound)SFX.play('ok')};
 $('#oVol').oninput=e=>{prefs.vol=+e.target.value;$('#vVol').textContent=prefs.vol+'%';store('rkm_prefs',prefs)};$('#oVol').onchange=()=>SFX.play('ok');
 document.querySelectorAll('[data-sfx]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();SFX.play(b.dataset.sfx)}));
+$('#oHover').onchange=e=>{prefs.hoverPreview=e.target.checked;store('rkm_prefs',prefs);toast(e.target.checked?'تم تفعيل المعاينة عند المرور':'تم إيقاف المعاينة عند المرور','ok')};
+$('#oThumbStyle').onchange=e=>{prefs.thumbStyle=e.target.value;store('rkm_prefs',prefs);renderTable();toast('تم تغيير طريقة عرض الصور في سجل الأصول','ok')};
 $('#oShowSync').onchange=e=>{prefs.showSync=e.target.checked;store('rkm_prefs',prefs);setConn();toast(e.target.checked?'تم إظهار زرّي الحفظ والتحديث':'تم إخفاء زرّي الحفظ والتحديث','ok')};
 $('#bGsLogout').onclick=async()=>{if(OPS.length&&!await confirmBox('تسجيل الخروج','توجد تغييرات لم تُحفظ بعد. هل تريد المتابعة؟','خروج'))return;logoutDevice('تم تسجيل الخروج من هذا الجهاز.');dsRender()};
 $('#bGsCode').onclick=async()=>{const code=$('#gasTpl').textContent;
