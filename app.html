@@ -254,6 +254,61 @@ body.am-open::after{content:"";position:fixed;inset:0;background:rgba(8,30,60,.3
 .hp-f{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
 .hp-f>span{display:flex;gap:5px}.hp-f small{color:var(--gold);font-weight:700;font-size:11px}
 @media (max-width:1180px){.nmi,.atbl .pchip{display:none}}
+/* media manager */
+#mmM{padding:16px}
+.mm{background:#fff;border-radius:18px;width:min(980px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 70px rgba(8,30,60,.35)}
+.mm-h{display:flex;align-items:center;gap:12px;padding:14px 18px;background:linear-gradient(135deg,var(--navy),#08386F);color:#fff}
+.mm-tt{display:flex;flex-direction:column;min-width:0;flex:1}.mm-tt small{color:#bcd2f1;font-size:11.5px;font-weight:700}
+.mm-tt b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mm-tt span{font-size:11.5px;color:#cfe0f7;direction:ltr;text-align:right}
+.mm-cnt{display:flex;gap:6px}.mm-cnt .mb{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25);color:#fff}
+.mm-x{width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:22px;cursor:pointer;flex:none}.mm-x:hover{background:rgba(255,255,255,.28)}
+.mm-tb{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--tint)}
+.mm-ty{display:flex;flex-direction:column;gap:4px;font-size:11.5px;font-weight:700;color:var(--navy-2)}.mm-ty select{min-width:210px;padding:8px 10px}
+.mm-btns{display:flex;flex-wrap:wrap;gap:8px;flex:1;justify-content:flex-end}
+.mm-b{display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 14px;border-radius:11px;border:1px solid #c7d5ea;background:#fff;color:var(--navy);font:700 13.5px Tajawal,sans-serif;cursor:pointer;transition:transform .1s,box-shadow .15s}
+.mm-b svg{width:19px;height:19px}.mm-b:hover{box-shadow:0 4px 12px rgba(12,76,162,.14)}.mm-b:active{transform:scale(.97)}
+.mm-b.gold{background:var(--gold);border-color:var(--gold);color:#fff}.mm-b.red{background:#c62828;border-color:#c62828;color:#fff}
+.mm-body{position:relative;flex:1;overflow:auto;padding:16px 18px;min-height:260px}
+.mm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.mm-it{position:relative;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.mm-it:hover{box-shadow:0 8px 22px rgba(8,30,60,.14);transform:translateY(-1px)}
+.mm-im{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,#eef3fa,#dde6f2)}.mm-im img{width:100%;height:100%;object-fit:cover;display:block}
+.mm-im .pv{position:absolute;inset:0;margin:auto;width:42px;height:42px;border-radius:50%;background:rgba(241,92,34,.95);box-shadow:0 3px 10px rgba(0,0,0,.3)}
+.mm-im .pv::after{content:"";position:absolute;inset:0;margin:auto;left:4px;width:0;height:0;border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent #fff}
+.mm-im .du{position:absolute;bottom:7px;left:7px;background:rgba(0,0,0,.7);color:#fff;font:700 10.5px/1 Tajawal,sans-serif;padding:4px 6px;border-radius:6px;direction:ltr}
+.mm-im .st{position:absolute;top:7px;right:7px;background:var(--gold);color:#fff;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:7px}
+.mm-im .pg{position:absolute;left:8px;right:8px;bottom:8px;height:6px;border-radius:4px;background:rgba(255,255,255,.7);overflow:hidden}.mm-im .pg i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.mm-cap{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:7px 10px}
+.mm-cap b{font-size:12.5px;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mm-cap small{font-size:11px;color:var(--muted);direction:ltr;flex:none}
+.mm-del{position:absolute;top:7px;left:7px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.95);color:var(--bad);font:700 17px/1 inherit;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);opacity:0;transition:opacity .15s}
+.mm-it:hover .mm-del,.mm-it:focus-within .mm-del{opacity:1}@media (hover:none){.mm-del{opacity:1}}
+.mm-empty{grid-column:1/-1;text-align:center;padding:44px 16px;color:var(--muted);border:2px dashed #cfd9e8;border-radius:16px}
+.mm-empty svg{width:46px;height:46px;color:#b8c6db;display:block;margin:0 auto 10px}.mm-empty b{display:block;color:var(--navy);font-size:15px;margin-bottom:3px}
+.mm-drop{position:absolute;inset:10px;border:3px dashed var(--gold);border-radius:16px;background:rgba(255,247,240,.94);display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--navy);pointer-events:none}
+.mm-drop b{font-size:17px}.mm-drop span{color:var(--muted)}.mm-body.over .mm-drop{display:flex}
+.mm-f{display:flex;align-items:center;gap:8px;padding:11px 18px;border-top:1px solid var(--line)}.mm-f .hint{flex:1}
+@media (max-width:820px){#mmM{padding:0;align-items:stretch}.mm{border-radius:0;max-height:none;height:100%;width:100%}
+  .mm-tb{padding:10px 12px}.mm-ty{flex:1 1 100%}.mm-ty select{width:100%}.mm-btns{justify-content:stretch}.mm-b{flex:1 1 30%;justify-content:center;flex-direction:column;height:auto;padding:10px 6px;gap:4px;font-size:12px}
+  .mm-grid{grid-template-columns:repeat(2,1fr);gap:9px}.mm-body{padding:12px}.mm-f{padding:10px 12px calc(10px + env(safe-area-inset-bottom))}.mm-f .hint{display:none}.mm-f .btn{flex:1}.mm-cnt{display:none}}
+/* in-app camera */
+#camM{background:rgba(0,0,0,.85);padding:0}
+.cam{width:min(900px,100%);height:min(680px,100vh);display:flex;flex-direction:column;background:#000;border-radius:16px;overflow:hidden}
+.cam-v{position:relative;flex:1;display:flex;align-items:center;justify-content:center;background:#000;min-height:0}
+.cam-v video{width:100%;height:100%;object-fit:contain;background:#000}
+.cam-top{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:10px;padding:12px 14px;background:linear-gradient(rgba(0,0,0,.6),transparent);color:#fff;font-weight:700}
+.cam-top button{margin-inline-start:auto;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:22px;cursor:pointer}
+.cam-rec{display:inline-flex;align-items:center;gap:6px;background:rgba(198,40,40,.9);padding:3px 10px;border-radius:999px;font-size:13px;direction:ltr}.cam-rec i{width:9px;height:9px;border-radius:50%;background:#fff;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.25}}
+.cam-err{position:absolute;inset:auto 20px 20px;background:rgba(198,40,40,.92);color:#fff;padding:12px 14px;border-radius:12px;font-size:13.5px;line-height:1.6}
+.cam-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px calc(14px + env(safe-area-inset-bottom));background:#0b0b0b}
+.cam-s{width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;cursor:pointer}.cam-s svg{width:22px;height:22px}.cam-sp{width:46px}
+.cam-go{width:72px;height:72px;border-radius:50%;border:4px solid #fff;background:transparent;padding:5px;cursor:pointer}
+.cam-go i{display:block;width:100%;height:100%;border-radius:50%;background:#fff;transition:all .2s}
+#camM.video .cam-go i{background:#e53935}#camM.recording .cam-go i{border-radius:8px;transform:scale(.55)}
+.cam-after{display:flex;gap:10px}
+#camM [hidden],#mmM [hidden]{display:none!important}
+.mm-f .btn{justify-content:center}
+@media (max-width:820px){.cam{border-radius:0;height:100%}}
 /* video */
 .ph-vbtn{border-color:#c7d5ea}
 .ph-it .pv{position:absolute;inset:0;margin:auto;width:34px;height:34px;border-radius:50%;background:rgba(241,92,34,.95);box-shadow:0 2px 8px rgba(0,0,0,.3)}
@@ -717,7 +772,8 @@ html{-webkit-text-size-adjust:100%}
                   <select id="phType"></select>
                   <label class="btn sm gold ph-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg><span>تصوير</span><input type="file" accept="image/*" capture="environment" id="phCam" hidden></label>
                   <label class="btn sm ph-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg><span>رفع صور</span><input type="file" accept="image/*" multiple id="phUp" hidden></label>
-                  <label class="btn sm ph-btn ph-vbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5.5" width="13.5" height="13" rx="2"/><path d="m16 10 5.5-3v10L16 14"/></svg><span>فيديو</span><input type="file" accept="video/*" id="phVid" hidden></label>
+                  <button type="button" class="btn sm ph-btn ph-vbtn" id="phVidRec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5.5" width="13.5" height="13" rx="2"/><path d="m16 10 5.5-3v10L16 14"/><circle cx="9" cy="12" r="2.2" fill="currentColor"/></svg><span>تصوير فيديو</span></button><input type="file" accept="video/*" capture="environment" id="phVidCam" hidden>
+                  <label class="btn sm ph-btn ph-vbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5.5" width="13.5" height="13" rx="2"/><path d="m16 10 5.5-3v10L16 14"/></svg><span>رفع فيديو</span><input type="file" accept="video/*" id="phVid" hidden></label>
                   <span class="hint" id="phHint"></span>
                 </div>
                 <div class="ph-grid" id="phGrid"></div>
@@ -936,6 +992,28 @@ html{-webkit-text-size-adjust:100%}
 </div>
 
 <nav class="bnav"><button class="nav" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>لوحة</span></button><button class="nav" data-v="assets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>الأصول</span></button><button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg><span>تسجيل</span></button><button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg><span>الطباعة</span></button><button class="nav" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>الإعدادات</span></button></nav>
+<div class="modal" id="mmM"><div class="mm">
+  <div class="mm-h"><div class="mm-tt"><small>صور وفيديو الأصل</small><b id="mmN"></b><span id="mmC" class="mono"></span></div><span class="mm-cnt" id="mmCnt"></span><button type="button" class="mm-x" id="mmX" title="إغلاق">×</button></div>
+  <div class="mm-tb">
+    <label class="mm-ty"><span>نوع الصورة</span><select id="mmType"></select></label>
+    <div class="mm-btns">
+      <button type="button" class="mm-b gold" data-cap="photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg><span>التقاط صورة</span></button>
+      <button type="button" class="mm-b red" data-cap="video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5.5" width="13.5" height="13" rx="2"/><path d="m16 10 5.5-3v10L16 14"/><circle cx="9" cy="12" r="2.2" fill="currentColor"/></svg><span>تصوير فيديو</span></button>
+      <label class="mm-b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg><span>رفع صور أو فيديو</span><input type="file" accept="image/*,video/*" multiple id="mmFiles" hidden></label>
+    </div>
+  </div>
+  <div class="mm-body" id="mmBody"><div class="mm-grid" id="mmGrid"></div><div class="mm-drop" id="mmDrop"><b>أفلت الصور أو مقاطع الفيديو هنا</b><span>تُرفع مباشرة إلى Google Drive</span></div></div>
+  <div class="mm-f"><span class="hint" id="mmHint"></span><button type="button" class="btn sm" id="mmRep">تقرير الأصل</button><button type="button" class="btn sm pri" id="mmDone">تم</button></div>
+  <input type="file" accept="image/*" capture="environment" id="mmCamP" hidden><input type="file" accept="video/*" capture="environment" id="mmCamV" hidden>
+</div></div>
+<div class="modal" id="camM"><div class="cam">
+  <div class="cam-v"><video id="camV" playsinline muted autoplay></video><video id="camR" playsinline controls hidden></video><canvas id="camC" hidden></canvas>
+    <div class="cam-top"><span id="camT">الكاميرا</span><span class="cam-rec" id="camRec" hidden><i></i><b id="camTime">00:00</b> / 03:00</span><button type="button" id="camX" title="إغلاق">×</button></div>
+    <div class="cam-err" id="camErr" hidden></div></div>
+  <div class="cam-bar"><button type="button" class="cam-s" id="camSw" title="تبديل الكاميرا"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-3l-2-3H9L7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/><path d="M9 13a3 3 0 0 1 5.1-2.1M15 13a3 3 0 0 1-5.1 2.1M14 9v2h2M10 17v-2H8"/></svg></button>
+    <button type="button" class="cam-go" id="camGo"><i></i></button>
+    <div class="cam-after" id="camAfter" hidden><button type="button" class="btn" id="camRetry">إعادة</button><button type="button" class="btn pri" id="camUse">حفظ ورفع</button></div><span class="cam-sp"></span></div>
+</div></div>
 <div id="upBar"><div class="ub-h"><b id="ubT">رفع الفيديو</b><span id="ubP">0%</span></div><div class="ub-t"><i id="ubF"></i></div><small id="ubS"></small></div>
 <div class="modal" id="phM"><div class="phv">
   <div class="phv-top"><b id="phvT"></b><span id="phvN" class="hint"></span><span style="flex:1"></span><a id="phvDrive" class="btn sm" target="_blank" rel="noopener">فتح في Google Drive</a><button type="button" class="btn sm" id="phvX">إغلاق</button></div>
@@ -4073,7 +4151,7 @@ async function phPump(){if(phBusy||!GS()||needLogin()||syncing||!PQ.length||navi
         const arr=photosOf(a);arr.push({id:r.id,t:q.t,v:1,d:today(),dur:Math.round(q.dur||0)});setPhotos(a,arr);await phDrop(q);vids++;changed=true;gsCommit();changed=false;upHide()}}
     cur=null;
   }catch(e){lastErr=e.message;if(cur&&cur.k==='vid'){cur.resumed=true;pqSave(cur);upErr(cur,e)}}
-  finally{phBusy=false;if(changed)gsCommit();if(up||del||vids){renderAll();if(PHS.code)phRenderForm()}
+  finally{phBusy=false;if(changed)gsCommit();if(up||del||vids){renderAll();if(PHS.code)phRenderForm();if(typeof mmRender==='function')mmRender()}
     if(up||vids)toast([up?(up===1?'تم حفظ الصورة':`تم حفظ ${up} صور`):'',vids?(vids===1?'تم حفظ الفيديو':`تم حفظ ${vids} مقاطع فيديو`):''].filter(Boolean).join(' و')+' في Google Drive','ok')}}
 /* ---- رفع الفيديو: جلسة Resumable إلى Drive، أجزاء 8MB مباشرة أو 4MB عبر الخادم، مع الاستئناف ---- */
 function xhrPut(url,blob,start,end,total,mime,onp){return new Promise(res=>{const x=new XMLHttpRequest();
@@ -4121,12 +4199,12 @@ function vidMeta(file){return new Promise(res=>{const v=document.createElement('
   v.onseeked=()=>{try{const k=Math.min(1,360/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(v.videoWidth*k));c.height=Math.max(1,Math.round(v.videoHeight*k));
     c.getContext('2d').drawImage(v,0,0,c.width,c.height);let t=c.toDataURL('image/jpeg',.72);if(t.length>45000)t=c.toDataURL('image/jpeg',.5);fin(c.width>1?t:generic(),isFinite(v.duration)?v.duration:0)}catch(e){fin(generic(),v.duration||0)}};
   v.onerror=()=>fin(generic(),0);v.src=url})}
-async function phAddVideo(file){if(!file)return;
+async function phAddVideo(file,durOverride){if(!file)return;
   if(file.size>1024*1024*1024)return toast('حجم الفيديو أكبر من 1 جيجابايت — قصّ المقطع أو صوّره بجودة أقل',1);
   if(phCount()>=PH_MAX)return toast(`الحد الأقصى ${PH_MAX} صورة/فيديو للأصل الواحد`,1);
   toast('جارٍ تجهيز الفيديو…');const m=await vidMeta(file);
   const ext=(file.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'mp4';
-  PHS.staged.push({v:1,t:'فيديو الأصل',blob:file,thumb:m.thumb,dur:m.dur,mime:file.type||'video/mp4',ext,size:file.size});
+  PHS.staged.push({v:1,t:'فيديو الأصل',blob:file,thumb:m.thumb,dur:durOverride||m.dur,mime:file.type||'video/mp4',ext,size:file.size});
   SFX.play('pop');phRenderForm();toast(`أُضيف الفيديو (${mb(file.size)} ميجابايت${m.dur?' · '+fmtDur(m.dur):''}) — سيُرفع عند حفظ الأصل`)}
 /* ---- عارض الصور ---- */
 let PV={list:[],i:0,code:''};
@@ -4153,7 +4231,7 @@ const phClose=()=>{phStopMedia();$('#phM').classList.remove('on')};$('#phvX').on
 $('#phvP').onclick=()=>phNav(1);$('#phvNx').onclick=()=>phNav(-1);
 {let sx=0,sy=0;const st=$('.phv-st');st.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});st.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)phNav(dx>0?-1:1)},{passive:true})}
 document.addEventListener('keydown',e=>{if(!$('#phM').classList.contains('on'))return;if(e.key==='Escape')phClose();if(e.key==='ArrowRight')phNav(-1);if(e.key==='ArrowLeft')phNav(1)});
-$('#phCam').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};$('#phVid').onchange=e=>{phAddVideo(e.target.files[0]);e.target.value=''};$('#phUp').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};
+$('#phCam').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};$('#phVid').onchange=e=>{phAddVideo(e.target.files[0]);e.target.value=''};$('#phVidCam').onchange=e=>{phAddVideo(e.target.files[0]);e.target.value=''};$('#phUp').onchange=e=>{phAddFiles([...e.target.files]);e.target.value=''};
 $('#phGrid').addEventListener('click',async e=>{const x=e.target.closest('[data-x]'),it=e.target.closest('.ph-it');if(!it)return;const items=phItems();
   if(x){const p=items[+x.dataset.x];if(!p)return;
     if(p.kind==='n'){PHS.staged.splice(p.si,1)}
@@ -4179,6 +4257,78 @@ $('#tb').addEventListener('mouseover',e=>{if(matchMedia('(hover:none)').matches|
   clearTimeout(hovT);hovT=setTimeout(()=>hovShow(el,a),160)});
 $('#tb').addEventListener('mouseleave',hovHide);addEventListener('scroll',hovHide,true);
 setTimeout(phLoad,0);
+/* ===== مدير صور وفيديو الأصل (من قائمة الإجراءات) ===== */
+let mmCode='';
+function mmAsset(){return assets.find(a=>a.code===mmCode)}
+function openMedia(code){const a=assets.find(x=>x.code===code);if(!a)return;mmCode=code;
+  if(!GS()||needLogin())return toast('الصور والفيديو تتوفّر عند الاتصال بقاعدة بيانات Google Sheets',1);
+  const sel=$('#mmType');if(!sel.options.length)sel.innerHTML=PH_TYPES.map(t=>`<option>${t}</option>`).join('');
+  $('#mmN').textContent=a.name;$('#mmC').textContent=a.code;$('#mmM').classList.add('on');mmRender();
+  const have=new Set(photosOf(a).map(p=>p.t));sel.value=PH_TYPES.find(t=>!have.has(t))||PH_TYPES[0];
+  const ids=photosOf(a).filter(p=>!TH[p.id]).map(p=>p.id);if(ids.length)needThumbs(ids).then(()=>{if(mmCode===code)mmRender()})}
+function mmItems(a){return [...photosOf(a).map(p=>({...p,kind:'s'})),...PQ.filter(q=>(q.k==='up'||q.k==='vid')&&q.code===a.code).map(q=>q.k==='vid'?{t:q.t,src:q.thumb,v:1,blob:q.blob,dur:q.dur,qid:q.qid,kind:'q',prog:q.size?q.sent/q.size:0}:{t:q.t,src:q.thumb,full:'data:image/jpeg;base64,'+q.data,qid:q.qid,kind:'q'})]}
+function mmRender(){const a=mmAsset();if(!a||!$('#mmM').classList.contains('on'))return;const items=mmItems(a),c=mediaCounts(a);
+  $('#mmCnt').innerHTML=mediaBadges(c);
+  $('#mmHint').textContent=`${items.length} / ${PH_MAX} · تُحفظ في Google Drive: صور أصول راكان / ${a.category||'بدون فئة'} / ${a.code}`;
+  $('#mmGrid').innerHTML=items.length?items.map((p,i)=>`<div class="mm-it" data-i="${i}" tabindex="0"><div class="mm-im"><img src="${p.kind==='s'?(TH[p.id]||PIX):p.src}" ${p.kind==='s'?`data-ph="${esc(p.id)}"`:''} alt="">${p.v?'<i class="pv"></i>':''}${p.v&&p.dur?`<span class="du">${fmtDur(p.dur)}</span>`:''}${p.kind==='q'?`<span class="st">${p.v?'جارٍ الرفع':'بانتظار الرفع'}</span>`:''}${p.kind==='q'&&p.v?`<span class="pg" data-q="${p.qid}"><i style="width:${Math.round((p.prog||0)*100)}%"></i></span>`:''}</div>
+    <div class="mm-cap"><b>${esc(p.t||'صورة')}</b><small>${esc(p.d||'')}</small></div>${p.kind==='s'?`<button type="button" class="mm-del" data-del="${i}" title="حذف">×</button>`:''}</div>`).join('')
+    :`<div class="mm-empty">${IC_PH}<b>لا توجد صور أو فيديو لهذا الأصل بعد</b>التقط صورة أو صوّر فيديو أو اسحب الملفات وأفلتها هنا</div>`;
+  $$('#mmM .mm-b').forEach(b=>b.disabled=items.length>=PH_MAX)}
+async function mmAdd(files,opts={}){const a=mmAsset();if(!a)return;const t=$('#mmType').value;let np=0,nv=0;const now=Date.now();
+  for(const f of files){const isV=/^video\//.test(f.type)||/\.(mp4|mov|webm|m4v|3gp|mkv)$/i.test(f.name),isI=/^image\//.test(f.type)||/\.(heic|heif|jpe?g|png|webp|gif|bmp)$/i.test(f.name);
+    if(!isV&&!isI)continue;if(mmItems(a).length+np+nv>=PH_MAX){toast(`الحد الأقصى ${PH_MAX} صورة/فيديو للأصل`,1);break}
+    if(isV){if(f.size>1024*1024*1024){toast('الفيديو أكبر من 1 جيجابايت',1);continue}toast('جارٍ تجهيز الفيديو…');const m=await vidMeta(f),dur=opts.dur||m.dur;
+      const ext=(f.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'mp4',qid='v'+now+'_'+nv+Math.random().toString(36).slice(2,6);
+      const q={qid,k:'vid',code:a.code,t:'فيديو الأصل',blob:f,thumb:m.thumb,dur,mime:f.type||'video/mp4',ext,size:f.size,url:null,sent:0,at:now+200+nv};PQ.push(q);IDB.put('blobs',f,qid);pqSave(q);nv++}
+    else{try{const r=await phProcess(f),qid='u'+now+'_'+np+Math.random().toString(36).slice(2,6);const q={qid,k:'up',code:a.code,t,data:r.data,thumb:r.thumb,at:now+100+np};PQ.push(q);pqSave(q);np++}
+      catch(e){toast('تعذّر قراءة الصورة '+f.name,1)}}}
+  if(np||nv){SFX.play('pop');const have=new Set([...photosOf(a).map(p=>p.t),...PQ.filter(q=>q.code===a.code).map(q=>q.t)]);$('#mmType').value=PH_TYPES.find(x=>!have.has(x))||t;
+    mmRender();renderTable();toast('جارٍ رفع '+[np?(np===1?'الصورة':np+' صور'):'',nv?(nv===1?'الفيديو':nv+' مقاطع فيديو'):''].filter(Boolean).join(' و')+' إلى Google Drive…');phPump()}}
+async function mmDelete(i){const a=mmAsset(),p=mmItems(a)[i];if(!p||p.kind!=='s')return;
+  if(!await confirmBox('حذف من وسائط الأصل',`سيُحذف ${p.v?'الفيديو':'صورة'} «${esc(p.t)}» من الأصل ويُنقل إلى سلة Google Drive (قابل للاسترجاع 30 يوماً).`,'حذف','del'))return;
+  setPhotos(a,photosOf(a).filter(x=>x.id!==p.id));const q={qid:'d'+Date.now(),k:'del',id:p.id,code:a.code,at:Date.now()};PQ.push(q);pqSave(q);gsCommit();SFX.play('del');mmRender();renderTable();phPump();toast('تم حذف '+(p.v?'الفيديو':'الصورة'))}
+const mmClose=()=>{$('#mmM').classList.remove('on');mmCode=''};
+$('#mmX').onclick=mmClose;$('#mmDone').onclick=mmClose;$('#mmM').addEventListener('click',e=>{if(e.target.id==='mmM')mmClose()});
+$('#mmRep').onclick=()=>{const c=mmCode;printAssetReport([c])};
+$('#mmFiles').onchange=e=>{mmAdd([...e.target.files]);e.target.value=''};
+$('#mmCamP').onchange=e=>{mmAdd([...e.target.files]);e.target.value=''};$('#mmCamV').onchange=e=>{mmAdd([...e.target.files]);e.target.value=''};
+$('#mmGrid').addEventListener('click',e=>{const d=e.target.closest('[data-del]');if(d){e.stopPropagation();mmDelete(+d.dataset.del);return}const it=e.target.closest('.mm-it');if(!it)return;const a=mmAsset();phOpen(mmItems(a),+it.dataset.i,a.code)});
+$$('#mmM [data-cap]').forEach(b=>b.onclick=()=>capture(b.dataset.cap,files=>mmAdd(files.files,{dur:files.dur}),b.dataset.cap==='photo'?'#mmCamP':'#mmCamV'));
+{const body=$('#mmBody');let dc=0;body.addEventListener('dragenter',e=>{e.preventDefault();dc++;body.classList.add('over')});body.addEventListener('dragover',e=>e.preventDefault());
+  body.addEventListener('dragleave',()=>{if(--dc<=0){dc=0;body.classList.remove('over')}});body.addEventListener('drop',e=>{e.preventDefault();dc=0;body.classList.remove('over');mmAdd([...e.dataTransfer.files])})}
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('#camM').classList.contains('on')){e.stopImmediatePropagation();camClose();return}if($('#mmM').classList.contains('on')&&!$('#phM').classList.contains('on')&&!$('#confirmM').classList.contains('on'))mmClose()},true);
+/* ===== الكاميرا: على الجوال تطبيق الكاميرا الأصلي، وعلى الكمبيوتر كاميرا داخل المنظومة ===== */
+const coarse=()=>matchMedia('(pointer:coarse)').matches;
+function capture(kind,cb,inputSel){if(coarse()&&inputSel){$(inputSel).click();return}openCam(kind,cb)}
+let CAM={stream:null,kind:'photo',cb:null,rec:null,chunks:[],t0:0,timer:null,facing:'environment',blob:null,dur:0};
+async function openCam(kind,cb){CAM.kind=kind;CAM.cb=cb;CAM.blob=null;const m=$('#camM');m.classList.toggle('video',kind==='video');m.classList.remove('recording');m.classList.add('on');
+  $('#camT').textContent=kind==='video'?'تصوير فيديو — حتى 3 دقائق':'التقاط صورة';$('#camErr').hidden=true;$('#camR').hidden=true;$('#camV').hidden=false;$('#camGo').hidden=false;$('#camAfter').hidden=true;$('#camRec').hidden=true;
+  await camStart()}
+async function camStart(){camStopStream();try{
+    if(!navigator.mediaDevices?.getUserMedia)throw new Error('nosupport');
+    CAM.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:CAM.facing,width:{ideal:1920},height:{ideal:1080}},audio:CAM.kind==='video'});
+    $('#camV').srcObject=CAM.stream;const devs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');$('#camSw').style.visibility=devs.length>1?'':'hidden'}
+  catch(e){$('#camErr').hidden=false;$('#camErr').textContent=e.message==='nosupport'?'هذا المتصفح لا يدعم الكاميرا — استخدم زر «رفع صور أو فيديو».':(e.name==='NotAllowedError'?'لم يُسمح بالوصول إلى الكاميرا. اسمح للموقع باستخدام الكاميرا والميكروفون من شريط العنوان ثم أعد المحاولة.':e.name==='NotFoundError'?'لا توجد كاميرا متصلة بهذا الجهاز — استخدم زر «رفع صور أو فيديو».':'تعذّر تشغيل الكاميرا: '+e.message);$('#camGo').hidden=true}}
+function camStopStream(){if(CAM.stream){CAM.stream.getTracks().forEach(t=>t.stop());CAM.stream=null}}
+function camClose(){if(CAM.rec&&CAM.rec.state==='recording'){CAM.rec.onstop=null;CAM.rec.stop()}clearInterval(CAM.timer);camStopStream();const r=$('#camR');if(r.src){URL.revokeObjectURL(r.src);r.removeAttribute('src')}$('#camM').classList.remove('on','recording')}
+function camMime(){const c=['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];return c.find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||''}
+function camTick(){const s=Math.floor((Date.now()-CAM.t0)/1000);$('#camTime').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;if(s>=180)camStopRec()}
+function camStopRec(){if(CAM.rec&&CAM.rec.state==='recording')CAM.rec.stop();clearInterval(CAM.timer)}
+$('#camGo').onclick=()=>{const v=$('#camV');if(!CAM.stream)return;
+  if(CAM.kind==='photo'){const c=$('#camC');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);SFX.play('pop');
+    c.toBlob(b=>{if(!b)return;const f=new File([b],'camera_'+Date.now()+'.jpg',{type:'image/jpeg'});camClose();CAM.cb&&CAM.cb({files:[f]})},'image/jpeg',.92);return}
+  if(CAM.rec&&CAM.rec.state==='recording'){camStopRec();return}
+  const mime=camMime();try{CAM.rec=new MediaRecorder(CAM.stream,mime?{mimeType:mime,videoBitsPerSecond:4500000}:{videoBitsPerSecond:4500000})}catch(e){CAM.rec=new MediaRecorder(CAM.stream)}
+  CAM.chunks=[];CAM.rec.ondataavailable=e=>{if(e.data&&e.data.size)CAM.chunks.push(e.data)};
+  CAM.rec.onstop=()=>{$('#camM').classList.remove('recording');$('#camRec').hidden=true;CAM.dur=(Date.now()-CAM.t0)/1000;const type=(CAM.rec.mimeType||mime||'video/webm').split(';')[0];
+    CAM.blob=new Blob(CAM.chunks,{type});camStopStream();const r=$('#camR');r.src=URL.createObjectURL(CAM.blob);r.hidden=false;$('#camV').hidden=true;$('#camGo').hidden=true;$('#camAfter').hidden=false;$('#camT').textContent='معاينة المقطع ('+fmtDur(CAM.dur)+')'};
+  CAM.rec.start(1000);CAM.t0=Date.now();$('#camM').classList.add('recording');$('#camRec').hidden=false;camTick();CAM.timer=setInterval(camTick,500)};
+$('#camUse').onclick=()=>{if(!CAM.blob)return;const ext=/mp4/.test(CAM.blob.type)?'mp4':'webm';const f=new File([CAM.blob],'video_'+Date.now()+'.'+ext,{type:CAM.blob.type});const dur=CAM.dur;camClose();CAM.cb&&CAM.cb({files:[f],dur})};
+$('#camRetry').onclick=()=>{const r=$('#camR');URL.revokeObjectURL(r.src);r.hidden=true;$('#camV').hidden=false;$('#camAfter').hidden=true;$('#camGo').hidden=false;$('#camT').textContent='تصوير فيديو — حتى 3 دقائق';camStart()};
+$('#phCam').closest('label').addEventListener('click',e=>{if(e.target.id==='phCam'||coarse())return;e.preventDefault();capture('photo',r=>phAddFiles(r.files))});
+$('#phVidRec').onclick=()=>capture('video',r=>phAddVideo(r.files[0],r.dur),'#phVidCam');
+$('#camSw').onclick=()=>{CAM.facing=CAM.facing==='environment'?'user':'environment';camStart()};$('#camX').onclick=camClose;
+
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncTick()});
 window.addEventListener('online',()=>syncTick());
 /* ---- login on this device ---- */
@@ -4767,7 +4917,7 @@ async function doAct(act,c){
   if(act==='edit'){editAsset(c);return}
   if(act==='print'){queue=[c];go('label');return}
   if(act==='rep'){printAssetReport([c]);return}
-  if(act==='media'){const a=assets.find(x=>x.code===c);if(a)phOpen(assetGallery(a),0,a.code);return}
+  if(act==='media'){openMedia(c);return}
   if(act==='copy'){try{await navigator.clipboard.writeText(c);toast('تم نسخ رقم الباركود '+c,'ok')}catch(e){toast(c)}return}
   const da=assets.find(a=>a.code===c);
   if(act==='del'&&
@@ -4779,7 +4929,7 @@ const AI={edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4
   copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',del:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>'};
 function openActMenu(btn,c){const a=assets.find(x=>x.code===c);if(!a)return;if(actCode===c&&actM.classList.contains('on')){closeActMenu();return}closeActMenu();actCode=c;const mc=mediaCounts(a),nm=mc.p+mc.v;
   const it=(k,l,sub,cls)=>`<button type="button" role="menuitem" data-m="${k}" class="${cls||''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${AI[k]}</svg><span>${l}${sub?`<small>${sub}</small>`:''}</span></button>`;
-  actM.innerHTML=`<div class="am-h"><b>${esc(a.name)}</b><span class="mono">${esc(a.code)}</span></div>${it('edit','عرض وتعديل','')}${it('print','طباعة الملصق',+a.printCount?`طُبع ${a.printCount} مرة`:'لم يُطبع بعد')}${it('rep','تقرير الأصل مع الصور','PDF / طباعة A4')}${nm?it('media','الصور والفيديو',[mc.p?mc.p+' صورة':'',mc.v?mc.v+' فيديو':''].filter(Boolean).join(' · ')):''}${it('copy','نسخ رقم الباركود','')}<div class="am-sep"></div>${it('del','حذف الأصل','','dng')}`;
+  actM.innerHTML=`<div class="am-h"><b>${esc(a.name)}</b><span class="mono">${esc(a.code)}</span></div>${it('edit','عرض وتعديل','')}${it('print','طباعة الملصق',+a.printCount?`طُبع ${a.printCount} مرة`:'لم يُطبع بعد')}${it('rep','تقرير الأصل مع الصور','PDF / طباعة A4')}${it('media','الصور والفيديو',nm?[mc.p?mc.p+' صورة':'',mc.v?mc.v+' فيديو':''].filter(Boolean).join(' · ')+' — عرض وإضافة':'تصوير ورفع صور وفيديو')}${it('copy','نسخ رقم الباركود','')}<div class="am-sep"></div>${it('del','حذف الأصل','','dng')}`;
   const sheet=innerWidth<=820;actM.classList.toggle('sheet',sheet);document.body.classList.toggle('am-open',sheet);
   if(!sheet){const r=btn.getBoundingClientRect();actM.style.visibility='hidden';actM.classList.add('on');const W=actM.offsetWidth,H=actM.offsetHeight;
     let left=r.left;if(left+W>innerWidth-8)left=innerWidth-W-8;let top=r.bottom+6;if(top+H>innerHeight-8)top=Math.max(8,r.top-H-6);
