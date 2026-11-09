@@ -139,6 +139,11 @@ tr:hover td{background:var(--gold-soft)}
 tr.hl td{background:var(--gold-2)!important}
 .atw{overflow:visible;max-height:none;border-radius:10px}
 .atbl{table-layout:fixed;font-size:12.5px}
+.atbl th{position:sticky}.atbl th .rz{position:absolute;top:0;bottom:0;left:-4px;width:9px;cursor:col-resize;z-index:3;touch-action:none}
+.atbl th .rz::after{content:"";position:absolute;top:22%;bottom:22%;left:4px;width:1px;background:rgba(255,255,255,.35);transition:background .15s,width .15s}
+.atbl th:hover .rz::after{background:rgba(255,255,255,.75)}.atbl th .rz:hover::after,.atbl th.rzon .rz::after{background:var(--gold);width:3px;left:3px}
+body.rzing,body.rzing *{cursor:col-resize!important;user-select:none!important}
+.atw.wide{overflow-x:auto}
 .atbl th{white-space:normal;line-height:1.35;padding:9px 6px;font-size:12px;vertical-align:middle;top:7px}
 .atbl td{white-space:normal;overflow-wrap:anywhere;word-break:normal;padding:7px 6px;line-height:1.5;vertical-align:middle}
 .atbl td.mono{font-size:11.5px;overflow-wrap:anywhere}
@@ -458,6 +463,7 @@ html{-webkit-text-size-adjust:100%}
   .atbl tr:has(td.empty){display:block!important}
   .atbl td.empty{display:block!important;text-align:center!important;padding:26px 10px!important}
   .atw{border:0!important}
+  .atbl th .rz{display:none}
   .atbl tr,.atbl tr:nth-child(even),.atbl tr:hover{background:#fff!important}
   .atbl td,.atbl tr:nth-child(even) td,.atbl tr:hover td{background:transparent!important}
 }
@@ -655,7 +661,7 @@ html{-webkit-text-size-adjust:100%}
       <div class="card">
         <div class="row atool" style="justify-content:space-between;margin-bottom:12px">
           <div class="row afilt">
-            <input class="inp" id="q" placeholder="بحث بالاسم أو الباركود أو الموقع…" style="width:260px">
+            <input class="inp" id="q" placeholder="بحث شامل: الاسم، الباركود، الموقع، الملاحظات…" title="يبحث في جميع بيانات الأصل بما فيها الملاحظات — يمكن كتابة أكثر من كلمة" style="width:260px">
             <select class="inp" id="fCat"><option value="">كل الفئات</option></select>
             <select class="inp" id="fLoc"><option value="">كل المواقع</option></select>
             <select class="inp" id="fPrint"><option value="">كل الحالات</option><option value="0">لم يُطبع</option><option value="1">مطبوع</option></select>
@@ -4297,8 +4303,10 @@ function renderDash(){
 }
 function statusPill(s){const m={'جديد':'p-ok','جيد':'p-ok','متوسط':'p-warn','يحتاج صيانة':'p-warn','تالف':'p-bad','مستبعد':'p-gray'};return s?`<span class="pill ${m[s]||'p-gray'}">${esc(s)}</span>`:''}
 let selected=new Set();
-function filtered(){const q=$('#q').value.trim().toLowerCase(),c=$('#fCat').value,l=$('#fLoc').value,p=$('#fPrint').value,od=$('#fOdoo').value;
-  return assets.filter(a=>(!q||[a.code,a.name,a.location,a.dept,a.custodian,a.serial,a.odooId,a.odooName].join(' ').toLowerCase().includes(q))&&(!c||a.category===c)&&(!l||a.location===l)&&(p===''||(p==='1')===(+a.printCount>0))&&(od===''||(od==='1')===!!a.odooId))}
+const normAr=t=>String(t??'').toLowerCase().replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+function searchText(a){return normAr([a.code,a.name,a.category,a.location,a.dept,a.custodian,a.serial,a.purchaseDate,a.value,a.status,a.notes,a.odooId,a.odooName,a.createdAt,a.lastPrint,photosOf(a).map(p=>p.t).join(' ')].join(' | '))}
+function filtered(){const qs=normAr($('#q').value.trim()).split(/\s+/).filter(Boolean),c=$('#fCat').value,l=$('#fLoc').value,p=$('#fPrint').value,od=$('#fOdoo').value;
+  return assets.filter(a=>(!qs.length||(t=>qs.every(w=>t.includes(w)))(searchText(a)))&&(!c||a.category===c)&&(!l||a.location===l)&&(p===''||(p==='1')===(+a.printCount>0))&&(od===''||(od==='1')===!!a.odooId))}
 /* ---- أعمدة سجل الأصول (قابلة للإظهار/الإخفاء) ---- */
 const DOTS='<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
 const COLS=[
@@ -4317,11 +4325,14 @@ const COLS=[
 COLS.forEach(c=>{if(!c.td)c.td=a=>`<td data-l="${c.l}"${a[c.k]?'':' class="e"'}>${esc(a[c.k])||'—'}</td>`});
 function colOn(c){const v=(prefs.cols||{})[c.k];return c.fixed||(v===undefined?c.d:!!v)}
 function visCols(){const TS=prefs.thumbStyle||'col';return COLS.filter(c=>colOn(c)&&!(c.k==='photo'&&TS!=='col'))}
+function applyColW(vc){const tb=$('#tb').closest('table'),tot=vc.reduce((t,c)=>t+c.w,0),avail=100-2.5-4,CW=prefs.colW||{},wrap=tb.parentElement,desk=!matchMedia('(max-width:1180px)').matches;
+  if(desk&&vc.some(c=>CW[c.k])){const W=wrap.clientWidth||1100,px=c=>Math.round(CW[c.k]||c.w/tot*avail/100*W),sum=34+56+vc.reduce((t,c)=>t+px(c),0);$('#tcg').innerHTML='<col style="width:34px">'+vc.map(c=>`<col data-k="${c.k}" style="width:${px(c)}px">`).join('')+'<col style="width:56px">';tb.style.width=Math.max(W,sum)+'px';wrap.classList.toggle('wide',sum>W+1)}
+  else{$('#tcg').innerHTML='<col style="width:2.5%">'+vc.map(c=>`<col data-k="${c.k}" style="width:${(c.w/tot*avail).toFixed(2)}%">`).join('')+'<col style="width:4%">';tb.style.width='';wrap.classList.remove('wide')}}
 function renderTable(){const TS=prefs.thumbStyle||'col',tb=$('#tb').closest('table');tb.dataset.ts=TS;
-  const vc=visCols(),tot=vc.reduce((t,c)=>t+c.w,0),avail=100-2.5-4;
-  $('#tcg').innerHTML='<col style="width:2.5%">'+vc.map(c=>`<col style="width:${(c.w/tot*avail).toFixed(2)}%">`).join('')+'<col style="width:4%">';
+  const vc=visCols();applyColW(vc);
+
   const list=filtered(),all=list.length&&list.every(a=>selected.has(a.code));
-  $('#thd').innerHTML=`<tr><th><input type="checkbox" id="chkAll" ${all?'checked':''}></th>${vc.map(c=>`<th${c.k==='photo'?' class="cph"':''}>${c.l}</th>`).join('')}<th style="text-align:center" title="خيارات">${DOTS.replace('<svg','<svg style="width:15px;height:15px;opacity:.85"')}</th></tr>`;
+  $('#thd').innerHTML=`<tr><th><input type="checkbox" id="chkAll" ${all?'checked':''}></th>${vc.map(c=>`<th data-k="${c.k}"${c.k==='photo'?' class="cph"':''}>${c.l}<span class="rz" data-k="${c.k}" title="اسحب لتغيير عرض العمود — نقر مزدوج للإرجاع"></span></th>`).join('')}<th style="text-align:center" title="خيارات">${DOTS.replace('<svg','<svg style="width:15px;height:15px;opacity:.85"')}</th></tr>`;
   $('#chkAll').onchange=e=>{filtered().forEach(a=>e.target.checked?selected.add(a.code):selected.delete(a.code));renderTable()};
   $('#tb').innerHTML=list.length?list.map(a=>`<tr data-c="${esc(a.code)}" title="انقر مرتين لعرض الأصل وتعديله"><td data-l="تحديد"><input type="checkbox" class="rc" ${selected.has(a.code)?'checked':''}></td>${vc.map(c=>c.td(a)).join('')}<td data-l="إجراءات"><button class="ib km" data-a="menu" title="خيارات الأصل" aria-haspopup="menu">${DOTS}<span>خيارات</span></button></td></tr>`).join(''):`<tr><td colspan="${vc.length+2}" class="empty">${assets.length?'لا توجد نتائج مطابقة للبحث':'لا توجد أصول بعد — افتح ملف Excel أو سجّل أول أصل'}</td></tr>`;
   $('#tblFoot').textContent=`عرض ${list.length} من ${assets.length} أصل`;updSel();
@@ -4779,13 +4790,25 @@ actM.addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)ret
 document.addEventListener('click',e=>{if(actM.classList.contains('on')&&!e.target.closest('#actMenu,.km'))closeActMenu();if(colM.classList.contains('on')&&!e.target.closest('#colMenu,#bCols'))colM.classList.remove('on')},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeActMenu();colM.classList.remove('on')}});
 addEventListener('scroll',e=>{if(actM.classList.contains('on')&&!actM.classList.contains('sheet')&&!actM.contains(e.target))closeActMenu()},true);addEventListener('resize',()=>{if(!actM.classList.contains('sheet'))closeActMenu()});
+/* ---- تغيير عرض الأعمدة بالسحب ---- */
+{let drag=null;const thd=$('#thd');
+  thd.addEventListener('pointerdown',e=>{const h=e.target.closest('.rz');if(!h)return;e.preventDefault();e.stopPropagation();const tb=$('#tb').closest('table');
+    const snap={};$$('#thd th[data-k]').forEach(th=>snap[th.dataset.k]=Math.round(th.getBoundingClientRect().width));prefs.colW=Object.assign({},snap);applyColW(visCols());
+    const col=$(`#tcg col[data-k="${h.dataset.k}"]`);drag={k:h.dataset.k,x:e.clientX,w:prefs.colW[h.dataset.k],col,tb,id:e.pointerId};document.body.classList.add('rzing');
+    $(`#thd th[data-k="${h.dataset.k}"]`)?.classList.add('rzon')});
+  addEventListener('pointermove',e=>{if(!drag)return;const w=Math.max(56,Math.min(900,Math.round(drag.w-(e.clientX-drag.x))));prefs.colW[drag.k]=w;
+    if(drag.col)drag.col.style.width=w+'px';const W=drag.tb.parentElement.clientWidth,sum=34+56+Object.keys(prefs.colW).filter(k=>visCols().some(c=>c.k===k)).reduce((t,k)=>t+prefs.colW[k],0);
+    drag.tb.style.width=Math.max(W,sum)+'px';drag.tb.parentElement.classList.toggle('wide',sum>W+1)});
+  addEventListener('pointerup',()=>{if(!drag)return;$$('#thd th.rzon').forEach(t=>t.classList.remove('rzon'));drag=null;document.body.classList.remove('rzing');store('rkm_prefs',prefs);applyColW(visCols())});
+  thd.addEventListener('dblclick',e=>{const h=e.target.closest('.rz');if(!h)return;e.stopPropagation();const vc=visCols(),tot=vc.reduce((t,c)=>t+c.w,0),c=vc.find(x=>x.k===h.dataset.k),W=$('#tb').closest('table').parentElement.clientWidth||1100;if(c){prefs.colW=Object.assign({},prefs.colW,{[c.k]:Math.round(c.w/tot*93.5/100*W)})}store('rkm_prefs',prefs);applyColW(visCols());toast('أُعيد عرض عمود «'+(c?c.l:'')+'» إلى الافتراضي')});
+  let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if($('#v-assets')?.classList.contains('on'))renderTable()},150)})}
 /* ---- اختيار الأعمدة ---- */
 const colM=document.createElement('div');colM.id='colMenu';document.body.appendChild(colM);
 function renderColMenu(){colM.innerHTML=`<div class="am-h"><b>أعمدة سجل الأصول</b><span>اختر ما يظهر في الجدول — يُحفظ على هذا الجهاز</span></div><div class="cm-l">${COLS.map(c=>`<label class="${c.fixed?'fx':''}"><input type="checkbox" data-col="${c.k}" ${colOn(c)?'checked':''} ${c.fixed?'disabled':''}><span>${c.l}${c.k==='photo'&&(prefs.thumbStyle||'col')!=='col'?' <small>(حسب طريقة عرض الصور)</small>':''}</span></label>`).join('')}</div><div class="cm-f"><button type="button" class="btn sm" data-cm="def">الافتراضي</button><button type="button" class="btn sm pri" data-cm="ok">تم</button></div>`}
 $('#bCols').onclick=e=>{e.stopPropagation();if(colM.classList.contains('on')){colM.classList.remove('on');document.body.classList.remove('am-open');return}renderColMenu();const sheet=innerWidth<=820;colM.classList.toggle('sheet',sheet);document.body.classList.toggle('am-open',sheet);
   if(!sheet){const r=$('#bCols').getBoundingClientRect();colM.style.top=(r.bottom+6)+'px';colM.style.left=Math.max(8,Math.min(innerWidth-268,r.left))+'px'}else colM.style.top=colM.style.left='';colM.classList.add('on')};
 colM.addEventListener('change',e=>{const k=e.target.dataset.col;if(!k)return;prefs.cols=Object.assign({},prefs.cols,{[k]:e.target.checked});store('rkm_prefs',prefs);renderTable()});
-colM.addEventListener('click',e=>{const b=e.target.closest('[data-cm]');if(!b)return;if(b.dataset.cm==='def'){prefs.cols={};store('rkm_prefs',prefs);renderColMenu();renderTable();toast('أُعيدت أعمدة الجدول إلى الوضع الافتراضي')}else{colM.classList.remove('on');document.body.classList.remove('am-open')}});
+colM.addEventListener('click',e=>{const b=e.target.closest('[data-cm]');if(!b)return;if(b.dataset.cm==='def'){prefs.cols={};prefs.colW={};store('rkm_prefs',prefs);renderColMenu();renderTable();toast('أُعيدت أعمدة الجدول إلى الوضع الافتراضي')}else{colM.classList.remove('on');document.body.classList.remove('am-open')}});
 
 $('#bRepSel').onclick=()=>printAssetReport(assets.filter(a=>selected.has(a.code)).map(a=>a.code));
 $('#bPrintSel').onclick=()=>{queue=assets.filter(a=>selected.has(a.code)).map(a=>a.code);go('label')};
