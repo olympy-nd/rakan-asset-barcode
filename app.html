@@ -3281,6 +3281,7 @@ function handle_(p) {
   if (a === 'photoGet') return out_(photoGet_(p));
   if (a === 'videoChunk') return out_(videoChunk_(p));      // خارج القفل: رفع جزء قد يستغرق ثوانٍ
   if (a === 'videoStatus') return out_(videoStatus_(p));
+  if (a === 'shareAll') return out_(shareAll_());
   // ---- writes ----
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
@@ -3545,7 +3546,7 @@ function photoUpload_(ss, p) {
   const t = safeName_(p.type) || 'صورة';
   const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd_HH-mm-ss');
   const blob = Utilities.newBlob(Utilities.base64Decode(p.data), p.mime || 'image/jpeg', safeName_(code + '_' + t + '_' + stamp) + '.jpg');
-  const file = f.createFile(blob);
+  const file = f.createFile(blob); shareLink_(file);
   file.setDescription(code + ' | ' + t + (p.name ? ' | ' + p.name : ''));
   if (p.thumb && String(p.thumb).length < 48000) sheet_(ss, TH_SHEET, ['معرّف الملف', 'رقم الباركود', 'مصغّرة']).appendRow([file.getId(), code, p.thumb]);
   return { ok: true, id: file.getId(), name: file.getName(), folder: f.getId() };
@@ -3611,8 +3612,21 @@ function videoStatus_(p) {
 function videoDone_(ss, p) {
   const id = String(p.id || ''); let file;
   try { file = DriveApp.getFileById(id); } catch (e) { return { ok: false, error: 'video_missing' }; }
+  shareLink_(file);
   if (p.thumb && String(p.thumb).length < 48000) sheet_(ss, TH_SHEET, ['معرّف الملف', 'رقم الباركود', 'مصغّرة']).appendRow([id, String(p.code || ''), p.thumb]);
   return { ok: true, id: id, name: file.getName(), size: file.getSize() };
+}
+/* عرض بدون تسجيل دخول: كل ملف (صورة/فيديو) يُتاح «لأي شخص لديه الرابط — عرض فقط».
+   المجلدات تبقى خاصة (لا يمكن تصفّحها)، والملف لا يُفتح إلا برابطه الفريد. */
+function shareLink_(file) { try { if (file.getSharingAccess() !== DriveApp.Access.ANYONE_WITH_LINK) file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); return true; } catch (e) { return false; } }
+function shareAll_() {
+  const P = P_(); if (P.getProperty('ph_shared') === '1') return { ok: true, done: true, n: 0 };
+  const t0 = Date.now(); let n = 0, fail = 0, more = false;
+  const walk = f => { const fs = f.getFiles(); while (fs.hasNext()) { if (Date.now() - t0 > 240000) { more = true; return; } shareLink_(fs.next()) ? n++ : fail++; }
+    const ds = f.getFolders(); while (ds.hasNext() && !more) walk(ds.next()); };
+  walk(phRoot_());
+  if (!more) P.setProperty('ph_shared', '1');
+  return { ok: true, done: !more, n: n, fail: fail };
 }
 /** شغّلها مرة واحدة من المحرّر لمنح صلاحية Google Drive */
 function authorizeDrive() { phRoot_(); UrlFetchApp.fetch('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest', { muteHttpExceptions: true }); }
@@ -3944,8 +3958,11 @@ const IDB={db:null,
   get(store,k){return this.open().then(d=>new Promise(res=>{const r=d.transaction(store,'readonly').objectStore(store).get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>res(undefined)})).catch(()=>undefined)},
   all(store){return this.open().then(d=>new Promise(res=>{const out=[],c=d.transaction(store,'readonly').objectStore(store).openCursor();
     c.onsuccess=()=>{const x=c.result;if(x){out.push([x.key,x.value]);x.continue()}else res(out)};c.onerror=()=>res(out)})).catch(()=>[])}};
+let shareBusy=false;
+async function phShareOnce(){try{if(shareBusy||!GS()||needLogin()||localStorage.getItem('rkm_shared2')==='1')return;shareBusy=true;
+  const r=await gsCall('shareAll',{});if(r.done)localStorage.setItem('rkm_shared2','1')}catch(e){}finally{shareBusy=false}}
 async function phLoad(){(await IDB.all('thumbs')).forEach(([k,v])=>TH[k]=v);PQ=(await IDB.all('pq')).map(([,v])=>v).sort((a,b)=>a.at-b.at);for(const q of PQ)if(q.k==='vid'&&!q.blob)q.blob=await IDB.get('blobs',q.qid);
-  if(assets.length)renderTable();phPump()}
+  if(assets.length)renderTable();phPump();setTimeout(phShareOnce,4000)}
 /* ---- مصغّرات ---- */
 let thWant=new Set(),thTimer=null;const thInflight=new Set();
 function needThumbs(ids){ids.forEach(id=>{if(id&&!TH[id]&&!thInflight.has(id))thWant.add(id)});
@@ -4086,7 +4103,7 @@ async function phShow(){const p=PV.list[PV.i],img=$('#phvI'),L=$('#phvL');phStop
   if(p.v){img.hidden=true;L.hidden=true;const box=$('.phv-img');
     if(p.blob){const vd=document.createElement('video');vd.controls=true;vd.playsInline=true;vd.src=URL.createObjectURL(p.blob);box.appendChild(vd)}
     else{const fr=document.createElement('iframe');fr.src='https://drive.google.com/file/d/'+encodeURIComponent(p.id)+'/preview';fr.allow='autoplay; fullscreen';fr.allowFullscreen=true;box.appendChild(fr);
-      $('#phvC').textContent=(p.d?'أُضيف بتاريخ '+p.d+(p.dur?' · المدة '+fmtDur(p.dur):'')+' — ':'')+'للمشاهدة يلزم تسجيل الدخول بحساب Google لديه صلاحية على مجلد «صور أصول راكان».'}
+      $('#phvC').textContent=p.d?'أُضيف بتاريخ '+p.d+(p.dur?' · المدة '+fmtDur(p.dur):''):'';phShareOnce()}
     return}
   if(p.full){img.src=p.full;L.hidden=true;return}
   if(FULL[p.id]){img.src=FULL[p.id];L.hidden=true;return}
