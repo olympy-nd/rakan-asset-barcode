@@ -720,6 +720,7 @@ html{-webkit-text-size-adjust:100%}
             <select class="inp" id="fCat"><option value="">كل الفئات</option></select>
             <select class="inp" id="fLoc"><option value="">كل المواقع</option></select>
             <select class="inp" id="fDept"><option value="">كل الأقسام</option></select>
+            <select class="inp" id="fCust"><option value="">كل العهد</option></select>
             <select class="inp" id="fPrint"><option value="">كل الحالات</option><option value="0">لم يُطبع</option><option value="1">مطبوع</option></select>
             <select class="inp" id="fOdoo"><option value="">الربط بأودو</option><option value="1">مربوط</option><option value="0">غير مربوط</option></select>
           </div>
@@ -4456,8 +4457,8 @@ function statusPill(s){const m={'جديد':'p-ok','جيد':'p-ok','متوسط':'
 let selected=new Set();
 const normAr=t=>String(t??'').toLowerCase().replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
 function searchText(a){return normAr([a.code,a.name,a.category,a.location,a.dept,a.custodian,a.serial,a.purchaseDate,a.value,a.status,a.notes,a.odooId,a.odooName,a.createdAt,a.lastPrint,photosOf(a).map(p=>p.t).join(' ')].join(' | '))}
-function filtered(){const qs=normAr($('#q').value.trim()).split(/\s+/).filter(Boolean),c=$('#fCat').value,l=$('#fLoc').value,dp=$('#fDept').value,p=$('#fPrint').value,od=$('#fOdoo').value;
-  return assets.filter(a=>(!qs.length||(t=>qs.every(w=>t.includes(w)))(searchText(a)))&&(!c||a.category===c)&&(!l||a.location===l)&&(!dp||a.dept===dp)&&(p===''||(p==='1')===(+a.printCount>0))&&(od===''||(od==='1')===!!a.odooId))}
+function filtered(){const qs=normAr($('#q').value.trim()).split(/\s+/).filter(Boolean),c=$('#fCat').value,l=$('#fLoc').value,dp=$('#fDept').value,cu=$('#fCust').value,p=$('#fPrint').value,od=$('#fOdoo').value;
+  return assets.filter(a=>(!qs.length||(t=>qs.every(w=>t.includes(w)))(searchText(a)))&&(!c||a.category===c)&&(!l||a.location===l)&&(!dp||a.dept===dp)&&(!cu||a.custodian===cu)&&(p===''||(p==='1')===(+a.printCount>0))&&(od===''||(od==='1')===!!a.odooId))}
 /* ---- أعمدة سجل الأصول (قابلة للإظهار/الإخفاء) ---- */
 const DOTS='<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
 const COLS=[
@@ -4491,7 +4492,7 @@ function renderTable(){const TS=prefs.thumbStyle||'col',tb=$('#tb').closest('tab
 function updSel(){selected=new Set([...selected].filter(c=>assets.some(a=>a.code===c)));$('#selInfo').textContent=selected.size?`محدد: ${selected.size}`:'لم يتم تحديد أصول';$('#bPrintSel').disabled=!selected.size}
 {const _u=updSel;updSel=function(){_u();const b=$('#bRepSel');if(b)b.disabled=!selected.size}}
 function renderFilters(){const keep=(id,vals,first)=>{const s=$(id),v=s.value;s.innerHTML=`<option value="">${first}</option>`+vals.map(x=>`<option>${esc(x)}</option>`).join('');s.value=vals.includes(v)?v:''};
-  const uniq=k=>[...new Set(assets.map(a=>a[k]).filter(Boolean))].sort();keep('#fCat',settings.cats.map(c=>c.name),'كل الفئات');keep('#fLoc',uniq('location'),'كل المواقع');keep('#fDept',uniq('dept'),'كل الأقسام');
+  const uniq=k=>[...new Set(assets.map(a=>a[k]).filter(Boolean))].sort();keep('#fCat',settings.cats.map(c=>c.name),'كل الفئات');keep('#fLoc',uniq('location'),'كل المواقع');keep('#fDept',uniq('dept'),'كل الأقسام');keep('#fCust',uniq('custodian'),'كل العهد');
   $('#dlLoc').innerHTML=uniq('location').map(x=>`<option value="${esc(x)}">`).join('');$('#dlDept').innerHTML=uniq('dept').map(x=>`<option value="${esc(x)}">`).join('');$('#dlCust').innerHTML=uniq('custodian').map(x=>`<option value="${esc(x)}">`).join('')}
 function fillCatSelect(){const s=$('#af').category,v=s.value;s.innerHTML=settings.cats.map(c=>`<option value="${esc(c.name)}">${esc(c.name)} (${esc(c.code)})</option>`).join('');if(v)s.value=v}
 function renderCatTable(){$('#catTb').innerHTML=settings.cats.map((c,i)=>`<tr><td>${esc(c.name)}</td><td class="mono"><b>${esc(c.code)}</b></td><td>${assets.filter(a=>a.category===c.name).length}</td><td><button class="btn sm danger" data-i="${i}">حذف</button></td></tr>`).join('')}
@@ -4707,7 +4708,7 @@ function reportHTML(list){const PHC=list.some(a=>mainPhoto(a))?1:0;
   const groups={};list.forEach(a=>{const k=a.category||'غير مصنف';(groups[k]=groups[k]||[]).push(a)});
   const gk=Object.keys(groups).sort((x,y)=>groups[y].length-groups[x].length);
   const total=sum(list),linked=list.filter(a=>a.odooId).length,printed=list.filter(a=>+a.printCount>0).length;
-  const flt=[];if($('#q').value.trim())flt.push('بحث: «'+esc($('#q').value.trim())+'»');['fCat','fLoc','fDept','fPrint','fOdoo'].forEach(id=>{const el=$('#'+id);if(el.value)flt.push(esc(el.options[el.selectedIndex].text))});
+  const flt=[];if($('#q').value.trim())flt.push('بحث: «'+esc($('#q').value.trim())+'»');['fCat','fLoc','fDept','fCust','fPrint','fOdoo'].forEach(id=>{const el=$('#'+id);if(el.value)flt.push(esc(el.options[el.selectedIndex].text))});
   const scope=flt.length?`نطاق التقرير: ${flt.join(' · ')}`:'نطاق التقرير: جميع الأصول المسجلة في المنظومة';
   const lg=logo();let n=0;
   const det=gk.map(k=>{const g=groups[k];return `<tbody><tr class="grp"><td colspan="${11+PHC}">${esc(k)} <span class="gc">(${g.length})</span></td></tr>`+
@@ -4905,7 +4906,7 @@ $('#fileFallback').onchange=async e=>{const f=e.target.files[0];if(!f)return;rea
 $('#bImport').onclick=()=>$('#fileImport').click();$('#fileImport').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''};
 $('#bReport').onclick=()=>printReport();
 $('#bExport').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buildWorkbook()]));a.download=`نسخة_أصول_${today()}.xlsx`;a.click()};
-['#q','#fCat','#fLoc','#fDept','#fPrint','#fOdoo'].forEach(s=>$(s).addEventListener('input',renderTable));
+['#q','#fCat','#fLoc','#fDept','#fCust','#fPrint','#fOdoo'].forEach(s=>$(s).addEventListener('input',renderTable));
 
 $('#tb').addEventListener('click',async e=>{const tr=e.target.closest('tr[data-c]');if(!tr)return;const c=tr.dataset.c;
   if(e.target.classList.contains('rc')){e.target.checked?selected.add(c):selected.delete(c);updSel();return}
