@@ -767,6 +767,7 @@ html{-webkit-text-size-adjust:100%}
             <div class="field"><label>الرقم التسلسلي للمصنع</label><input name="serial" class="mono"></div>
             <div class="field"><label>تاريخ الشراء</label><input name="purchaseDate" type="date"></div>
             <div class="field"><label>القيمة</label><input name="value" type="number" step="0.01" min="0"></div>
+            <div class="field"><label>الوزن (طن)</label><input name="weight" type="number" step="0.001" min="0" inputmode="decimal" placeholder="مثال: 2.5"></div>
             <div class="field" style="grid-column:span 2"><label>ملاحظات</label><input name="notes"></div>
             <div class="field ph-field" style="grid-column:1/-1"><label>صور وفيديو الأصل <span class="hint">— تُحفظ في Google Drive داخل مجلد منظّم حسب الفئة والأصل</span></label>
               <div class="ph-box">
@@ -3759,7 +3760,7 @@ const DEFAULT_LOGO = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAM
 
 const FIELDS = [
   ['code','رقم الباركود'],['name','اسم الأصل'],['odooId','رقم الأصل في أودو'],['odooName','اسم الأصل في أودو'],['category','الفئة'],['location','الموقع'],['dept','الإدارة / القسم'],
-  ['custodian','العهدة / المسؤول'],['serial','الرقم التسلسلي'],['purchaseDate','تاريخ الشراء'],['value','القيمة'],
+  ['custodian','العهدة / المسؤول'],['serial','الرقم التسلسلي'],['purchaseDate','تاريخ الشراء'],['value','القيمة'],['weight','الوزن (طن)'],
   ['status','الحالة'],['notes','ملاحظات'],['createdAt','تاريخ التسجيل'],['printCount','عدد مرات الطباعة'],['lastPrint','آخر طباعة'],['photos','الصور'],['ver','الإصدار']
 ];
 const ALIASES = { // extra header spellings accepted on import
@@ -3875,7 +3876,7 @@ function buildWorkbook(){return XLSX.write(buildWB(),{bookType:'xlsx',type:'arra
 function buildWB(){
   const wb=XLSX.utils.book_new();
   const head=[...FIELDS.map(f=>f[1]),...extraCols];
-  const data=[head,...assets.map(a=>[...FIELDS.map(([k])=>k==='value'||k==='printCount'?(a[k]===''?'':+a[k]):a[k]),...extraCols.map(h=>a._x?.[h]??'')])];
+  const data=[head,...assets.map(a=>[...FIELDS.map(([k])=>k==='value'||k==='weight'||k==='printCount'?(a[k]===''||a[k]==null?'':+a[k]):a[k]),...extraCols.map(h=>a._x?.[h]??'')])];
   const ws=XLSX.utils.aoa_to_sheet(data);ws['!cols']=head.map((h,i)=>({wch:[18,32,20,18,18,18,18,13,12,12,28,13,10,17][i]||16}));ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(assets.length,1),c:head.length-1}})};
   XLSX.utils.book_append_sheet(wb,ws,'الأصول');
   const cs=XLSX.utils.aoa_to_sheet([['اسم الفئة','الرمز'],...settings.cats.map(c=>[c.name,c.code])]);cs['!cols']=[{wch:28},{wch:10}];XLSX.utils.book_append_sheet(wb,cs,'الفئات');
@@ -3948,7 +3949,7 @@ let SH=Object.assign({seq:0,base:{},secs:{},logLen:0},load('rkm_sync')||{});
 let OPS=load('rkm_ops')||[];const renameHint={};const waiters={};
 function saveSH(){store('rkm_sync',SH)}function saveOps(){store('rkm_ops',OPS)}
 function cacheState(){store('rkm_backup',{assets,printLog,extraCols,settings,odoo,odooMeta,t:nowStr()})}
-function assetRow(a){const o={};FIELDS.forEach(([k,l])=>{if(k==='ver')return;o[l]=k==='value'||k==='printCount'?(a[k]===''||a[k]==null?'':+a[k]):(a[k]??'')});extraCols.forEach(h=>o[h]=a._x?.[h]??'');return o}
+function assetRow(a){const o={};FIELDS.forEach(([k,l])=>{if(k==='ver')return;o[l]=k==='value'||k==='weight'||k==='printCount'?(a[k]===''||a[k]==null?'':+a[k]):(a[k]??'')});extraCols.forEach(h=>o[h]=a._x?.[h]??'');return o}
 const snap=a=>JSON.stringify(assetRow(a));
 function secRows(k){const wb=buildWB(),n=SECN[k],ws=wb.Sheets[n];let rows=ws?XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:true}):[];
   if(k==='settings')rows=rows.filter(r=>r[0]!=='آخر تحديث');return rows}
@@ -4456,7 +4457,7 @@ function renderDash(){
 function statusPill(s){const m={'جديد':'p-ok','جيد':'p-ok','متوسط':'p-warn','يحتاج صيانة':'p-warn','تالف':'p-bad','مستبعد':'p-gray'};return s?`<span class="pill ${m[s]||'p-gray'}">${esc(s)}</span>`:''}
 let selected=new Set();
 const normAr=t=>String(t??'').toLowerCase().replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
-function searchText(a){return normAr([a.code,a.name,a.category,a.location,a.dept,a.custodian,a.serial,a.purchaseDate,a.value,a.status,a.notes,a.odooId,a.odooName,a.createdAt,a.lastPrint,photosOf(a).map(p=>p.t).join(' ')].join(' | '))}
+function searchText(a){return normAr([a.code,a.name,a.category,a.location,a.dept,a.custodian,a.serial,a.purchaseDate,a.value,a.weight,a.status,a.notes,a.odooId,a.odooName,a.createdAt,a.lastPrint,photosOf(a).map(p=>p.t).join(' ')].join(' | '))}
 function filtered(){const qs=normAr($('#q').value.trim()).split(/\s+/).filter(Boolean),c=$('#fCat').value,l=$('#fLoc').value,dp=$('#fDept').value,cu=$('#fCust').value,p=$('#fPrint').value,od=$('#fOdoo').value;
   return assets.filter(a=>(!qs.length||(t=>qs.every(w=>t.includes(w)))(searchText(a)))&&(!c||a.category===c)&&(!l||a.location===l)&&(!dp||a.dept===dp)&&(!cu||a.custodian===cu)&&(p===''||(p==='1')===(+a.printCount>0))&&(od===''||(od==='1')===!!a.odooId))}
 /* ---- أعمدة سجل الأصول (قابلة للإظهار/الإخفاء) ---- */
@@ -4470,6 +4471,7 @@ const COLS=[
  {k:'serial',l:'الرقم التسلسلي',w:7,d:true,td:a=>`<td data-l="الرقم التسلسلي" class="mono${a.serial?'':' e'}">${esc(a.serial)||'—'}</td>`},
  {k:'purchaseDate',l:'تاريخ الشراء',w:7,d:true,td:a=>`<td data-l="تاريخ الشراء" class="num${a.purchaseDate?'':' e'}">${esc(a.purchaseDate)||'—'}</td>`},
  {k:'value',l:'القيمة',w:7,d:true,td:a=>`<td data-l="القيمة" class="num${a.value!==''&&a.value!=null?'':' e'}">${a.value!==''&&a.value!=null?`<b>${fmtNum(a.value)}</b> <small>د.ل</small>`:'—'}</td>`},
+ {k:'weight',l:'الوزن (طن)',w:5.5,d:false,td:a=>`<td data-l="الوزن (طن)" class="num${a.weight!==''&&a.weight!=null?'':' e'}">${a.weight!==''&&a.weight!=null?`<b>${fmtNum(a.weight)}</b> <small>طن</small>`:'—'}</td>`},
  {k:'status',l:'الحالة',w:5.5,d:true,td:a=>`<td data-l="الحالة">${statusPill(a.status)||'—'}</td>`},
  {k:'print',l:'الطباعة',w:5.5,d:true,td:a=>`<td data-l="الطباعة">${+a.printCount>0?`<span class="pill p-ok">${a.printCount}×</span>`:'<span class="pill p-gray">لم يُطبع</span>'}</td>`},
  {k:'notes',l:'ملاحظات',w:11,d:true,td:a=>`<td data-l="ملاحظات" class="nts${a.notes?'':' e'}"${a.notes?` title="${esc(a.notes)}"`:''}>${a.notes?`<span>${esc(a.notes)}</span>`:'—'}</td>`},
@@ -4500,20 +4502,20 @@ function renderCatTable(){$('#catTb').innerHTML=settings.cats.map((c,i)=>`<tr><t
 /* ================= Form ================= */
 function resetForm(){const f=$('#af');f.reset();editingCode=null;phInitForm(null);$('#formTitle').textContent='تسجيل أصل جديد';fillCatSelect();f.status.value='جيد';f.code.value=nextCode(f.category.value);f.code.readOnly=false;setOdooPick('');$('#codeHint').textContent='يُولَّد الرقم تلقائياً حسب الفئة ويُتحقق من عدم تكراره.'}
 function editAsset(code){const a=assets.find(x=>x.code===code);if(!a)return;go('form');editingCode=code;const f=$('#af');$('#formTitle').textContent='تعديل أصل: '+a.code;fillCatSelect();
-  ['odooId','name','category','status','location','dept','custodian','serial','purchaseDate','value','notes','code'].forEach(k=>{if(f[k])f[k].value=a[k]??''});
+  ['odooId','name','category','status','location','dept','custodian','serial','purchaseDate','value','weight','notes','code'].forEach(k=>{if(f[k])f[k].value=a[k]??''});
   setOdooPick(a.odooId);phInitForm(a);
   if(a.category&&!settings.cats.some(c=>c.name===a.category)){f.category.insertAdjacentHTML('beforeend',`<option>${esc(a.category)}</option>`);f.category.value=a.category}
   $('#codeHint').textContent=+a.printCount>0?'تنبيه: هذا الأصل له ملصق مطبوع. تغيير الرقم يتطلب إعادة طباعة الملصق.':'يمكنك تعديل الرقم ما دام غير مكرر.'}
 async function submitForm(e){
   e.preventDefault();const f=e.target,andPrint=e.submitter&&e.submitter.name==='saveprint';
-  const d={};['odooId','name','category','status','location','dept','custodian','serial','purchaseDate','value','notes','code'].forEach(k=>d[k]=f[k].value.trim());
+  const d={};['odooId','name','category','status','location','dept','custodian','serial','purchaseDate','value','weight','notes','code'].forEach(k=>d[k]=f[k].value.trim());
   if(!d.name)return toast('اسم الأصل مطلوب',1);
   if(!d.code)d.code=nextCode(d.category);
   d.code=d.code.replace(/\s+/g,'');
   if(assets.some(a=>a.code===d.code&&a.code!==editingCode))return toast('رقم الباركود مستخدم لأصل آخر',1);
   if(d.odooId){const o=!settings.odooMulti&&assets.find(a=>a.odooId===d.odooId&&a.code!==editingCode);if(o)return toast(`أصل أودو ${d.odooId} مربوط مسبقاً بالأصل ${o.code}`,1);const r=odoo.find(r=>r.id===d.odooId);d.odooName=r?r.name:(assets.find(a=>a.code===editingCode)?.odooName||'')}else d.odooName='';
   if(prefs.fmt==='EAN13'&&!/^\d{12,13}$/.test(d.code))toast('ملاحظة: نوع الباركود الحالي EAN-13 ويتطلب أرقاماً فقط',1);
-  const LBL={name:'اسم الأصل',code:'رقم الباركود',odooId:'رقم أودو',category:'الفئة',status:'الحالة',location:'الموقع',dept:'الإدارة / القسم',custodian:'العهدة / المسؤول',serial:'الرقم التسلسلي',purchaseDate:'تاريخ الشراء',value:'القيمة',notes:'ملاحظات'};
+  const LBL={weight:'الوزن (طن)',name:'اسم الأصل',code:'رقم الباركود',odooId:'رقم أودو',category:'الفئة',status:'الحالة',location:'الموقع',dept:'الإدارة / القسم',custodian:'العهدة / المسؤول',serial:'الرقم التسلسلي',purchaseDate:'تاريخ الشراء',value:'القيمة',notes:'ملاحظات'};
   const row=(k,v)=>`<tr><td>${LBL[k]}</td><td>${v}</td></tr>`;
   if(editingCode){const o=assets.find(x=>x.code===editingCode);
     const ch=Object.keys(LBL).filter(k=>String(o[k]??'')!==String(d[k]??''));
@@ -4803,7 +4805,7 @@ function assetReportHTML(list){
     const repNo=`أ.ث / ${a.code} / ${now.getFullYear()}${p2(now.getMonth()+1)}${p2(now.getDate())}`;
     const kv=[['رقم الباركود',`<span class="mono">${esc(a.code)}</span>`],['الفئة',v(a.category)],['الحالة',a.status?`<span class="st ${stCls(a.status)}">${esc(a.status)}</span>`:mu],
       ['الموقع',v(a.location)],['الإدارة / القسم',v(a.dept)],['العهدة / المسؤول',v(a.custodian)],['الرقم التسلسلي للمصنع',a.serial?`<span class="mono">${esc(a.serial)}</span>`:mu],
-      ['تاريخ الشراء',v(a.purchaseDate)],['القيمة',money(a.value)],['ربط أودو',a.odooId?`<span class="mono">${esc(a.odooId)}</span>${a.odooName?` — ${esc(a.odooName)}`:''}`:'<span class="mu">غير مربوط</span>'],
+      ['تاريخ الشراء',v(a.purchaseDate)],['القيمة',money(a.value)],['الوزن',a.weight!==''&&a.weight!=null?`<span dir="ltr">${+a.weight}</span> طن`:mu],['ربط أودو',a.odooId?`<span class="mono">${esc(a.odooId)}</span>${a.odooName?` — ${esc(a.odooName)}`:''}`:'<span class="mu">غير مربوط</span>'],
       ['تاريخ التسجيل',v(a.createdAt)],['ملصق الباركود',+a.printCount?`طُبع ${+a.printCount} مرة${a.lastPrint?` · آخرها ${esc(a.lastPrint)}`:''}`:'<span class="mu">لم يُطبع بعد</span>']];
     const gal=photos.map((p,i)=>`<figure class="ph"><div class="im">${FULL[p.id]||TH[p.id]?`<img src="${FULL[p.id]||TH[p.id]}" alt="">`:'<span class="mu">تعذّر تحميل الصورة</span>'}<span class="no">${i+1}</span></div><figcaption><b>${esc(p.t||'صورة')}</b><span>${esc(p.d||'')}</span></figcaption></figure>`).join('');
     const vid=vids.map((p,i)=>{const url='https://drive.google.com/file/d/'+p.id+'/view';return `<div class="vd"><div class="vt">${TH[p.id]?`<img src="${TH[p.id]}" alt="">`:''}<i></i>${p.dur?`<em>${fmtDur(p.dur)}</em>`:''}</div><div class="vi"><b>${esc(p.t||'مقطع فيديو')} ${vids.length>1?i+1:''}</b><span>تاريخ الإضافة: ${esc(p.d||'—')}${p.dur?` · المدة: ${fmtDur(p.dur)}`:''}</span><small>محفوظ في Google Drive — امسح الرمز لمشاهدة المقطع</small><span class="u" dir="ltr">${url}</span></div><div class="qr">${qrSVG(url)}</div></div>`}).join('');
