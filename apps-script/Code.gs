@@ -8,6 +8,7 @@
  */
 const A_SHEET = 'الأصول', CODE_H = 'رقم الباركود', VER_H = 'الإصدار', DEL_SHEET = '_محذوفات';
 const SECTIONS = { odoo: 'أصول أودو', settings: 'الإعدادات', cats: 'الفئات', log: 'سجل الطباعة' };
+const VIEW_OK = ['init', 'ping', 'sync', 'thumbs', 'photoGet'];
 const PH_ROOT = 'صور أصول راكان', TH_SHEET = '_مصغّرات';
 const LEGACY = ['الأصول', 'أصول أودو', 'الفئات', 'سجل الطباعة', 'الإعدادات'];
 const TEXT_COL = /رقم|باركود|الكود|الرمز|تاريخ|التاريخ|آخر طباعة|المقاس/;
@@ -21,7 +22,16 @@ function doPost(e) {
 
 /* ---------- auth ---------- */
 function handle_(p) {
-  const props = PropertiesService.getScriptProperties(), stored = props.getProperty('key');
+  const props = PropertiesService.getScriptProperties(), stored = props.getProperty('key'), vkey = props.getProperty('viewKey');
+  /* رابط العرض فقط: مفتاح منفصل يسمح بالقراءة وحدها، وأي عملية كتابة تُرفض من الخادم */
+  if (vkey && p.key && p.key === vkey) {
+    if (VIEW_OK.indexOf(p.action) < 0) return out_({ ok: false, error: 'read_only' });
+    const ss0 = SpreadsheetApp.getActiveSpreadsheet();
+    if (p.action === 'init' || p.action === 'ping') return out_({ ok: true, name: ss0.getName(), rev: rev_(), seq: seq_(), v: 2, view: true });
+    if (p.action === 'sync') return out_(sync_(ss0, +p.since || 0));
+    if (p.action === 'thumbs') return out_(thumbs_(ss0, p));
+    if (p.action === 'photoGet') return out_(photoGet_(p));
+  }
   if (p.action === 'init') {
     if (!p.key || String(p.key).length < 24) return out_({ ok: false, error: 'weak_key' });
     if (stored && stored !== p.key) return out_({ ok: false, error: 'unauthorized' });
@@ -40,6 +50,11 @@ function handle_(p) {
   if (a === 'videoChunk') return out_(videoChunk_(p));      // خارج القفل: رفع جزء قد يستغرق ثوانٍ
   if (a === 'videoStatus') return out_(videoStatus_(p));
   if (a === 'shareAll') return out_(shareAll_());
+  if (a === 'viewLink') {                                   // إنشاء/قراءة/تجديد/إلغاء رابط العرض فقط (بالمفتاح الكامل فقط)
+    if (p.op === 'off') { props.deleteProperty('viewKey'); return out_({ ok: true, token: '' }); }
+    if (p.op === 'new' || !vkey) { const t = 'v-' + Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, ''); props.setProperty('viewKey', t); return out_({ ok: true, token: t, created: true }); }
+    return out_({ ok: true, token: vkey });
+  }
   // ---- writes ----
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
