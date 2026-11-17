@@ -254,6 +254,33 @@ body.am-open::after{content:"";position:fixed;inset:0;background:rgba(8,30,60,.3
 .hp-f{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
 .hp-f>span{display:flex;gap:5px}.hp-f small{color:var(--gold);font-weight:700;font-size:11px}
 @media (max-width:1180px){.nmi,.atbl .pchip{display:none}}
+/* view-only mode */
+#viewBar{display:none}
+html.viewonly #viewBar{display:flex;align-items:center;gap:9px;margin:0 0 14px;padding:9px 14px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px}
+#viewBar svg{width:19px;height:19px;flex:none}
+html.viewonly .nav[data-v="form"],html.viewonly .nav[data-v="label"],html.viewonly .nav[data-v="settings"],html.viewonly #bOpen,html.viewonly #bNew,html.viewonly #bSave,html.viewonly #bPrintSel,html.viewonly #bImport,html.viewonly #bExport,html.viewonly #bView,html.viewonly #syncBar,html.viewonly #loginM{display:none!important}
+html.viewonly .bnav{grid-template-columns:repeat(2,1fr)!important}
+#viewErr{display:none;position:fixed;inset:0;z-index:200;background:rgba(8,30,60,.75);align-items:center;justify-content:center;padding:20px}
+#viewErr.on{display:flex}#viewErr>div{background:#fff;border-radius:16px;padding:24px;max-width:420px;text-align:center;display:flex;flex-direction:column;gap:8px}#viewErr b{color:var(--bad);font-size:17px}#viewErr span{color:var(--muted);font-size:14px;line-height:1.7}
+#vlM,#dtM{padding:16px}.vl,.dt{background:#fff;border-radius:18px;width:min(640px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 70px rgba(8,30,60,.35)}
+.vl-b{padding:16px 18px;display:flex;flex-direction:column;gap:12px}.vl-p{margin:0;font-size:13.5px;line-height:1.8;color:var(--ink)}
+.vl-in{display:flex;gap:8px}.vl-in input{flex:1;min-width:0;font:12.5px Consolas,monospace;background:var(--tint)}
+.vl-act{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.vl-off{color:var(--bad)}
+.dt{width:min(820px,100%)}.dt-b{display:grid;grid-template-columns:42% 1fr;gap:16px;padding:16px 18px;overflow:auto}
+.dt-im{border-radius:12px;overflow:hidden;background:var(--tint);border:1px solid var(--line);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:zoom-in}.dt-im img{width:100%;height:100%;object-fit:cover}
+.dt-kv{width:100%;border-collapse:collapse;align-self:start}.dt-kv th{text-align:right;font-weight:700;color:var(--navy-2);background:var(--tint);padding:7px 10px;border-bottom:1px solid var(--line);width:38%;font-size:12.5px}.dt-kv td{padding:7px 10px;border-bottom:1px solid var(--line);font-size:13px}
+@media (max-width:820px){#vlM,#dtM{padding:0;align-items:stretch}.vl,.dt{border-radius:0;max-height:none;height:100%}.dt-b{grid-template-columns:1fr}.vl-in{flex-direction:column}}
+/* report config */
+#rcM{padding:16px}.rc{background:#fff;border-radius:18px;width:min(760px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 70px rgba(8,30,60,.35)}
+.rc-h{display:flex;align-items:center;gap:12px;padding:14px 18px;background:linear-gradient(135deg,var(--navy),#08386F);color:#fff}.rc-h>div{flex:1;min-width:0;display:flex;flex-direction:column}
+.rc-h b{font-size:16px}.rc-h span{font-size:12px;color:#cfe0f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-b{overflow:auto;padding:6px 18px 12px}.rc-b section{padding:12px 0;border-bottom:1px dashed var(--line);transition:opacity .15s}.rc-b section:last-child{border-bottom:0}.rc-b section.off{opacity:.45}
+.rc-b h4{margin:0 0 8px;font-size:13.5px;color:var(--navy)}
+.rc-g{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 10px}.rc-g.c3{grid-template-columns:repeat(3,1fr)}.rc-g.c4{grid-template-columns:repeat(4,1fr)}
+.rc-c{display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;font-size:13px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
+.rc-c:hover{background:var(--tint)}.rc-c input{width:17px;height:17px;accent-color:var(--navy);flex:none}.rc-c:has(input:checked){border-color:#a9c0e3;background:#f5f9ff}
+.rc-f{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--line);flex-wrap:wrap}.rc-f .hint{flex:1}.rc-f #rcGo svg{width:17px;height:17px}
+@media (max-width:820px){#rcM{padding:0;align-items:stretch}.rc{border-radius:0;max-height:none;height:100%}.rc-g,.rc-g.c3,.rc-g.c4{grid-template-columns:1fr 1fr}.rc-f .hint{display:none}.rc-f #rcNo,.rc-f #rcGo{flex:1;justify-content:center}.rc-f{padding-bottom:calc(12px + env(safe-area-inset-bottom))}}
 /* media manager */
 #mmM{padding:16px}
 .mm{background:#fff;border-radius:18px;width:min(980px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 70px rgba(8,30,60,.35)}
@@ -678,6 +705,7 @@ html{-webkit-text-size-adjust:100%}
   </aside>
 
   <main>
+    <div id="viewBar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span><b>وضع العرض فقط</b> — تصفّح وفلترة وعرض الصور والطباعة، دون أي تعديل</span></div>
     <div class="top">
       <div class="ttl"><h1 id="vTitle">لوحة المتابعة</h1><p id="vSub">نظرة عامة على الأصول المسجلة وحالة الترميز</p></div>
       <div class="row">
@@ -729,6 +757,7 @@ html{-webkit-text-size-adjust:100%}
             <button class="btn gold" id="bPrintSel" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>طباعة المحدد</button>
             <button class="btn" id="bImport" title="دمج أصول من سجل Excel آخر">استيراد سجل</button>
             <button class="btn" id="bExport">تصدير نسخة</button>
+            <button class="btn" id="bView" title="رابط لمشاهدة سجل الأصول فقط بدون تعديل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.1 0l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"/></svg>رابط عرض</button>
             <button class="btn" id="bCols" title="إظهار أو إخفاء أعمدة الجدول"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg>الأعمدة</button>
             <button class="btn" id="bRepSel" disabled title="تقرير مفصّل لكل أصل محدد مع صوره"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>تقرير مفصّل للمحدد</button>
             <button class="btn pri" id="bReport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>طباعة تقرير</button>
@@ -995,6 +1024,29 @@ html{-webkit-text-size-adjust:100%}
 </div>
 
 <nav class="bnav"><button class="nav" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>لوحة</span></button><button class="nav" data-v="assets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>الأصول</span></button><button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg><span>تسجيل</span></button><button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg><span>الطباعة</span></button><button class="nav" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>الإعدادات</span></button></nav>
+<div class="modal" id="vlM"><div class="vl">
+  <div class="rc-h"><div><b>رابط العرض فقط</b><span>سجل الأصول للمشاهدة — بدون أي صلاحية تعديل</span></div><button type="button" class="mm-x" id="vlX" title="إغلاق">×</button></div>
+  <div class="vl-b">
+    <p class="vl-p">من يفتح هذا الرابط يرى سجل الأصول ويستطيع <b>البحث والفلترة وعرض التفاصيل والصور والفيديو وطباعة التقارير</b> فقط. لا يستطيع التسجيل أو التعديل أو الحذف أو رفع الصور أو طباعة الملصقات، ولا يحتاج رمز الدخول. والخادم نفسه يرفض أي محاولة تعديل بهذا الرابط.</p>
+    <div class="vl-in"><input id="vlUrl" readonly dir="ltr"><button type="button" class="btn pri" id="vlCopy">نسخ الرابط</button></div>
+    <div class="vl-act"><a class="btn sm" id="vlOpen" target="_blank" rel="noopener">فتح للتجربة</a><span style="flex:1"></span><button type="button" class="btn sm" id="vlNew">إلغاء هذا الرابط وإنشاء رابط جديد</button><button type="button" class="btn sm vl-off" id="vlOff">إيقاف رابط العرض</button></div>
+    <p class="hint" id="vlNote"></p>
+  </div></div></div>
+<div class="modal" id="dtM"><div class="dt">
+  <div class="rc-h"><div><b id="dtN"></b><span id="dtC" class="mono"></span></div><button type="button" class="mm-x" id="dtX" title="إغلاق">×</button></div>
+  <div class="dt-b"><div class="dt-im" id="dtIm"></div><table class="dt-kv" id="dtKv"></table></div>
+  <div class="rc-f"><button type="button" class="btn" id="dtMedia"></button><span style="flex:1"></span><button type="button" class="btn pri" id="dtRep">تقرير الأصل</button></div>
+</div></div>
+<div id="viewErr"><div><b>رابط العرض غير صالح</b><span>هذا الرابط أُلغي أو تغيّر. اطلب رابط العرض الجديد من مسؤول المنظومة.</span></div></div>
+<div class="modal" id="rcM"><div class="rc">
+  <div class="rc-h"><div><b>إعدادات التقرير المفصّل</b><span id="rcSub"></span></div><button type="button" class="mm-x" id="rcX" title="إغلاق">×</button></div>
+  <div class="rc-b">
+    <section><h4>أقسام التقرير</h4><div class="rc-g" id="rcSec"></div></section>
+    <section id="rcFwrap"><h4>حقول جدول بيانات الأصل</h4><div class="rc-g c3" id="rcF"></div></section>
+    <section id="rcStwrap"><h4>عناصر شريط الملخص</h4><div class="rc-g c4" id="rcSt"></div></section>
+  </div>
+  <div class="rc-f"><button type="button" class="btn sm" id="rcAll">تحديد الكل</button><button type="button" class="btn sm" id="rcDef">الافتراضي</button><span class="hint">يُحفظ اختيارك على هذا الجهاز</span><button type="button" class="btn" id="rcNo">إلغاء</button><button type="button" class="btn pri" id="rcGo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>طباعة التقرير</span></button></div>
+</div></div>
 <div class="modal" id="mmM"><div class="mm">
   <div class="mm-h"><div class="mm-tt"><small>صور وفيديو الأصل</small><b id="mmN"></b><span id="mmC" class="mono"></span></div><span class="mm-cnt" id="mmCnt"></span><button type="button" class="mm-x" id="mmX" title="إغلاق">×</button></div>
   <div class="mm-tb">
@@ -3366,6 +3418,7 @@ var qrcode = function() {
  */
 const A_SHEET = 'الأصول', CODE_H = 'رقم الباركود', VER_H = 'الإصدار', DEL_SHEET = '_محذوفات';
 const SECTIONS = { odoo: 'أصول أودو', settings: 'الإعدادات', cats: 'الفئات', log: 'سجل الطباعة' };
+const VIEW_OK = ['init', 'ping', 'sync', 'thumbs', 'photoGet'];
 const PH_ROOT = 'صور أصول راكان', TH_SHEET = '_مصغّرات';
 const LEGACY = ['الأصول', 'أصول أودو', 'الفئات', 'سجل الطباعة', 'الإعدادات'];
 const TEXT_COL = /رقم|باركود|الكود|الرمز|تاريخ|التاريخ|آخر طباعة|المقاس/;
@@ -3379,7 +3432,16 @@ function doPost(e) {
 
 /* ---------- auth ---------- */
 function handle_(p) {
-  const props = PropertiesService.getScriptProperties(), stored = props.getProperty('key');
+  const props = PropertiesService.getScriptProperties(), stored = props.getProperty('key'), vkey = props.getProperty('viewKey');
+  /* رابط العرض فقط: مفتاح منفصل يسمح بالقراءة وحدها، وأي عملية كتابة تُرفض من الخادم */
+  if (vkey && p.key && p.key === vkey) {
+    if (VIEW_OK.indexOf(p.action) < 0) return out_({ ok: false, error: 'read_only' });
+    const ss0 = SpreadsheetApp.getActiveSpreadsheet();
+    if (p.action === 'init' || p.action === 'ping') return out_({ ok: true, name: ss0.getName(), rev: rev_(), seq: seq_(), v: 2, view: true });
+    if (p.action === 'sync') return out_(sync_(ss0, +p.since || 0));
+    if (p.action === 'thumbs') return out_(thumbs_(ss0, p));
+    if (p.action === 'photoGet') return out_(photoGet_(p));
+  }
   if (p.action === 'init') {
     if (!p.key || String(p.key).length < 24) return out_({ ok: false, error: 'weak_key' });
     if (stored && stored !== p.key) return out_({ ok: false, error: 'unauthorized' });
@@ -3398,6 +3460,11 @@ function handle_(p) {
   if (a === 'videoChunk') return out_(videoChunk_(p));      // خارج القفل: رفع جزء قد يستغرق ثوانٍ
   if (a === 'videoStatus') return out_(videoStatus_(p));
   if (a === 'shareAll') return out_(shareAll_());
+  if (a === 'viewLink') {                                   // إنشاء/قراءة/تجديد/إلغاء رابط العرض فقط (بالمفتاح الكامل فقط)
+    if (p.op === 'off') { props.deleteProperty('viewKey'); return out_({ ok: true, token: '' }); }
+    if (p.op === 'new' || !vkey) { const t = 'v-' + Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, ''); props.setProperty('viewKey', t); return out_({ ok: true, token: t, created: true }); }
+    return out_({ ok: true, token: vkey });
+  }
   // ---- writes ----
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(15000)) return out_({ ok: false, error: 'busy' });
@@ -3797,8 +3864,11 @@ if(prefs.fmt==='EAN13')prefs.fmt='ODOO';
 
 /* ================= Utils ================= */
 const $ = s=>document.querySelector(s), $$ = s=>[...document.querySelectorAll(s)];
-function load(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
-function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+/* وضع العرض فقط: رابط فيه #view=<رمز> — بيانات الجهاز تُحفظ بمفاتيح منفصلة حتى لا تختلط بحساب كامل على نفس المتصفح */
+const VIEWT=(location.hash.match(/(?:^#|&)view=([A-Za-z0-9-]{20,})/)||[])[1]||'',VIEW=!!VIEWT;if(VIEW)document.documentElement.classList.add('viewonly');
+const lsk=k=>VIEW?String(k).replace(/^rkm_/,'rkmv_'):k;
+function load(k){try{return JSON.parse(localStorage.getItem(lsk(k)))}catch(e){return null}}
+function store(k,v){try{localStorage.setItem(lsk(k),JSON.stringify(v))}catch(e){}}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function today(){const d=new Date();return d.toISOString().slice(0,10)}
 function nowStr(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`}
@@ -3915,13 +3985,14 @@ async function save(silent){
   }catch(e){toast(e.name==='NoModificationAllowedError'||/lock|busy|in use/i.test(e.message)?'الملف مفتوح في Excel — أغلقه ثم أعد الحفظ':'فشل الحفظ: '+e.message,1);dirty=true;setConn()}
   saving=false;
 }
-async function commit(){if(GS()){gsCommit();renderAll();return}dirty=true;setConn();store('rkm_backup',{assets,printLog,extraCols,settings,odoo,odooMeta,t:nowStr()});
+async function commit(){if(VIEW)return;if(GS()){gsCommit();renderAll();return}dirty=true;setConn();store('rkm_backup',{assets,printLog,extraCols,settings,odoo,odooMeta,t:nowStr()});
   if(needLogin())showLogin('سجّل الدخول لحفظ التغييرات في قاعدة البيانات المشتركة.');else if(fileHandle)await save(true);renderAll()}
 
 /* ================= Google Sheets data source ================= */
 const DEFAULT_GS='https://script.google.com/macros/s/AKfycbze8fynGES3KTpdepXYgkbn6JJ0z5RbB0OgL6epb19koqJILpNfZY1lno3uRTC46x4F/exec'.startsWith('https:')?'https://script.google.com/macros/s/AKfycbze8fynGES3KTpdepXYgkbn6JJ0z5RbB0OgL6epb19koqJILpNfZY1lno3uRTC46x4F/exec':'';
 let ds=Object.assign({mode:DEFAULT_GS?'gsheet':'excel',url:DEFAULT_GS,key:''},load('rkm_ds')||{});
 if(ds.mode==='gsheet'&&!ds.url)ds.url=DEFAULT_GS;
+if(VIEW)ds={mode:'gsheet',url:DEFAULT_GS,key:VIEWT};
 const GS=()=>ds.mode==='gsheet'&&!!ds.url&&!!ds.key;
 const needLogin=()=>ds.mode==='gsheet'&&!!ds.url&&!ds.key;
 /* SHA-256 (للاشتقاق من رمز الدخول) */
@@ -3976,7 +4047,7 @@ function diffOps(){
   if(printLog.length>SH.logLen){const lh=['التاريخ','رقم الباركود','اسم الأصل','المقاس','عدد النسخ'];OPS.push({t:'log',rows:printLog.slice(SH.logLen).map(r=>lh.map(h=>r[h]??'')),id:Date.now()+Math.random()});SH.logLen=printLog.length}
   saveOps();saveSH();
 }
-function gsCommit(){diffOps();cacheState();setConn();pump()}
+function gsCommit(){if(VIEW)return;diffOps();cacheState();setConn();pump()}
 function renameLocal(from,to){const a=assets.find(x=>x.code===from);if(!a)return;a.code=to;phRename(from,to);if(SH.base[from]){SH.base[to]=SH.base[from];delete SH.base[from]}
   if(selected.has(from)){selected.delete(from);selected.add(to)}queue=queue.map(c=>c===from?to:c);if($('#pvAsset').value===from)$('#pvAsset').value=to;
   OPS.forEach(o=>{if(o.code===from)o.code=to;if(o.codes)o.codes=o.codes.map(c=>c===from?to:c);if(o.news)o.news=o.news.map(c=>c===from?to:c)});
@@ -3984,7 +4055,7 @@ function renameLocal(from,to){const a=assets.find(x=>x.code===from);if(!a)return
 function serverAsset(head,row){const obj=Array.isArray(row)?Object.fromEntries(head.map((h,i)=>[h,row[i]])):row;const a=rowsToAssets([obj]).list[0];if(a){a.odooId=String(a.odooId??'').trim();a.odooName=String(a.odooName??'')}return a}
 function acceptServer(a){const i=assets.findIndex(x=>x.code===a.code);if(i>=0)assets[i]=a;else assets.push(a);SH.base[a.code]={s:snap(a),ver:a.ver}}
 /** إرسال الطابور بالترتيب */
-async function pump(){
+async function pump(){if(VIEW)return;
   if(pumping||!GS()||!OPS.length)return;pumping=true;setConn();
   try{while(OPS.length&&GS()){const op=OPS[0];op.inflight=true;let res;
     try{res=await sendOp(op)}catch(e){op.inflight=false;
@@ -4077,9 +4148,9 @@ const IDB={db:null,
   all(store){return this.open().then(d=>new Promise(res=>{const out=[],c=d.transaction(store,'readonly').objectStore(store).openCursor();
     c.onsuccess=()=>{const x=c.result;if(x){out.push([x.key,x.value]);x.continue()}else res(out)};c.onerror=()=>res(out)})).catch(()=>[])}};
 let shareBusy=false;
-async function phShareOnce(){try{if(shareBusy||!GS()||needLogin()||localStorage.getItem('rkm_shared2')==='1')return;shareBusy=true;
+async function phShareOnce(){try{if(VIEW||shareBusy||!GS()||needLogin()||localStorage.getItem('rkm_shared2')==='1')return;shareBusy=true;
   const r=await gsCall('shareAll',{});if(r.done)localStorage.setItem('rkm_shared2','1')}catch(e){}finally{shareBusy=false}}
-async function phLoad(){(await IDB.all('thumbs')).forEach(([k,v])=>TH[k]=v);PQ=(await IDB.all('pq')).map(([,v])=>v).sort((a,b)=>a.at-b.at);for(const q of PQ)if(q.k==='vid'&&!q.blob)q.blob=await IDB.get('blobs',q.qid);
+async function phLoad(){(await IDB.all('thumbs')).forEach(([k,v])=>TH[k]=v);PQ=VIEW?[]:(await IDB.all('pq')).map(([,v])=>v).sort((a,b)=>a.at-b.at);for(const q of PQ)if(q.k==='vid'&&!q.blob)q.blob=await IDB.get('blobs',q.qid);
   if(assets.length)renderTable();phPump();setTimeout(phShareOnce,4000)}
 /* ---- مصغّرات ---- */
 let thWant=new Set(),thTimer=null;const thInflight=new Set();
@@ -4141,7 +4212,7 @@ function phRename(from,to){PQ.forEach(q=>{if(q.code===from){q.code=to;pqSave(q)}
 function pqSave(q){const {blob,...m}=q;return IDB.put('pq',m)}
 async function phDrop(q){PQ=PQ.filter(x=>x.qid!==q.qid);await IDB.del('pq',q.qid);if(q.k==='vid')IDB.del('blobs',q.qid)}
 /* ---- الرفع في الخلفية (يُستأنف تلقائياً بعد انقطاع الإنترنت) ---- */
-async function phPump(){if(phBusy||!GS()||needLogin()||syncing||!PQ.length||navigator.onLine===false)return;phBusy=true;let up=0,del=0,vids=0,changed=false,cur=null;
+async function phPump(){if(VIEW||phBusy||!GS()||needLogin()||syncing||!PQ.length||navigator.onLine===false)return;phBusy=true;let up=0,del=0,vids=0,changed=false,cur=null;
   try{const pend=pendingCodes();
     for(const q of [...PQ.filter(x=>x.k!=='vid'),...PQ.filter(x=>x.k==='vid')]){cur=q;
       if(q.k==='up'){const a=assets.find(x=>x.code===q.code);if(!a){await phDrop(q);continue}if(pend.has(q.code))continue;
@@ -4263,7 +4334,7 @@ setTimeout(phLoad,0);
 /* ===== مدير صور وفيديو الأصل (من قائمة الإجراءات) ===== */
 let mmCode='';
 function mmAsset(){return assets.find(a=>a.code===mmCode)}
-function openMedia(code){const a=assets.find(x=>x.code===code);if(!a)return;mmCode=code;
+function openMedia(code){const a=assets.find(x=>x.code===code);if(!a)return;if(VIEW){const g=assetGallery(a);return g.length?phOpen(g,0,a.code):toast('لا توجد صور أو فيديو لهذا الأصل')}mmCode=code;
   if(!GS()||needLogin())return toast('الصور والفيديو تتوفّر عند الاتصال بقاعدة بيانات Google Sheets',1);
   const sel=$('#mmType');if(!sel.options.length)sel.innerHTML=PH_TYPES.map(t=>`<option>${t}</option>`).join('');
   $('#mmN').textContent=a.name;$('#mmC').textContent=a.code;$('#mmM').classList.add('on');mmRender();
@@ -4337,7 +4408,7 @@ window.addEventListener('online',()=>syncTick());
 /* ---- login on this device ---- */
 let loginBusy=false;
 function showLogin(msg){$('#loginLogo').src=logo()||'';$('#loginLogo').hidden=!logo();$('#loginMsg').textContent=msg||'أدخل رمز الدخول للاتصال بقاعدة البيانات المشتركة. يُطلب مرة واحدة على هذا الجهاز.';$('#loginErr').textContent='';$('#loginIn').value='';$('#loginM').classList.add('on');setTimeout(()=>$('#loginIn').focus(),60)}
-function logoutDevice(msg){ds.key='';store('rkm_ds',ds);gsName='';setConn();showLogin(msg)}
+function logoutDevice(msg){if(VIEW){viewInvalid();return}ds.key='';store('rkm_ds',ds);gsName='';setConn();showLogin(msg)}
 async function doLogin(){if(loginBusy)return;const code=$('#loginIn').value.trim();$('#loginIn').value='';if(!code){$('#loginErr').textContent='أدخل رمز الدخول';return}
   loginBusy=true;$('#loginYes').disabled=true;$('#loginErr').textContent='';const key=keyFromCode(code),c={mode:'gsheet',url:ds.url,key};
   try{let first=false;try{await gsCall('ping',{},c)}catch(e){if(e.code==='not_initialized')first=true;else throw e}
@@ -4345,7 +4416,7 @@ async function doLogin(){if(loginBusy)return;const code=$('#loginIn').value.trim
       $('#loginM').classList.remove('on');const ok=await confirmBox('تحديد رمز الدخول','هذا أول دخول للمنظومة. الرمز الذي أدخلته سيصبح <b>رمز الدخول لكل الأجهزة</b>. احفظه في مكان آمن وأعطه لمن يستخدم المنظومة فقط.','اعتماد الرمز');
       if(!ok){showLogin();return}await gsCall('init',{},c)}
     ds=c;store('rkm_ds',ds);$('#loginM').classList.remove('on');fileHandle=null;fileName='';
-    const b=load('rkm_backup');if(b&&b.pending&&!load('rkm_sync'))SH.recover=assets.slice();await pull(true);
+    const b=load('rkm_backup');if(!VIEW&&b&&b.pending&&!load('rkm_sync'))SH.recover=assets.slice();await pull(true);
     toast('تم الدخول — متصل بقاعدة البيانات المشتركة');SFX.play('login');renderAll();dsRender()}
   catch(e){SFX.play('err');$('#loginM').classList.add('on');$('#loginErr').textContent=e.code==='unauthorized'?'رمز الدخول غير صحيح':e.message}
   finally{loginBusy=false;$('#loginYes').disabled=false}}
@@ -4446,7 +4517,7 @@ function isUnlocked(){return unlocked}
 function askLock(next){lockNext=next;$('#lockIn').value='';$('#lockErr').textContent='';$('#lockM').classList.add('on');setTimeout(()=>$('#lockIn').focus(),50)}
 function tryUnlock(){const v=$('#lockIn').value.trim();$('#lockIn').value='';if(lockHash(v)===LOCK_H){unlocked=true;$('#lockM').classList.remove('on');const n=lockNext;lockNext=null;if(n)n()}
   else{SFX.play('err');$('#lockErr').textContent='كلمة السر غير صحيحة';$('#lockIn').focus()}}
-function go(v){if(v==='settings'&&!isUnlocked()){SFX.play('pop');return askLock(()=>go('settings'))}SFX.play('nav');const mt=document.getElementById('mTitle');if(mt)mt.textContent=TITLES[v][0];$$('.nav').forEach(n=>n.classList.toggle('on',n.dataset.v===v));$$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));$('#vTitle').textContent=TITLES[v][0];$('#vSub').textContent=TITLES[v][1];if(v==='label')renderDesigner();if(v==='form'&&!editingCode)resetForm();window.scrollTo(0,0)}
+function go(v){if(VIEW&&v!=='dash'&&v!=='assets')v='assets';if(v==='settings'&&!isUnlocked()){SFX.play('pop');return askLock(()=>go('settings'))}SFX.play('nav');const mt=document.getElementById('mTitle');if(mt)mt.textContent=TITLES[v][0];$$('.nav').forEach(n=>n.classList.toggle('on',n.dataset.v===v));$$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));$('#vTitle').textContent=TITLES[v][0];$('#vSub').textContent=TITLES[v][1];if(v==='label')renderDesigner();if(v==='form'&&!editingCode)resetForm();window.scrollTo(0,0)}
 function renderAll(){renderOdooList();renderMulti();renderDash();renderTable();renderFilters();renderCatTable();fillCatSelect();if($('#v-label').classList.contains('on'))renderDesigner()}
 function bars(el,map){const e=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,8),m=Math.max(1,...e.map(x=>x[1]));el.innerHTML=e.length?e.map(([k,v])=>`<div class="bar"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(k)}</span><div class="tr"><div class="fl" style="width:${v/m*100}%"></div></div><b>${v}</b></div>`).join(''):'<div class="hint">لا توجد بيانات بعد</div>'}
 function renderDash(){
@@ -4501,7 +4572,7 @@ function renderCatTable(){$('#catTb').innerHTML=settings.cats.map((c,i)=>`<tr><t
 
 /* ================= Form ================= */
 function resetForm(){const f=$('#af');f.reset();editingCode=null;phInitForm(null);$('#formTitle').textContent='تسجيل أصل جديد';fillCatSelect();f.status.value='جيد';f.code.value=nextCode(f.category.value);f.code.readOnly=false;setOdooPick('');$('#codeHint').textContent='يُولَّد الرقم تلقائياً حسب الفئة ويُتحقق من عدم تكراره.'}
-function editAsset(code){const a=assets.find(x=>x.code===code);if(!a)return;go('form');editingCode=code;const f=$('#af');$('#formTitle').textContent='تعديل أصل: '+a.code;fillCatSelect();
+function editAsset(code){if(VIEW){openDetails(code);return}const a=assets.find(x=>x.code===code);if(!a)return;go('form');editingCode=code;const f=$('#af');$('#formTitle').textContent='تعديل أصل: '+a.code;fillCatSelect();
   ['odooId','name','category','status','location','dept','custodian','serial','purchaseDate','value','weight','notes','code'].forEach(k=>{if(f[k])f[k].value=a[k]??''});
   setOdooPick(a.odooId);phInitForm(a);
   if(a.category&&!settings.cats.some(c=>c.name===a.category)){f.category.insertAdjacentHTML('beforeend',`<option>${esc(a.category)}</option>`);f.category.value=a.category}
@@ -4785,15 +4856,59 @@ function openReport(html){
 function barcodeSVG(v){try{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');JsBarcode(s,v,{format:'CODE128',displayValue:false,margin:0,height:44,width:1.5,background:'#fff',lineColor:'#000'});return s.outerHTML}catch(e){return ''}}
 function qrSVG(t){try{const q=qrcode(0,'M');q.addData(t);q.make();return q.createSvgTag({cellSize:3,margin:0})}catch(e){return ''}}
 function fmtDur(s){s=Math.round(+s||0);return s?`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`:''}
-async function printAssetReport(codes){
+/* ---- عرض تفاصيل الأصل (وضع العرض فقط) ---- */
+let dtCode='';
+function openDetails(code){const a=assets.find(x=>x.code===code);if(!a)return;dtCode=code;const m=mainPhoto(a),c=mediaCounts(a),n=c.p+c.v;
+  $('#dtN').textContent=a.name;$('#dtC').textContent=a.code;
+  $('#dtIm').innerHTML=m?`<img ${m.v?'':`data-ph="${esc(m.id)}"`} src="${(!m.v&&FULL[m.id])||TH[m.id]||PIX}" alt="">`:'لا توجد صورة';if(m&&!TH[m.id])needThumbs([m.id]);
+  if(m&&!m.v&&!FULL[m.id])gsCall('photoGet',{id:m.id}).then(r=>{FULL[m.id]=`data:${r.mime||'image/jpeg'};base64,${r.data}`;if(dtCode===code){const i=$('#dtIm img');if(i)i.src=FULL[m.id]}}).catch(()=>{});
+  const row=(l,x)=>x===''||x==null?'':`<tr><th>${l}</th><td>${x}</td></tr>`;
+  $('#dtKv').innerHTML=row('رقم الباركود',`<span class="mono">${esc(a.code)}</span>`)+row('الفئة',esc(a.category))+row('الحالة',a.status?statusPill(a.status):'')+row('الموقع',esc(a.location))+row('الإدارة / القسم',esc(a.dept))+row('العهدة / المسؤول',esc(a.custodian))+row('الرقم التسلسلي',a.serial?`<span class="mono">${esc(a.serial)}</span>`:'')+row('تاريخ الشراء',esc(a.purchaseDate))+row('القيمة',a.value!==''&&a.value!=null?`${fmtNum(a.value)} د.ل`:'')+row('الوزن',a.weight!==''&&a.weight!=null?`${+a.weight} طن`:'')+row('ربط أودو',a.odooId?esc(a.odooId+(a.odooName?' — '+a.odooName:'')):'')+row('ملاحظات',esc(a.notes))+row('تاريخ التسجيل',esc(a.createdAt))+row('ملصق الباركود',+a.printCount?`طُبع ${+a.printCount} مرة`:'لم يُطبع بعد');
+  const b=$('#dtMedia');b.hidden=!n;b.textContent=`الصور والفيديو (${n})`;$('#dtM').classList.add('on')}
+const dtClose=()=>{$('#dtM').classList.remove('on');dtCode=''};$('#dtX').onclick=dtClose;$('#dtM').addEventListener('click',e=>{if(e.target.id==='dtM')dtClose()});
+$('#dtMedia').onclick=()=>openMedia(dtCode);$('#dtIm').onclick=()=>openMedia(dtCode);$('#dtRep').onclick=()=>{const c=dtCode;dtClose();printAssetReport([c])};
+function viewInvalid(){$('#viewErr').classList.add('on')}
+/* ---- رابط العرض فقط (من الحساب الكامل) ---- */
+const SITE_URL='https://olympy-nd.github.io/rakan-asset-barcode/';
+async function vlLoad(op){if(!GS())return toast('رابط العرض يتطلب الاتصال بقاعدة بيانات Google Sheets',1);
+  try{const r=await gsCall('viewLink',op?{op}:{});const u=r.token?SITE_URL+'#view='+r.token:'';$('#vlUrl').value=u||'— رابط العرض متوقف —';$('#vlOpen').href=u||'#';
+    $('#vlCopy').disabled=!u;$('#vlOpen').style.pointerEvents=u?'':'none';$('#vlOff').hidden=!u;$('#vlNew').textContent=u?'إلغاء هذا الرابط وإنشاء رابط جديد':'إنشاء رابط عرض';
+    $('#vlNote').textContent=op==='new'?'أُنشئ رابط جديد — الرابط القديم لم يعد يعمل.':op==='off'?'تم إيقاف رابط العرض — لم يعد أي رابط سابق يعمل.':r.created?'أُنشئ رابط العرض لأول مرة.':'';return u}
+  catch(e){toast(e.code==='unknown_action'?'يلزم تحديث خادم المنظومة لتفعيل رابط العرض':e.message,1)}}
+$('#bView').onclick=async()=>{$('#vlUrl').value='جارٍ التجهيز…';$('#vlNote').textContent='';$('#vlM').classList.add('on');await vlLoad()};
+$('#vlCopy').onclick=async()=>{const u=$('#vlUrl').value;try{await navigator.clipboard.writeText(u)}catch(e){$('#vlUrl').select();document.execCommand('copy')}toast('تم نسخ رابط العرض','ok')};
+$('#vlNew').onclick=async()=>{if($('#vlOff').hidden||await confirmBox('رابط عرض جديد','سيتوقف الرابط الحالي عن العمل لكل من لديه، ويُنشأ رابط جديد.','إنشاء رابط جديد','del'))vlLoad('new')};
+$('#vlOff').onclick=async()=>{if(await confirmBox('إيقاف رابط العرض','لن يستطيع أحد فتح سجل الأصول بالرابط الحالي. يمكنك إنشاء رابط جديد لاحقاً.','إيقاف الرابط','del'))vlLoad('off')};
+const vlClose=()=>$('#vlM').classList.remove('on');$('#vlX').onclick=vlClose;$('#vlM').addEventListener('click',e=>{if(e.target.id==='vlM')vlClose()});
+/* ---- إعدادات التقرير المفصّل: اختيار الأقسام والحقول ---- */
+const RC_SEC=[['barcode','الباركود في رأس التقرير'],['main','الصورة الرئيسية'],['kv','جدول بيانات الأصل'],['stats','شريط الملخص'],['gallery','معرض صور الأصل'],['videos','مقاطع الفيديو ورموز QR'],['sig','خانات التوقيع'],['note','ملاحظة التذييل (مكان حفظ الصور)']];
+const RC_F=[['code','رقم الباركود'],['category','الفئة'],['status','الحالة'],['location','الموقع'],['dept','الإدارة / القسم'],['custodian','العهدة / المسؤول'],['serial','الرقم التسلسلي'],['purchaseDate','تاريخ الشراء'],['value','القيمة'],['weight','الوزن'],['odoo','ربط أودو'],['createdAt','تاريخ التسجيل'],['printInfo','ملصق الباركود'],['notes','ملاحظات']];
+const RC_ST=[['photos','عدد الصور'],['videos','عدد مقاطع الفيديو'],['prints','مرات طباعة الملصق'],['odoo','الربط بأودو']];
+function repCfg(){const c=prefs.repCfg||{},m=(L,o)=>Object.fromEntries(L.map(([k])=>[k,o&&o[k]!==undefined?!!o[k]:true]));return {sec:m(RC_SEC,c.sec),f:m(RC_F,c.f),st:m(RC_ST,c.st)}}
+let rcCodes=[];
+function printAssetReport(codes){rcCodes=codes.filter(c=>assets.some(a=>a.code===c));if(!rcCodes.length)return;rcRender(repCfg());$('#rcM').classList.add('on')}
+function rcRender(c){const box=(g,L,o)=>L.map(([k,l])=>`<label class="rc-c"><input type="checkbox" data-g="${g}" data-k="${k}" ${o[k]?'checked':''}><span>${l}</span></label>`).join('');
+  const n=rcCodes.length,a=n===1?assets.find(x=>x.code===rcCodes[0]):null;
+  $('#rcSub').textContent=n===1?`${a.name} — ${a.code}`:`${n} أصول — كل أصل في صفحة مستقلة`;
+  $('#rcSec').innerHTML=box('sec',RC_SEC,c.sec);$('#rcF').innerHTML=box('f',RC_F,c.f);$('#rcSt').innerHTML=box('st',RC_ST,c.st);rcSync()}
+function rcRead(){const c={sec:{},f:{},st:{}};$$('#rcM input[data-g]').forEach(i=>c[i.dataset.g][i.dataset.k]=i.checked);return c}
+function rcSync(){const c=rcRead();$('#rcFwrap').classList.toggle('off',!c.sec.kv);$('#rcStwrap').classList.toggle('off',!c.sec.stats);
+  $$('#rcF input').forEach(i=>i.disabled=!c.sec.kv);$$('#rcSt input').forEach(i=>i.disabled=!c.sec.stats);
+  const n=Object.values(c.sec).filter(Boolean).length;$('#rcGo').disabled=!n;$('#rcGo span').textContent=rcCodes.length>1?`طباعة ${rcCodes.length} تقارير`:'طباعة التقرير'}
+$('#rcM').addEventListener('change',e=>{if(e.target.dataset.g)rcSync()});
+$('#rcAll').onclick=()=>{$$('#rcM input[data-g]').forEach(i=>i.checked=true);rcSync()};
+$('#rcDef').onclick=()=>{prefs.repCfg=null;store('rkm_prefs',prefs);rcRender(repCfg());toast('أُعيدت إعدادات التقرير إلى الافتراضي')};
+const rcClose=()=>$('#rcM').classList.remove('on');$('#rcX').onclick=rcClose;$('#rcNo').onclick=rcClose;$('#rcM').addEventListener('click',e=>{if(e.target.id==='rcM')rcClose()});
+$('#rcGo').onclick=()=>{const c=rcRead();prefs.repCfg=c;store('rkm_prefs',prefs);rcClose();runAssetReport(rcCodes,c)};
+async function runAssetReport(codes,cfg){
   const list=codes.map(c=>assets.find(a=>a.code===c)).filter(Boolean);if(!list.length)return;
-  const media=list.flatMap(a=>photosOf(a));
+  const media=list.flatMap(a=>photosOf(a)).filter(p=>p.v?cfg.sec.videos:(cfg.sec.main||cfg.sec.gallery));
   if(media.length){toast(`جارٍ تجهيز ${media.length} من صور ومقاطع الأصل للتقرير…`);await needThumbs(media.map(p=>p.id));
     const need=media.filter(p=>!p.v&&!FULL[p.id]);let i=0;
     await Promise.all(Array.from({length:Math.min(4,need.length)},async()=>{while(i<need.length){const p=need[i++];try{const r=await gsCall('photoGet',{id:p.id});FULL[p.id]=`data:${r.mime||'image/jpeg'};base64,${r.data}`}catch(e){}}}))}
-  openReport(assetReportHTML(list));
+  openReport(assetReportHTML(list,cfg));
 }
-function assetReportHTML(list){
+function assetReportHTML(list,cfg=repCfg()){const S=cfg.sec,F=cfg.f,ST=cfg.st;
   const fonts=[...document.styleSheets].flatMap(sh=>{try{return [...sh.cssRules]}catch(e){return []}}).filter(r=>r.type===5).map(r=>r.cssText).join('\n');
   const now=new Date(),p2=n=>String(n).padStart(2,'0'),dIss=`${p2(now.getDate())}/${p2(now.getMonth()+1)}/${now.getFullYear()}`,lg=logo();
   const mu='<span class="mu">—</span>',v=x=>x===''||x==null?mu:esc(x);
@@ -4803,28 +4918,29 @@ function assetReportHTML(list){
     const all=photosOf(a),photos=all.filter(p=>!p.v),vids=all.filter(p=>p.v),main=mainPhoto(a);
     const mainSrc=main&&!main.v?(FULL[main.id]||TH[main.id]):(main?TH[main.id]:'');
     const repNo=`أ.ث / ${a.code} / ${now.getFullYear()}${p2(now.getMonth()+1)}${p2(now.getDate())}`;
-    const kv=[['رقم الباركود',`<span class="mono">${esc(a.code)}</span>`],['الفئة',v(a.category)],['الحالة',a.status?`<span class="st ${stCls(a.status)}">${esc(a.status)}</span>`:mu],
-      ['الموقع',v(a.location)],['الإدارة / القسم',v(a.dept)],['العهدة / المسؤول',v(a.custodian)],['الرقم التسلسلي للمصنع',a.serial?`<span class="mono">${esc(a.serial)}</span>`:mu],
-      ['تاريخ الشراء',v(a.purchaseDate)],['القيمة',money(a.value)],['الوزن',a.weight!==''&&a.weight!=null?`<span dir="ltr">${+a.weight}</span> طن`:mu],['ربط أودو',a.odooId?`<span class="mono">${esc(a.odooId)}</span>${a.odooName?` — ${esc(a.odooName)}`:''}`:'<span class="mu">غير مربوط</span>'],
-      ['تاريخ التسجيل',v(a.createdAt)],['ملصق الباركود',+a.printCount?`طُبع ${+a.printCount} مرة${a.lastPrint?` · آخرها ${esc(a.lastPrint)}`:''}`:'<span class="mu">لم يُطبع بعد</span>']];
-    const gal=photos.map((p,i)=>`<figure class="ph"><div class="im">${FULL[p.id]||TH[p.id]?`<img src="${FULL[p.id]||TH[p.id]}" alt="">`:'<span class="mu">تعذّر تحميل الصورة</span>'}<span class="no">${i+1}</span></div><figcaption><b>${esc(p.t||'صورة')}</b><span>${esc(p.d||'')}</span></figcaption></figure>`).join('');
+    const kv=[['code','رقم الباركود',`<span class="mono">${esc(a.code)}</span>`],['category','الفئة',v(a.category)],['status','الحالة',a.status?`<span class="st ${stCls(a.status)}">${esc(a.status)}</span>`:mu],
+      ['location','الموقع',v(a.location)],['dept','الإدارة / القسم',v(a.dept)],['custodian','العهدة / المسؤول',v(a.custodian)],['serial','الرقم التسلسلي للمصنع',a.serial?`<span class="mono">${esc(a.serial)}</span>`:mu],
+      ['purchaseDate','تاريخ الشراء',v(a.purchaseDate)],['value','القيمة',money(a.value)],['weight','الوزن',a.weight!==''&&a.weight!=null?`<span dir="ltr">${+a.weight}</span> طن`:mu],['odoo','ربط أودو',a.odooId?`<span class="mono">${esc(a.odooId)}</span>${a.odooName?` — ${esc(a.odooName)}`:''}`:'<span class="mu">غير مربوط</span>'],
+      ['createdAt','تاريخ التسجيل',v(a.createdAt)],['printInfo','ملصق الباركود',+a.printCount?`طُبع ${+a.printCount} مرة${a.lastPrint?` · آخرها ${esc(a.lastPrint)}`:''}`:'<span class="mu">لم يُطبع بعد</span>']].filter(r=>F[r[0]]);if(F.notes&&a.notes)kv.push(['notes','ملاحظات',esc(a.notes)]);
+    const galList=S.main?photos.filter(p=>p!==main):photos,stI=[['photos',photos.length,'صورة'],['videos',vids.length,'مقطع فيديو'],['prints',+a.printCount||0,'مرات طباعة الملصق'],['odoo',a.odooId?'نعم':'لا','مربوط بأودو']].filter(r=>ST[r[0]]);
+    const gal=galList.map((p,i)=>`<figure class="ph"><div class="im">${FULL[p.id]||TH[p.id]?`<img src="${FULL[p.id]||TH[p.id]}" alt="">`:'<span class="mu">تعذّر تحميل الصورة</span>'}<span class="no">${i+1}</span></div><figcaption><b>${esc(p.t||'صورة')}</b><span>${esc(p.d||'')}</span></figcaption></figure>`).join('');
     const vid=vids.map((p,i)=>{const url='https://drive.google.com/file/d/'+p.id+'/view';return `<div class="vd"><div class="vt">${TH[p.id]?`<img src="${TH[p.id]}" alt="">`:''}<i></i>${p.dur?`<em>${fmtDur(p.dur)}</em>`:''}</div><div class="vi"><b>${esc(p.t||'مقطع فيديو')} ${vids.length>1?i+1:''}</b><span>تاريخ الإضافة: ${esc(p.d||'—')}${p.dur?` · المدة: ${fmtDur(p.dur)}`:''}</span><small>محفوظ في Google Drive — امسح الرمز لمشاهدة المقطع</small><span class="u" dir="ltr">${url}</span></div><div class="qr">${qrSVG(url)}</div></div>`}).join('');
     let sec=0;
     return `<section class="pg${ix?' brk':''}">
 <div class="bar"></div>
 <div class="hd">${lg?`<img src="${lg}" alt="راكان">`:'<b>راكان لاستيراد المواد الغذائية والتوزيع</b>'}<div class="meta">رقم التقرير: <b>${repNo}</b><br>تاريخ الإصدار: <b>${dIss}</b><br><span class="pill">بطاقة أصل ثابت</span></div></div>
 <div class="ttl"><div><div class="kick">سجل الأصول الثابتة — تقرير أصل</div><h1>${esc(a.name)}</h1><div class="sub1"><span class="codep">${esc(a.code)}</span>${a.category?`<span>${esc(a.category)}</span>`:''}${a.location?`<span>${esc(a.location)}</span>`:''}</div></div>
-<div class="bc">${barcodeSVG(a.code)}<span>${esc(a.code)}</span></div></div>
-<div class="hero">
-  <div class="mp">${mainSrc?`<img src="${mainSrc}" alt="">`:`<div class="nop">لا توجد صورة للأصل</div>`}<div class="cap">${main?esc(main.t):'الصورة الرئيسية'}</div></div>
-  <table class="kv">${kv.map(([k,x])=>`<tr><th>${k}</th><td>${x}</td></tr>`).join('')}${a.notes?`<tr><th>ملاحظات</th><td>${esc(a.notes)}</td></tr>`:''}</table>
-</div>
-<div class="stats"><div><b>${photos.length}</b><small>صورة</small></div><div><b>${vids.length}</b><small>مقطع فيديو</small></div><div><b>${+a.printCount||0}</b><small>مرات طباعة الملصق</small></div><div><b>${a.odooId?'نعم':'لا'}</b><small>مربوط بأودو</small></div></div>
-${photos.length>1?`<h2><i>${++sec}</i>صور الأصل <span class="cnt">(${photos.length})</span></h2><div class="gal ${photos.length===1?'g1':photos.length===2||photos.length===4?'g2':'g3'}">${gal}</div>`:''}
-${vids.length?`<h2><i>${++sec}</i>مقاطع الفيديو <span class="cnt">(${vids.length})</span></h2><div class="vids">${vid}</div>`:''}
-${!photos.length&&!vids.length?`<div class="empty">لم تُرفع صور أو مقاطع فيديو لهذا الأصل بعد.</div>`:''}
-<div class="sig"><div><b>أمين العهدة</b><span>الاسم / التوقيع / التاريخ</span></div><div><b>مسؤول الأصول</b><span>الاسم / التوقيع / التاريخ</span></div><div><b>اعتماد المدير المالي</b><span>الاسم / التوقيع / التاريخ</span></div></div>
-<div class="note">أُعدّ هذا التقرير آلياً من منظومة ترميز الأصول بتاريخ ${dIss}. الصور الأصلية محفوظة في Google Drive ضمن مجلد «صور أصول راكان / ${esc(a.category||'بدون فئة')} / ${esc(a.code)}».</div>
+${S.barcode?`<div class="bc">${barcodeSVG(a.code)}<span>${esc(a.code)}</span></div>`:''}</div>
+${S.main||(S.kv&&kv.length)?`<div class="hero${S.main&&S.kv&&kv.length?'':' solo'}">
+  ${S.main?`<div class="mp">${mainSrc?`<img src="${mainSrc}" alt="">`:`<div class="nop">لا توجد صورة للأصل</div>`}<div class="cap">${main?esc(main.t):'الصورة الرئيسية'}</div></div>`:''}
+  ${S.kv&&kv.length?`<table class="kv">${kv.map(([,k,x])=>`<tr><th>${k}</th><td>${x}</td></tr>`).join('')}</table>`:''}
+</div>`:''}
+${S.stats&&stI.length?`<div class="stats" style="grid-template-columns:repeat(${stI.length},1fr)">${stI.map(([,n,l])=>`<div><b>${n}</b><small>${l}</small></div>`).join('')}</div>`:''}
+${S.gallery&&galList.length?`<h2><i>${++sec}</i>صور الأصل <span class="cnt">(${galList.length})</span></h2><div class="gal ${galList.length===1?'g1':galList.length===2||galList.length===4?'g2':'g3'}">${gal}</div>`:''}
+${S.videos&&vids.length?`<h2><i>${++sec}</i>مقاطع الفيديو <span class="cnt">(${vids.length})</span></h2><div class="vids">${vid}</div>`:''}
+${(S.gallery||S.videos)&&!photos.length&&!vids.length?`<div class="empty">لم تُرفع صور أو مقاطع فيديو لهذا الأصل بعد.</div>`:''}
+${S.sig?`<div class="sig"><div><b>أمين العهدة</b><span>الاسم / التوقيع / التاريخ</span></div><div><b>مسؤول الأصول</b><span>الاسم / التوقيع / التاريخ</span></div><div><b>اعتماد المدير المالي</b><span>الاسم / التوقيع / التاريخ</span></div></div>`:''}
+${S.note?`<div class="note">أُعدّ هذا التقرير آلياً من منظومة ترميز الأصول بتاريخ ${dIss}. الصور الأصلية محفوظة في Google Drive ضمن مجلد «صور أصول راكان / ${esc(a.category||'بدون فئة')} / ${esc(a.code)}».</div>`:''}
 </section>`}).join('');
   return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>${list.length===1?'تقرير الأصل '+esc(list[0].code):'تقارير الأصول المحددة'}</title><style>${fonts}
 :root{--blue:#0C4CA2;--blue-deep:#08386F;--orange:#F15C22;--ink:#1B2433;--muted:#5B6678;--line:#DCE3EE;--tint:#F2F6FC;--orange-tint:#FEF1EB}
@@ -4843,7 +4959,7 @@ h1{margin:1px 0 4px;color:var(--blue-deep);font-weight:900;font-size:22px;line-h
 .sub1 span:not(.codep)::before{content:"•";margin-left:6px;color:#B7C2D3}
 .codep{font-family:Consolas,'Courier New',monospace;font-weight:700;color:#fff;background:var(--blue);border-radius:5px;padding:1px 8px;direction:ltr;font-size:10.5px}
 .bc{text-align:center;flex:none}.bc svg{display:block;height:13mm;width:auto;max-width:62mm}.bc span{font-family:Consolas,'Courier New',monospace;font-size:9px;letter-spacing:1.5px;direction:ltr;display:block}
-.hero{display:grid;grid-template-columns:44% 1fr;gap:12px;margin-top:11px;break-inside:avoid}
+.hero.solo{grid-template-columns:1fr}.hero.solo .mp{width:62%;margin:0 auto}.hero{display:grid;grid-template-columns:44% 1fr;gap:12px;margin-top:11px;break-inside:avoid}
 .mp{border:1px solid var(--line);border-radius:3mm;overflow:hidden;background:var(--tint);display:flex;flex-direction:column}
 .mp img{width:100%;height:76mm;object-fit:cover;display:block}
 .mp .nop{height:76mm;display:flex;align-items:center;justify-content:center;color:#9AA4B5;font-weight:700}
@@ -4917,7 +5033,7 @@ $('#tb').addEventListener('click',async e=>{const tr=e.target.closest('tr[data-c
   if(e.pointerType==='touch'||e.sourceCapabilities?.firesTouchEvents){const now=Date.now();if(lastTap.c===c&&now-lastTap.t<380&&!e.target.closest('input,button,img,.thn,.nmi,.pchip')){lastTap={};editAsset(c)}else lastTap={c,t:now}}});
 let lastTap={};
 $('#tb').addEventListener('dblclick',e=>{const tr=e.target.closest('tr[data-c]');if(!tr||e.target.closest('input,button,.km'))return;window.getSelection()?.removeAllRanges();editAsset(tr.dataset.c)});
-async function doAct(act,c){
+async function doAct(act,c){if(VIEW&&(act==='print'||act==='del'))return;
   if(act==='edit'){editAsset(c);return}
   if(act==='print'){queue=[c];go('label');return}
   if(act==='rep'){printAssetReport([c]);return}
@@ -4933,7 +5049,7 @@ const AI={edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4
   copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',del:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>'};
 function openActMenu(btn,c){const a=assets.find(x=>x.code===c);if(!a)return;if(actCode===c&&actM.classList.contains('on')){closeActMenu();return}closeActMenu();actCode=c;const mc=mediaCounts(a),nm=mc.p+mc.v;
   const it=(k,l,sub,cls)=>`<button type="button" role="menuitem" data-m="${k}" class="${cls||''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${AI[k]}</svg><span>${l}${sub?`<small>${sub}</small>`:''}</span></button>`;
-  actM.innerHTML=`<div class="am-h"><b>${esc(a.name)}</b><span class="mono">${esc(a.code)}</span></div>${it('edit','عرض وتعديل','')}${it('print','طباعة الملصق',+a.printCount?`طُبع ${a.printCount} مرة`:'لم يُطبع بعد')}${it('rep','تقرير الأصل مع الصور','PDF / طباعة A4')}${it('media','الصور والفيديو',nm?[mc.p?mc.p+' صورة':'',mc.v?mc.v+' فيديو':''].filter(Boolean).join(' · ')+' — عرض وإضافة':'تصوير ورفع صور وفيديو')}${it('copy','نسخ رقم الباركود','')}<div class="am-sep"></div>${it('del','حذف الأصل','','dng')}`;
+  actM.innerHTML=`<div class="am-h"><b>${esc(a.name)}</b><span class="mono">${esc(a.code)}</span></div>${VIEW?it('edit','عرض التفاصيل',''):it('edit','عرض وتعديل','')}${VIEW?'':it('print','طباعة الملصق',+a.printCount?`طُبع ${a.printCount} مرة`:'لم يُطبع بعد')}${it('rep','تقرير الأصل مع الصور','PDF / طباعة A4')}${VIEW&&!nm?'':it('media','الصور والفيديو',VIEW?[mc.p?mc.p+' صورة':'',mc.v?mc.v+' فيديو':''].filter(Boolean).join(' · '):nm?[mc.p?mc.p+' صورة':'',mc.v?mc.v+' فيديو':''].filter(Boolean).join(' · ')+' — عرض وإضافة':'تصوير ورفع صور وفيديو')}${it('copy','نسخ رقم الباركود','')}${VIEW?'':`<div class="am-sep"></div>${it('del','حذف الأصل','','dng')}`}`;
   const sheet=innerWidth<=820;actM.classList.toggle('sheet',sheet);document.body.classList.toggle('am-open',sheet);
   if(!sheet){const r=btn.getBoundingClientRect();actM.style.visibility='hidden';actM.classList.add('on');const W=actM.offsetWidth,H=actM.offsetHeight;
     let left=r.left;if(left+W>innerWidth-8)left=innerWidth-W-8;let top=r.bottom+6;if(top+H>innerHeight-8)top=Math.max(8,r.top-H-6);
@@ -5068,7 +5184,7 @@ $('#bOdooBulk').onclick=bulkOdoo;
 $('#bReconnect').onclick=async()=>{const h=await idbGet('handle');if(h&&await verifyPerm(h)){await attach(h);$('#reconnect').style.display='none'}else toast('تعذّرت إعادة الاتصال — افتح الملف يدوياً',1)};
 window.addEventListener('beforeunload',e=>{if(dirty||(GS()&&OPS.length)){e.preventDefault();e.returnValue=''}});
 window.addEventListener('focus',async()=>{if(GS())return syncTick();if(!fileHandle||dirty||saving)return;try{const f=await fileHandle.getFile();if(f.lastModified>lastMod+1500&&await confirmBox('تحديث من Excel','تم تعديل ملف قاعدة البيانات خارج المنظومة. هل تريد تحميل أحدث نسخة؟','تحميل')){readWorkbook(await f.arrayBuffer());lastMod=f.lastModified;renderAll();toast('تم تحميل آخر التعديلات')}else lastMod=f.lastModified}catch(e){}});
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();$('#bSave').click()}});
+document.addEventListener('keydown',e=>{if(!VIEW&&(e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();$('#bSave').click()}});
 window.addEventListener('resize',()=>{if($('#v-label').classList.contains('on'))renderPreview()});
 
 /* ================= Boot ================= */
@@ -5080,7 +5196,8 @@ window.addEventListener('resize',()=>{if($('#v-label').classList.contains('on'))
   const hm=location.hash.match(/(?:^#|&)gs=([^&]+)/);
   if(hm){const u=decodeURIComponent(hm[1]);history.replaceState(null,'',location.pathname+location.search);
     if(/^https:\/\/script\.google(usercontent)?\.com\/.+\/exec$/.test(u)&&ds.url!==u){ds={mode:'gsheet',url:u,key:''};store('rkm_ds',ds)}}
-  if(GS()||needLogin()){renderSettings();renderSetup();setConn();renderAll();resetForm();sysState();dsRender();
+  if(VIEW)history.replaceState(null,'',location.pathname+location.search+'#view='+VIEWT);
+  if(GS()||needLogin()){if(VIEW)setTimeout(()=>go('assets'),0);renderSettings();renderSetup();setConn();renderAll();resetForm();sysState();dsRender();
     if(needLogin()){showLogin();return}
     const pb=load('rkm_backup');if(pb&&pb.pending&&!load('rkm_sync'))SH.recover=assets.slice();
     syncing=true;document.body.classList.add('syncing');setConn();pull(!SH.seq).then(ok=>{if(!ok){syncing=false;document.body.classList.remove('syncing');setConn()}});pump();return}
