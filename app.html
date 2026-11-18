@@ -254,6 +254,37 @@ body.am-open::after{content:"";position:fixed;inset:0;background:rgba(8,30,60,.3
 .hp-f{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
 .hp-f>span{display:flex;gap:5px}.hp-f small{color:var(--gold);font-weight:700;font-size:11px}
 @media (max-width:1180px){.nmi,.atbl .pchip{display:none}}
+/* import wizard */
+#imM{padding:16px}.im{background:#fff;border-radius:18px;width:min(940px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 70px rgba(8,30,60,.35)}
+.im-b{overflow:auto;padding:16px 18px;flex:1;min-height:0;display:flex;flex-direction:column}
+#imM [hidden]{display:none!important}
+.im-s1{display:flex;flex-direction:column;gap:12px}
+.im-step{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--tint)}
+.im-step>i{flex:none;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-style:normal;font-weight:800;display:grid;place-items:center}
+.im-step>div{flex:1;display:flex;flex-direction:column;gap:2px}.im-step b{color:var(--navy);font-size:14px}.im-step span{font-size:12.5px;color:var(--muted);line-height:1.6}.im-step .btn svg{width:17px;height:17px}
+.im-drop{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 16px;border:2px dashed #b9c9e2;border-radius:16px;cursor:pointer;text-align:center;color:var(--navy);transition:background .15s,border-color .15s}
+.im-drop svg{width:40px;height:40px;color:#1d7a45}.im-drop b{font-size:15px}.im-drop span{font-size:12px;color:var(--muted)}.im-drop:hover,.im-drop.over{background:#f3fbf6;border-color:#1d7a45}
+.im-opt{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:13.5px}.im-opt b{flex:1 1 100%;color:var(--navy);font-size:13px}.im-opt label,.im-opt1{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13.5px}
+.im-opt input,.im-opt1 input{width:17px;height:17px;accent-color:var(--navy)}
+.im-s2{display:flex;flex-direction:column;gap:10px;min-height:0;flex:1}
+.im-file{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--navy)}.im-file span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.im-sum{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.im-sum div{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column}.im-sum b{font-size:20px;font-weight:800}.im-sum small{font-size:11.5px;color:var(--muted)}
+.im-sum .n b{color:#13804B}.im-sum .u b{color:var(--navy)}.im-sum .k b{color:#7a8597}.im-sum .x b{color:var(--bad)}
+.im-flt{display:flex;flex-wrap:wrap;gap:6px}.im-flt button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font:600 12.5px Tajawal,sans-serif;cursor:pointer;color:var(--ink)}.im-flt button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.im-tw{border:1px solid var(--line);border-radius:12px;overflow:auto;flex:1;min-height:160px;max-height:46vh}
+.im-t{width:100%;border-collapse:collapse;font-size:12.5px}.im-t th{position:sticky;top:0;background:var(--navy);color:#fff;font-weight:700;padding:8px;text-align:right;white-space:nowrap;z-index:1}
+.im-t td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}.im-t td:first-child{color:var(--muted);text-align:center}
+.im-t .mono{font-family:Consolas,monospace;direction:ltr;text-align:right}.im-t .auto{color:var(--muted);font-style:italic}
+.ib-n,.ib-u,.ib-k,.ib-x{display:inline-block;padding:1px 9px;border-radius:999px;font-weight:700;font-size:11.5px;white-space:nowrap}
+.ib-n{background:#E7F6EE;color:#13804B}.ib-u{background:#E8F0FB;color:var(--navy)}.ib-k{background:#EEF2F7;color:#5B6678}.ib-x{background:#fdecec;color:var(--bad)}
+.im-t .msg{font-size:12px;line-height:1.6}.im-t .msg .w{color:#b45309;display:block}.im-t .msg .e{color:var(--bad);display:block}
+.im-t tr.x td{background:#fffafa}
+@media (max-width:820px){#imM{padding:0;align-items:stretch}.im{border-radius:0;max-height:none;height:100%}.im-step{flex-wrap:wrap}.im-step .btn{flex:1 1 100%;justify-content:center}
+  .im-sum{grid-template-columns:repeat(3,1fr)}.im-sum div:first-child{grid-column:1/-1;flex-direction:row;align-items:baseline;gap:8px}.im-tw{max-height:none;overflow-x:hidden}.im-t thead{display:none}
+  .im-t,.im-t tbody{display:block}.im-t tr{display:grid;grid-template-columns:30px auto 1fr;grid-template-areas:"n r nm" "n r cd" "n m m";column-gap:9px;padding:9px 10px;border-bottom:1px solid var(--line)}
+  .im-t td{border:0;padding:0;background:transparent!important}.im-t tr.x{background:#fffafa}.im-t tr.k{background:#f8fafc}.im-t td:nth-child(1){grid-area:n;align-self:start}.im-t td:nth-child(2){grid-area:r;align-self:start}.im-t td:nth-child(3){grid-area:cd;font-size:11.5px;color:var(--muted)}.im-t td:nth-child(4){grid-area:nm;font-weight:700}
+  .im-t td:nth-child(5),.im-t td:nth-child(6){display:none}.im-t td.msg{grid-area:m;margin-top:4px}.im-t td[colspan]{grid-column:1/-1}#imHint{display:none}#imNo,#imGo{flex:1;justify-content:center}}
 /* view-only mode */
 #viewBar{display:none}
 html.viewonly #viewBar{display:flex;align-items:center;gap:9px;margin:0 0 14px;padding:9px 14px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px}
@@ -555,6 +586,54 @@ html{-webkit-text-size-adjust:100%}
   .atbl tbody tr:has(td.empty){grid-column:1/-1}
   .atw{border:0}
 }
+
+/* ---------- phone card styles ---------- */
+.csSeg{display:none}
+@media (max-width:820px){
+  .csSeg{display:flex;gap:4px;padding:4px;background:var(--tint);border:1px solid var(--line);border-radius:12px;margin:0 0 10px}
+  .csSeg button{flex:1;border:0;background:none;padding:8px 2px;border-radius:9px;font:700 12.5px Tajawal,sans-serif;color:var(--navy-2);cursor:pointer}
+  .csSeg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(8,56,111,.15)}
+  /* common for alt styles */
+  .atbl:is([data-cs=list],[data-cs=rich]) td,.atbl[data-cs=fold] tr:not(.open) td{display:none!important}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="صورة"]{position:static!important;padding:0!important;grid-area:ph}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="صورة"] .thn{width:100%;margin:0}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="صورة"] .th,:is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="صورة"] .th0{display:grid!important;width:100%;height:auto;aspect-ratio:1;border-radius:12px;margin:0}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="صورة"] .th0 svg{width:40%;height:40%}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td::before{font-size:10.5px}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="اسم الأصل"]{grid-area:nm;padding:0!important;margin:0;border:0!important;font-size:14.5px;align-self:end;line-height:1.4}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="اسم الأصل"] b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="اسم الأصل"] .on2{display:none}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="رقم الباركود"]{grid-area:cd;padding:0!important;font-size:12px;color:var(--muted)}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="رقم الباركود"]::before{display:none}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=rich] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="رقم الباركود"] b{font-weight:600}
+  :is(.atbl[data-cs=list] tr,.atbl[data-cs=fold] tr:not(.open)) td[data-l="تحديد"]{position:static!important;grid-area:sel;justify-self:end;align-self:start}
+  /* list */
+  .atbl[data-cs=list] tr{grid-template-columns:62px 1fr auto!important;grid-template-areas:"ph nm sel" "ph cd st" "ph mt km";column-gap:12px!important;row-gap:2px!important;padding:10px 12px!important;align-items:center;cursor:pointer}
+  .atbl[data-cs=list] tr td:is([data-l="صورة"],[data-l="اسم الأصل"],[data-l="رقم الباركود"],[data-l="الموقع"],[data-l="الحالة"],[data-l="تحديد"],[data-l="إجراءات"]):not(.e){display:block!important}
+  .atbl[data-cs=list] td:is([data-l="الموقع"],[data-l="الحالة"]){padding:0!important;font-size:12px;color:var(--muted)}
+  .atbl[data-cs=list] td[data-l="الموقع"]{grid-area:mt;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.atbl[data-cs=list] td[data-l="الحالة"]{grid-area:st;justify-self:end}
+  .atbl[data-cs=list] td:is([data-l="الموقع"],[data-l="الحالة"])::before{display:none}
+  .atbl[data-cs=list] tr td[data-l="إجراءات"]{grid-area:km;border:0!important;margin:0;padding:0!important;align-self:end}
+  .atbl[data-cs=list] td .km{min-width:0!important;width:36px!important;padding:0!important;height:36px!important}.atbl[data-cs=list] td .km span{display:none!important}
+  .atbl[data-cs=list] .thn i{bottom:-3px;left:-3px}
+  /* rich */
+  .atbl[data-cs=rich] tr{grid-template-columns:108px 1fr 1fr!important;grid-template-areas:"ph nm nm" "ph cd cd" "ph f1 f2" "ph f3 f4" "km km km";column-gap:12px!important;row-gap:4px!important;padding:12px!important;cursor:pointer}
+  .atbl[data-cs=rich] tr td:is([data-l="صورة"],[data-l="اسم الأصل"],[data-l="رقم الباركود"],[data-l="الفئة"],[data-l="الموقع"],[data-l="العهدة"],[data-l="الحالة"],[data-l="تحديد"],[data-l="إجراءات"]):not(.e){display:block!important}
+  .atbl[data-cs=rich] td[data-l="صورة"]{align-self:start}.atbl[data-cs=rich] td[data-l="صورة"] .th{border-radius:14px}
+  .atbl[data-cs=rich] tr td[data-l="اسم الأصل"]{padding-left:30px!important;align-self:start}
+  .atbl[data-cs=rich] td:is([data-l="الفئة"],[data-l="الموقع"],[data-l="العهدة"],[data-l="الحالة"]){padding:0!important;font-size:12.5px;line-height:1.35;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .atbl[data-cs=rich] td[data-l="الفئة"]{grid-area:f1}.atbl[data-cs=rich] td[data-l="الموقع"]{grid-area:f2}.atbl[data-cs=rich] td[data-l="العهدة"]{grid-area:f3}.atbl[data-cs=rich] td[data-l="الحالة"]{grid-area:f4}
+  .atbl[data-cs=rich] tr td[data-l="إجراءات"]{grid-area:km;margin-top:6px!important}
+  .atbl[data-cs=rich] td[data-l="تحديد"]{top:12px!important;left:12px!important}
+  /* fold (collapsed) */
+  .atbl[data-cs=fold] tr:not(.open){grid-template-columns:48px 1fr auto!important;grid-template-areas:"ph nm sel" "ph cd st";column-gap:12px!important;row-gap:2px!important;padding:9px 12px 9px 34px!important;align-items:center;cursor:pointer}
+  .atbl[data-cs=fold] tr:not(.open) td:is([data-l="صورة"],[data-l="اسم الأصل"],[data-l="رقم الباركود"],[data-l="الحالة"],[data-l="تحديد"]):not(.e){display:block!important}
+  .atbl[data-cs=fold] tr:not(.open) td[data-l="الحالة"]{grid-area:st;padding:0!important;justify-self:end}.atbl[data-cs=fold] tr:not(.open) td[data-l="الحالة"]::before{display:none}
+  .atbl[data-cs=fold] tr:not(.open) td[data-l="اسم الأصل"] b{-webkit-line-clamp:1}
+  .atbl[data-cs=fold] tbody tr[data-c]::after{content:"";position:absolute;left:13px;top:50%;width:8px;height:8px;border-left:2px solid var(--navy-2);border-bottom:2px solid var(--navy-2);transform:translateY(-70%) rotate(-45deg);transition:transform .2s}
+  .atbl[data-cs=fold] tbody tr.open::after{top:auto;bottom:34px;left:22px;transform:rotate(135deg)}
+  .atbl[data-cs=fold] tr.open{box-shadow:0 6px 18px rgba(8,56,111,.14)}
+}
 /* ---------- tablet: icon rail ---------- */
 @media (min-width:821px) and (max-width:1180px){
   .app{grid-template-columns:78px 1fr}
@@ -755,7 +834,7 @@ html{-webkit-text-size-adjust:100%}
           <div class="row aacts">
             <span class="hint" id="selInfo">لم يتم تحديد أصول</span>
             <button class="btn gold" id="bPrintSel" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>طباعة المحدد</button>
-            <button class="btn" id="bImport" title="دمج أصول من سجل Excel آخر">استيراد سجل</button>
+            <button class="btn" id="bImport" title="استيراد سجلات أصول من ملف Excel مع قالب جاهز للتعبئة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>استيراد سجلات</button>
             <button class="btn" id="bExport">تصدير نسخة</button>
             <button class="btn" id="bView" title="رابط لمشاهدة سجل الأصول فقط بدون تعديل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.1 0l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"/></svg>رابط عرض</button>
             <button class="btn" id="bCols" title="إظهار أو إخفاء أعمدة الجدول"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg>الأعمدة</button>
@@ -763,6 +842,7 @@ html{-webkit-text-size-adjust:100%}
             <button class="btn pri" id="bReport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>طباعة تقرير</button>
           </div>
         </div>
+        <div class="csSeg" id="csSeg" role="tablist" aria-label="طريقة عرض البطاقات"><button type="button" data-cs="grid">التفصيلي</button><button type="button" data-cs="list">قائمة مدمجة</button><button type="button" data-cs="rich">بطاقة بصورة</button><button type="button" data-cs="fold">مطوي</button></div>
         <div class="tbl-wrap atw"><table class="atbl">
           <colgroup id="tcg"></colgroup>
           <thead id="thd"></thead>
@@ -937,6 +1017,8 @@ html{-webkit-text-size-adjust:100%}
             <label class="row" style="margin-top:12px;gap:8px;cursor:pointer;font-size:13px;flex-wrap:nowrap"><input type="checkbox" id="oShowSync" style="width:18px;height:18px;flex:none"><span>إظهار زرّي <b>«حفظ»</b> و<b>«تحديث من الشيت»</b> أعلى الصفحة <span class="hint">(الحفظ والتحديث يتمّان تلقائياً، فالزرّان للاستخدام اليدوي عند الحاجة فقط)</span></span></label>
             <label class="row" style="margin-top:12px;gap:10px;font-size:13px;flex-wrap:wrap"><span style="font-weight:700;color:var(--navy)">عرض صور الأصول في سجل الأصول:</span>
               <select id="oThumbStyle" style="width:auto;min-width:220px"><option value="col">عمود صورة مستقل (كبير)</option><option value="name">صورة داخل خانة اسم الأصل</option><option value="chip">شارة صغيرة + معاينة عند المرور</option></select></label>
+            <label class="row" style="margin-top:12px;gap:10px;font-size:13px;flex-wrap:wrap"><span style="font-weight:700;color:var(--navy)">عرض بطاقات الأصول على الجوال:</span>
+              <select id="oCardStyle" style="width:auto;min-width:220px"><option value="grid">التفصيلي (كل الحقول)</option><option value="list">قائمة مدمجة</option><option value="rich">بطاقة بصورة</option><option value="fold">مطوي قابل للتوسيع</option></select></label>
             <label class="row" style="margin-top:10px;gap:8px;cursor:pointer;font-size:13px;flex-wrap:nowrap"><input type="checkbox" id="oHover" style="width:18px;height:18px;flex:none"><span>تفعيل <b>معاينة الصورة عند مرور المؤشر</b> في سجل الأصول <span class="hint">(بطاقة معاينة كبيرة بالصورة وبيانات الأصل وبقية الصور — على الكمبيوتر)</span></span></label>
             <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">خطوات الإعداد (مرة واحدة)</summary>
               <div class="infobox" style="margin-top:8px">
@@ -1024,6 +1106,26 @@ html{-webkit-text-size-adjust:100%}
 </div>
 
 <nav class="bnav"><button class="nav" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>لوحة</span></button><button class="nav" data-v="assets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>الأصول</span></button><button class="nav" data-v="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg><span>تسجيل</span></button><button class="nav" data-v="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5v14M7 5v14M10 5v14M14 5v14M16 5v14M20 5v14"/></svg><span>الطباعة</span></button><button class="nav" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>الإعدادات</span></button></nav>
+<div class="modal" id="imM"><div class="im">
+  <div class="rc-h"><div><b>استيراد سجلات الأصول</b><span>من ملف Excel — مع مراجعة كل صف قبل الحفظ</span></div><button type="button" class="mm-x" id="imX" title="إغلاق">×</button></div>
+  <div class="im-b">
+    <div class="im-s1" id="imS1">
+      <div class="im-step"><i>1</i><div><b>حمّل قالب التعبئة</b><span>ملف Excel بالأعمدة الصحيحة، وورقة تعليمات، وقوائم الفئات والحالات والمواقع الحالية.</span></div><button type="button" class="btn" id="imTpl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>تحميل القالب</button></div>
+      <div class="im-step"><i>2</i><div><b>عبّئ البيانات ثم اختر الملف</b><span>صف لكل أصل. اسم الأصل إلزامي، واترك رقم الباركود فارغاً ليُولَّد تلقائياً.</span></div></div>
+      <label class="im-drop" id="imDrop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 12l4 6M12 12l-4 6"/></svg><b>اسحب ملف Excel هنا أو اضغط للاختيار</b><span>xlsx · xls · csv</span><input type="file" id="imFile" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></label>
+      <div class="im-opt"><b>إذا كان رقم الباركود موجوداً مسبقاً:</b>
+        <label><input type="radio" name="imDup" value="skip" checked> تخطّيه دون تغيير</label><label><input type="radio" name="imDup" value="update"> تحديث بياناته بالقيم المعبّأة في الملف</label></div>
+      <label class="im-opt1"><input type="checkbox" id="imCats" checked> إنشاء الفئات الجديدة تلقائياً</label>
+    </div>
+    <div class="im-s2" id="imS2" hidden>
+      <div class="im-file"><span id="imFn"></span><button type="button" class="btn sm" id="imBack">اختيار ملف آخر</button></div>
+      <div class="im-sum" id="imSum"></div>
+      <div class="im-flt" id="imFlt"></div>
+      <div class="im-tw"><table class="im-t"><thead><tr><th>الصف</th><th>النتيجة</th><th>رقم الباركود</th><th>اسم الأصل</th><th>الفئة</th><th>الموقع</th><th>ملاحظات الفحص</th></tr></thead><tbody id="imTb"></tbody></table></div>
+    </div>
+  </div>
+  <div class="rc-f"><span class="hint" id="imHint">الصفوف التي فيها أخطاء لا تُستورد.</span><button type="button" class="btn" id="imNo">إلغاء</button><button type="button" class="btn pri" id="imGo" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg><span>استيراد</span></button></div>
+</div></div>
 <div class="modal" id="vlM"><div class="vl">
   <div class="rc-h"><div><b>رابط العرض فقط</b><span>سجل الأصول للمشاهدة — بدون أي صلاحية تعديل</span></div><button type="button" class="mm-x" id="vlX" title="إغلاق">×</button></div>
   <div class="vl-b">
@@ -3914,7 +4016,7 @@ function nextCode(category){
 
 /* ================= Excel I/O ================= */
 const XL_TYPES=[{description:'ملف Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}];
-function headerKey(h){h=String(h).trim();const f=FIELDS.find(f=>f[1]===h);if(f)return f[0];for(const k in ALIASES)if(ALIASES[k].some(a=>a.toLowerCase()===h.toLowerCase()))return k;return null}
+function headerKey(h){h=String(h).replace(/[*＊]/g,'').replace(/\s+/g,' ').trim();const f=FIELDS.find(f=>f[1]===h)||FIELDS.find(f=>normAr(f[1])===normAr(h));if(f)return f[0];for(const k in ALIASES)if(ALIASES[k].some(a=>a.toLowerCase()===h.toLowerCase()))return k;return null}
 function rowsToAssets(rows){
   const out=[], extras=new Set();
   rows.forEach(r=>{const a={_x:{}};for(const h in r){const k=headerKey(h);if(k&&a[k]==null)a[k]=r[h];else{a._x[h]=r[h];extras.add(h)}}
@@ -4549,11 +4651,12 @@ const COLS=[
  {k:'createdAt',l:'تاريخ التسجيل',w:7,d:false,td:a=>`<td data-l="تاريخ التسجيل" class="num${a.createdAt?'':' e'}">${esc(a.createdAt)||'—'}</td>`}];
 COLS.forEach(c=>{if(!c.td)c.td=a=>`<td data-l="${c.l}"${a[c.k]?'':' class="e"'}>${esc(a[c.k])||'—'}</td>`});
 function colOn(c){const v=(prefs.cols||{})[c.k];return c.fixed||(v===undefined?c.d:!!v)}
-function visCols(){const TS=prefs.thumbStyle||'col';return COLS.filter(c=>colOn(c)&&!(c.k==='photo'&&TS!=='col'))}
+const isPhone=()=>matchMedia('(max-width:820px)').matches;
+function visCols(){const TS=prefs.thumbStyle||'col',ph=isPhone()&&(prefs.cardStyle||'grid')!=='grid';return COLS.filter(c=>(colOn(c)||(ph&&['photo','code','location','status','category','custodian'].includes(c.k)))&&!(c.k==='photo'&&TS!=='col'&&!ph))}
 function applyColW(vc){const tb=$('#tb').closest('table'),tot=vc.reduce((t,c)=>t+c.w,0),avail=100-2.5-4,CW=prefs.colW||{},wrap=tb.parentElement,desk=!matchMedia('(max-width:1180px)').matches;
   if(desk&&vc.some(c=>CW[c.k])){const W=wrap.clientWidth||1100,px=c=>Math.round(CW[c.k]||c.w/tot*avail/100*W),sum=34+56+vc.reduce((t,c)=>t+px(c),0);$('#tcg').innerHTML='<col style="width:34px">'+vc.map(c=>`<col data-k="${c.k}" style="width:${px(c)}px">`).join('')+'<col style="width:56px">';tb.style.width=Math.max(W,sum)+'px';wrap.classList.toggle('wide',sum>W+1)}
   else{$('#tcg').innerHTML='<col style="width:2.5%">'+vc.map(c=>`<col data-k="${c.k}" style="width:${(c.w/tot*avail).toFixed(2)}%">`).join('')+'<col style="width:4%">';tb.style.width='';wrap.classList.remove('wide')}}
-function renderTable(){const TS=prefs.thumbStyle||'col',tb=$('#tb').closest('table');tb.dataset.ts=TS;
+function renderTable(){const TS=prefs.thumbStyle||'col',tb=$('#tb').closest('table');tb.dataset.ts=TS;tb.dataset.cs=prefs.cardStyle||'grid';$$('#csSeg [data-cs]').forEach(b=>b.classList.toggle('on',b.dataset.cs===tb.dataset.cs));
   const vc=visCols();applyColW(vc);
 
   const list=filtered(),all=list.length&&list.every(a=>selected.has(a.code));
@@ -5003,25 +5106,87 @@ h2 .cnt{color:var(--muted);font-weight:600;font-size:11px}
 </style></head><body>${pages}</body></html>`;
 }
 /* ================= Import ================= */
-async function importFile(file){
+/* ================= استيراد سجلات الأصول (قالب + مراجعة) ================= */
+const IMP_COLS=['code','name','category','location','dept','custodian','serial','purchaseDate','value','weight','status','notes','odooId'];
+const STATUSES=['جديد','جيد','متوسط','يحتاج صيانة','تالف','مستبعد'];
+const flab=k=>(FIELDS.find(f=>f[0]===k)||[k,k])[1];
+function downloadTemplate(){const wb=XLSX.utils.book_new();
+  const hdr=IMP_COLS.map(flab);const ws=XLSX.utils.aoa_to_sheet([hdr]);ws['!cols']=IMP_COLS.map(k=>({wch:k==='name'||k==='notes'?34:k==='code'?18:16}));ws['!autofilter']={ref:`A1:${XLSX.utils.encode_col(hdr.length-1)}1`};
+  XLSX.utils.book_append_sheet(wb,ws,'الأصول');
+  const ex=[['RKN-FUR-00050','طاولة اجتماعات خشبية',settings.cats[0]?.name||'أثاث','المقر الرئيسي','الإدارة العامة','أحمد علي','SN-48213','2025-03-15',2400,0.08,'جيد','',''],
+            ['','حاسوب محمول Dell',settings.cats[1]?.name||'أجهزة','مخزن جنزور','تقنية المعلومات','محمد سالم','','2025-06-01',3900,'','جديد','تحت الضمان سنتين','']];
+  const ins=[['قالب استيراد سجلات الأصول — راكان لاستيراد المواد الغذائية والتوزيع'],[''],['طريقة التعبئة'],
+    ['1. عبّئ ورقة «الأصول» فقط: صف واحد لكل أصل، ولا تغيّر عناوين الأعمدة في الصف الأول.'],
+    ['2. «اسم الأصل» إلزامي. بقية الأعمدة اختيارية.'],
+    ['3. «رقم الباركود»: اتركه فارغاً ليُولَّد تلقائياً حسب الفئة، أو اكتب رقماً موجوداً لتحديث ذلك الأصل.'],
+    ['4. «تاريخ الشراء» بصيغة سنة-شهر-يوم مثل 2025-03-15، أو خانة تاريخ من Excel.'],
+    ['5. «القيمة» بالدينار و«الوزن (طن)» أرقام فقط، بدون عملة أو وحدة.'],
+    ['6. «الحالة» إحدى القيم: '+STATUSES.join('، ')],
+    ['7. «الفئة» يُفضّل أن تكون من القائمة في ورقة «القوائم»، والفئة الجديدة تُنشأ تلقائياً عند الاستيراد.'],
+    ['8. بعد اختيار الملف تعرض المنظومة كل صف ونتيجة فحصه (جديد / تحديث / تخطٍّ / خطأ) قبل الحفظ.'],[''],['أمثلة على صفوف صحيحة (لا تُنسخ إلى ورقة الأصول إلا إذا كانت أصولاً حقيقية):'],hdr,...ex];
+  const wi=XLSX.utils.aoa_to_sheet(ins);wi['!cols']=[{wch:22},{wch:30},{wch:18},{wch:18},{wch:18},{wch:16},{wch:14},{wch:14},{wch:10},{wch:10},{wch:12},{wch:20},{wch:12}];XLSX.utils.book_append_sheet(wb,wi,'تعليمات');
+  const uniqv=k=>[...new Set(assets.map(a=>String(a[k]||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ar'));
+  const L=[settings.cats.map(c=>c.name),STATUSES,uniqv('location'),uniqv('dept'),uniqv('custodian')],n=Math.max(...L.map(x=>x.length));
+  const wl=XLSX.utils.aoa_to_sheet([['الفئات','الحالات','المواقع الحالية','الأقسام الحالية','العهد الحالية'],...Array.from({length:n},(_,i)=>L.map(x=>x[i]||''))]);wl['!cols']=L.map(()=>({wch:24}));XLSX.utils.book_append_sheet(wb,wl,'القوائم');
+  wb.Workbook={Views:[{RTL:true}]};const out=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download='قالب_استيراد_الأصول_راكان.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('تم تحميل القالب — عبّئ ورقة «الأصول» ثم اختر الملف','ok')}
+let IMP={rows:[],flt:'all',name:''};
+const numIn=v=>{if(v===''||v==null)return '';if(typeof v==='number')return v;const t=String(v).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[٬,\s]/g,'').replace('٫','.').replace(/(د\.?ل|LYD|طن)$/i,'');return t===''?'':(isFinite(+t)?+t:NaN)};
+async function impRead(file){try{
   const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:true});
-  const sh=wb.Sheets['الأصول']||wb.Sheets[wb.SheetNames[0]];const {list,extras}=rowsToAssets(XLSX.utils.sheet_to_json(sh,{defval:''}));
-  if(!list.length)return toast('لم يُعثر على أصول في الملف. تأكد أن الصف الأول يحتوي عناوين الأعمدة',1);
-  let added=0,gen=0,dup=0;
-  for(const a of list){if(a.category&&!settings.cats.some(c=>c.name===a.category))settings.cats.push({name:a.category,code:autoCatCode(a.category)});if(!a.category)a.category='أخرى';
-    if(!a.code){a.code=nextCode(a.category);gen++}else if(assets.some(x=>x.code===a.code)){dup++;continue}
-    a.createdAt=a.createdAt||today();assets.push(a);added++}
-  extras.forEach(h=>{if(!extraCols.includes(h))extraCols.push(h)});
-  await commit();toast(`تم استيراد ${added} أصل · ${gen} باركود جديد${dup?` · تخطي ${dup} مكرر`:''}`);
-}
-
+  const sn=wb.SheetNames.find(n=>normAr(n)===normAr('الأصول'))||wb.SheetNames.find(n=>!/تعليمات|القوائم/.test(n))||wb.SheetNames[0];
+  const raw=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:'',raw:true});
+  if(!raw.length)return toast('الملف لا يحتوي صفوف بيانات تحت العناوين',1);
+  const keys=Object.keys(raw[0]).map(headerKey);if(!keys.includes('name')&&!keys.includes('code'))return toast('لم أجد عمود «اسم الأصل» في الصف الأول — استخدم قالب الاستيراد',1);
+  IMP={rows:impCheck(raw),flt:'all',name:file.name+' · ورقة «'+sn+'»'};impShow()}catch(e){toast('تعذّر قراءة الملف: '+e.message,1)}}
+function impCheck(raw){const dup=document.querySelector('input[name=imDup]:checked').value,mkCats=$('#imCats').checked,seen=new Map(),known=new Set(settings.cats.map(c=>c.name));
+  return raw.map((r,i)=>{const a={};const extra={};for(const h in r){const k=headerKey(h);if(k&&IMP_COLS.includes(k)){if(a[k]==null||a[k]==='')a[k]=r[h]}else if(String(r[h]).trim()!=='')extra[h]=r[h]}
+    for(const k of IMP_COLS)a[k]=a[k]instanceof Date?a[k]:String(a[k]??'').trim();
+    const row={n:i+2,a,err:[],warn:[],res:'n'};if(IMP_COLS.every(k=>a[k]===''||a[k]==null))return null;
+    const ex=a.code&&assets.find(x=>x.code===a.code);
+    if(a.code&&seen.has(a.code))row.err.push(`رقم الباركود مكرر في الملف (الصف ${seen.get(a.code)})`);else if(a.code)seen.set(a.code,row.n);
+    if(ex){row.res=dup==='update'?'u':'k';if(row.res==='k')row.warn.push('الأصل موجود مسبقاً — سيُتخطّى')}
+    if(!ex&&!a.name)row.err.push('اسم الأصل فارغ');
+    for(const k of ['value','weight']){const v=numIn(a[k]);if(Number.isNaN(v))row.err.push(`«${flab(k)}» ليس رقماً: ${a[k]}`);else a[k]=v}
+    if(a.purchaseDate!==''){const d=toDateStr(a.purchaseDate);if(!d||!/^\d{4}-\d{2}-\d{2}$/.test(d)){row.warn.push(`تاريخ غير مفهوم «${a.purchaseDate}» — سيُترك فارغاً`);a.purchaseDate=''}else a.purchaseDate=d}
+    if(a.status&&!STATUSES.includes(a.status))row.warn.push(`حالة غير معتادة «${a.status}»`);
+    if(a.category&&!known.has(a.category)){if(mkCats)row.warn.push(`فئة جديدة «${a.category}» ستُنشأ`);else row.err.push(`الفئة «${a.category}» غير موجودة`)}
+    if(!ex&&!a.category)row.warn.push('بدون فئة — ستُسجّل في «أخرى»');
+    if(Object.keys(extra).length)row.warn.push('أعمدة غير معروفة تُجوهلت: '+Object.keys(extra).slice(0,3).join('، '));
+    if(row.err.length)row.res='x';return row}).filter(Boolean)}
+function impShow(){$('#imS1').hidden=true;$('#imS2').hidden=false;$('#imFn').textContent='📄 '+IMP.name;
+  const R=IMP.rows,c=t=>R.filter(r=>r.res===t).length,ok=c('n')+c('u');
+  $('#imSum').innerHTML=`<div><b>${R.length}</b><small>صف في الملف</small></div><div class="n"><b>${c('n')}</b><small>أصل جديد</small></div><div class="u"><b>${c('u')}</b><small>تحديث أصل موجود</small></div><div class="k"><b>${c('k')}</b><small>تخطٍّ</small></div><div class="x"><b>${c('x')}</b><small>أخطاء (لن تُستورد)</small></div>`;
+  const F=[['all','الكل',R.length],['n','جديد',c('n')],['u','تحديث',c('u')],['k','تخطٍّ',c('k')],['x','أخطاء',c('x')],['w','تنبيهات',R.filter(r=>r.warn.length).length]].filter(f=>f[0]==='all'||f[2]);
+  $('#imFlt').innerHTML=F.map(([k,l,n])=>`<button type="button" data-f="${k}" class="${IMP.flt===k?'on':''}">${l} (${n})</button>`).join('');
+  const L={n:['ib-n','جديد'],u:['ib-u','تحديث'],k:['ib-k','تخطٍّ'],x:['ib-x','خطأ']};
+  const vis=R.filter(r=>IMP.flt==='all'||(IMP.flt==='w'?r.warn.length:r.res===IMP.flt));
+  $('#imTb').innerHTML=vis.slice(0,500).map(r=>`<tr class="${r.res}"><td>${r.n}</td><td><span class="${L[r.res][0]}">${L[r.res][1]}</span></td><td class="mono">${r.a.code?esc(r.a.code):'<span class="auto">تلقائي</span>'}</td><td>${esc(r.a.name)||'—'}</td><td>${esc(r.a.category)||'—'}</td><td>${esc(r.a.location)||'—'}</td><td class="msg">${r.err.map(e=>`<span class="e">✖ ${esc(e)}</span>`).join('')}${r.warn.map(w=>`<span class="w">⚠ ${esc(w)}</span>`).join('')}${!r.err.length&&!r.warn.length?'<span style="color:#13804B">✓ سليم</span>':''}</td></tr>`).join('')+(vis.length>500?`<tr><td colspan="7" style="text-align:center;color:var(--muted)">… و${vis.length-500} صف آخر</td></tr>`:'');
+  $('#imGo').disabled=!ok;$('#imGo span').textContent=ok?`استيراد ${ok} سجل`:'لا توجد صفوف صالحة';
+  $('#imHint').textContent=c('x')?`${c('x')} صف فيه أخطاء لن يُستورد — صحّحها في الملف ثم اختره مرة أخرى إن أردت.`:'كل الصفوف سليمة وجاهزة للاستيراد.'}
+async function impApply(){const R=IMP.rows.filter(r=>r.res==='n'||r.res==='u');if(!R.length)return;
+  let added=0,upd=0,gen=0,cats=0;
+  for(const r of R){const a=r.a;
+    if(a.category&&!settings.cats.some(c=>c.name===a.category)){settings.cats.push({name:a.category,code:autoCatCode(a.category)});cats++}
+    if(r.res==='u'){const t=assets.find(x=>x.code===a.code);if(!t)continue;for(const k of IMP_COLS)if(k!=='code'&&a[k]!==''&&a[k]!=null)t[k]=a[k];upd++;continue}
+    const n={};for(const [k] of FIELDS)n[k]='';Object.assign(n,a);n._x={};n.category=n.category||'أخرى';if(!settings.cats.some(c=>c.name===n.category)){settings.cats.push({name:n.category,code:autoCatCode(n.category)});cats++}
+    if(!n.code){n.code=nextCode(n.category);gen++}n.status=n.status||'جيد';n.createdAt=today();n.printCount=0;n.ver=0;n.photos='';assets.push(n);added++}
+  if(cats)store('rkm_settings',settings);
+  impClose();await commit();renderAll();SFX.play('ok');
+  toast([added?`أُضيف ${added} أصل`:'',upd?`حُدِّث ${upd}`:'',gen?`${gen} باركود جديد`:'',cats?`${cats} فئة جديدة`:''].filter(Boolean).join(' · '),'ok')}
+function impOpen(){if(syncing)return toast('انتظر اكتمال التحديث ثم أعد المحاولة',1);IMP={rows:[],flt:'all',name:''};$('#imS1').hidden=false;$('#imS2').hidden=true;$('#imGo').disabled=true;$('#imGo span').textContent='استيراد';$('#imHint').textContent='الصفوف التي فيها أخطاء لا تُستورد.';$('#imM').classList.add('on')}
+const impClose=()=>$('#imM').classList.remove('on');
 /* ================= Events ================= */
 $('#lockYes').onclick=tryUnlock;$('#bRelock').onclick=()=>{unlocked=false;go('dash');toast('تم قفل الإعدادات')};$('#lockNo').onclick=()=>{$('#lockM').classList.remove('on');lockNext=null};
 $('#lockIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock();if(e.key==='Escape')$('#lockNo').click()});
 $$('.nav').forEach(n=>n.onclick=()=>{if(n.dataset.v==='form')editingCode=null;go(n.dataset.v)});
 $('#bOpen').onclick=()=>needLogin()?showLogin():GS()?(pull(true).then(ok=>ok&&toast('تم التحديث من الشيت','ok'))):openExcel();$('#bNew').onclick=newDb;$('#bSave').onclick=()=>{if(GS()){if(!OPS.length)return toast('كل التغييرات محفوظة','ok');return pump()}if(!fileHandle&&!fileName&&FS)return newDb();save()};
 $('#fileFallback').onchange=async e=>{const f=e.target.files[0];if(!f)return;readWorkbook(await f.arrayBuffer());fileName=f.name;dirty=false;setConn();renderAll();toast(`تم تحميل ${f.name}`);e.target.value=''};
-$('#bImport').onclick=()=>$('#fileImport').click();$('#fileImport').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''};
+$('#csSeg').addEventListener('click',e=>{const b=e.target.closest('[data-cs]');if(!b)return;prefs.cardStyle=b.dataset.cs;store('rkm_prefs',prefs);renderTable()});
+$('#bImport').onclick=impOpen;$('#imX').onclick=impClose;$('#imNo').onclick=impClose;$('#imTpl').onclick=downloadTemplate;$('#imGo').onclick=impApply;
+$('#imFile').onchange=e=>{const f=e.target.files[0];if(f)impRead(f);e.target.value=''};$('#imBack').onclick=()=>{$('#imS1').hidden=false;$('#imS2').hidden=true;$('#imGo').disabled=true};
+$('#imFlt').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;IMP.flt=b.dataset.f;impShow()});
+{const d=$('#imDrop');['dragenter','dragover'].forEach(t=>d.addEventListener(t,e=>{e.preventDefault();d.classList.add('over')}));['dragleave','drop'].forEach(t=>d.addEventListener(t,()=>d.classList.remove('over')));d.addEventListener('drop',e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f)impRead(f)})}
 $('#bReport').onclick=()=>printReport();
 $('#bExport').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buildWorkbook()]));a.download=`نسخة_أصول_${today()}.xlsx`;a.click()};
 ['#q','#fCat','#fLoc','#fDept','#fCust','#fPrint','#fOdoo'].forEach(s=>$(s).addEventListener('input',renderTable));
@@ -5030,6 +5195,7 @@ $('#tb').addEventListener('click',async e=>{const tr=e.target.closest('tr[data-c
   if(e.target.classList.contains('rc')){e.target.checked?selected.add(c):selected.delete(c);updSel();return}
   const act=(e.target.closest('[data-a]')||{}).dataset?.a;if(act==='menu'){openActMenu(e.target.closest('[data-a]'),c);return}
   if(act)doAct(act,c);
+  if(isPhone()&&!e.target.closest('input,button,img,.thn,.km')){const cs=prefs.cardStyle||'grid';if(cs==='list'||cs==='rich'){editAsset(c);return}if(cs==='fold'){tr.classList.toggle('open');return}}
   if(e.pointerType==='touch'||e.sourceCapabilities?.firesTouchEvents){const now=Date.now();if(lastTap.c===c&&now-lastTap.t<380&&!e.target.closest('input,button,img,.thn,.nmi,.pchip')){lastTap={};editAsset(c)}else lastTap={c,t:now}}});
 let lastTap={};
 $('#tb').addEventListener('dblclick',e=>{const tr=e.target.closest('tr[data-c]');if(!tr||e.target.closest('input,button,.km'))return;window.getSelection()?.removeAllRanges();editAsset(tr.dataset.c)});
@@ -5158,7 +5324,7 @@ document.querySelectorAll('input[name=oMulti]').forEach(r=>r.onchange=async e=>{
 function renderMulti(){document.querySelectorAll('input[name=oMulti]').forEach(r=>{r.checked=(r.value==='1')===!!settings.odooMulti;r.closest('label').classList.toggle('on',r.checked)})}
 function dsRender(){document.querySelectorAll('input[name=dsMode]').forEach(r=>{r.checked=r.value===ds.mode;r.closest('label').classList.toggle('on',r.checked)});
   $('#gsBox').style.display=ds.mode==='gsheet'?'':'none';$('#gsUrl').value=ds.url||'';
-  $('#oShowSync').checked=!!prefs.showSync;$('#oThumbStyle').value=prefs.thumbStyle||'col';$('#oHover').checked=!!prefs.hoverPreview;
+  $('#oShowSync').checked=!!prefs.showSync;$('#oThumbStyle').value=prefs.thumbStyle||'col';$('#oCardStyle').value=prefs.cardStyle||'grid';$('#oHover').checked=!!prefs.hoverPreview;
   const dv=$('#gsDev');dv.className='pill '+(GS()?'p-ok':'p-warn');dv.textContent=GS()?'متصل ومسجّل الدخول':'غير مسجّل الدخول';$('#bGsLogout').style.display=GS()?'':'none';
   $('#gsInfo').textContent=GS()?(gsName?`متصل بـ «${gsName}»`:''):''}
 function gsForm(){return {mode:'gsheet',url:$('#gsUrl').value.trim(),key:ds.key}}
@@ -5170,6 +5336,7 @@ $('#oSound').onchange=e=>{prefs.sound=e.target.checked;store('rkm_prefs',prefs);
 $('#oVol').oninput=e=>{prefs.vol=+e.target.value;$('#vVol').textContent=prefs.vol+'%';store('rkm_prefs',prefs)};$('#oVol').onchange=()=>SFX.play('ok');
 document.querySelectorAll('[data-sfx]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();SFX.play(b.dataset.sfx)}));
 $('#oHover').onchange=e=>{prefs.hoverPreview=e.target.checked;store('rkm_prefs',prefs);toast(e.target.checked?'تم تفعيل المعاينة عند المرور':'تم إيقاف المعاينة عند المرور','ok')};
+$('#oCardStyle').onchange=e=>{prefs.cardStyle=e.target.value;store('rkm_prefs',prefs);renderTable();toast('تم تغيير عرض البطاقات على الجوال','ok')};
 $('#oThumbStyle').onchange=e=>{prefs.thumbStyle=e.target.value;store('rkm_prefs',prefs);renderTable();toast('تم تغيير طريقة عرض الصور في سجل الأصول','ok')};
 $('#oShowSync').onchange=e=>{prefs.showSync=e.target.checked;store('rkm_prefs',prefs);setConn();toast(e.target.checked?'تم إظهار زرّي الحفظ والتحديث':'تم إخفاء زرّي الحفظ والتحديث','ok')};
 $('#bGsLogout').onclick=async()=>{if(OPS.length&&!await confirmBox('تسجيل الخروج','توجد تغييرات لم تُحفظ بعد. هل تريد المتابعة؟','خروج'))return;logoutDevice('تم تسجيل الخروج من هذا الجهاز.');dsRender()};
