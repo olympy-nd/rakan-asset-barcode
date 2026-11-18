@@ -842,7 +842,7 @@ html{-webkit-text-size-adjust:100%}
             <button class="btn pri" id="bReport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></svg>طباعة تقرير</button>
           </div>
         </div>
-        <div class="csSeg" id="csSeg" role="tablist" aria-label="طريقة عرض البطاقات"><button type="button" data-cs="grid">التفصيلي</button><button type="button" data-cs="list">قائمة مدمجة</button><button type="button" data-cs="rich">بطاقة بصورة</button><button type="button" data-cs="fold">مطوي</button></div>
+        <div class="csSeg" id="csSeg" role="tablist" aria-label="طريقة عرض البطاقات"><button type="button" data-cs="list">قائمة مدمجة</button><button type="button" data-cs="grid">التفصيلي</button><button type="button" data-cs="rich">بطاقة بصورة</button><button type="button" data-cs="fold">مطوي</button></div>
         <div class="tbl-wrap atw"><table class="atbl">
           <colgroup id="tcg"></colgroup>
           <thead id="thd"></thead>
@@ -1018,7 +1018,7 @@ html{-webkit-text-size-adjust:100%}
             <label class="row" style="margin-top:12px;gap:10px;font-size:13px;flex-wrap:wrap"><span style="font-weight:700;color:var(--navy)">عرض صور الأصول في سجل الأصول:</span>
               <select id="oThumbStyle" style="width:auto;min-width:220px"><option value="col">عمود صورة مستقل (كبير)</option><option value="name">صورة داخل خانة اسم الأصل</option><option value="chip">شارة صغيرة + معاينة عند المرور</option></select></label>
             <label class="row" style="margin-top:12px;gap:10px;font-size:13px;flex-wrap:wrap"><span style="font-weight:700;color:var(--navy)">عرض بطاقات الأصول على الجوال:</span>
-              <select id="oCardStyle" style="width:auto;min-width:220px"><option value="grid">التفصيلي (كل الحقول)</option><option value="list">قائمة مدمجة</option><option value="rich">بطاقة بصورة</option><option value="fold">مطوي قابل للتوسيع</option></select></label>
+              <select id="oCardStyle" style="width:auto;min-width:220px"><option value="list">قائمة مدمجة</option><option value="grid">التفصيلي (كل الحقول)</option><option value="rich">بطاقة بصورة</option><option value="fold">مطوي قابل للتوسيع</option></select></label>
             <label class="row" style="margin-top:10px;gap:8px;cursor:pointer;font-size:13px;flex-wrap:nowrap"><input type="checkbox" id="oHover" style="width:18px;height:18px;flex:none"><span>تفعيل <b>معاينة الصورة عند مرور المؤشر</b> في سجل الأصول <span class="hint">(بطاقة معاينة كبيرة بالصورة وبيانات الأصل وبقية الصور — على الكمبيوتر)</span></span></label>
             <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">خطوات الإعداد (مرة واحدة)</summary>
               <div class="infobox" style="margin-top:8px">
@@ -3961,6 +3961,7 @@ let fileHandle = null, fileName = '', lastMod = 0, dirty = false, editingCode = 
 let queue = []; // codes queued for printing
 const prefs = Object.assign({ w:70,h:40,orient:'l',fmt:'ODOO',logo:true,co:false,name:true,code:true,loc:false,odoo:false,nameSrc:'local',border:false,mono:true,showSync:false,sound:true,vol:60,fs:100,sz:{logo:100,name:100,odoo:100,code:100,meta:100,bar:100},pad:1.5,rot:0,copies:1,custom:[],printer:'XP-P322B',page:'driver' }, load('rkm_prefs')||{});
 const FS = 'showOpenFilePicker' in window;
+if(!prefs.csV1){prefs.cardStyle='list';prefs.csV1=1;try{localStorage.setItem(lsk('rkm_prefs'),JSON.stringify(prefs))}catch(e){}}
 if(!prefs.sizeV3){prefs.w=70;prefs.h=40;prefs.orient='l';prefs.sizeV2=1;prefs.sizeV3=1;store('rkm_prefs',prefs)}
 if(prefs.fmt==='EAN13')prefs.fmt='ODOO';
 
@@ -4652,11 +4653,11 @@ const COLS=[
 COLS.forEach(c=>{if(!c.td)c.td=a=>`<td data-l="${c.l}"${a[c.k]?'':' class="e"'}>${esc(a[c.k])||'—'}</td>`});
 function colOn(c){const v=(prefs.cols||{})[c.k];return c.fixed||(v===undefined?c.d:!!v)}
 const isPhone=()=>matchMedia('(max-width:820px)').matches;
-function visCols(){const TS=prefs.thumbStyle||'col',ph=isPhone()&&(prefs.cardStyle||'grid')!=='grid';return COLS.filter(c=>(colOn(c)||(ph&&['photo','code','location','status','category','custodian'].includes(c.k)))&&!(c.k==='photo'&&TS!=='col'&&!ph))}
+function visCols(){const TS=prefs.thumbStyle||'col',ph=isPhone()&&(prefs.cardStyle||'list')!=='grid';return COLS.filter(c=>(colOn(c)||(ph&&['photo','code','location','status','category','custodian'].includes(c.k)))&&!(c.k==='photo'&&TS!=='col'&&!ph))}
 function applyColW(vc){const tb=$('#tb').closest('table'),tot=vc.reduce((t,c)=>t+c.w,0),avail=100-2.5-4,CW=prefs.colW||{},wrap=tb.parentElement,desk=!matchMedia('(max-width:1180px)').matches;
   if(desk&&vc.some(c=>CW[c.k])){const W=wrap.clientWidth||1100,px=c=>Math.round(CW[c.k]||c.w/tot*avail/100*W),sum=34+56+vc.reduce((t,c)=>t+px(c),0);$('#tcg').innerHTML='<col style="width:34px">'+vc.map(c=>`<col data-k="${c.k}" style="width:${px(c)}px">`).join('')+'<col style="width:56px">';tb.style.width=Math.max(W,sum)+'px';wrap.classList.toggle('wide',sum>W+1)}
   else{$('#tcg').innerHTML='<col style="width:2.5%">'+vc.map(c=>`<col data-k="${c.k}" style="width:${(c.w/tot*avail).toFixed(2)}%">`).join('')+'<col style="width:4%">';tb.style.width='';wrap.classList.remove('wide')}}
-function renderTable(){const TS=prefs.thumbStyle||'col',tb=$('#tb').closest('table');tb.dataset.ts=TS;tb.dataset.cs=prefs.cardStyle||'grid';$$('#csSeg [data-cs]').forEach(b=>b.classList.toggle('on',b.dataset.cs===tb.dataset.cs));
+function renderTable(){const TS=prefs.thumbStyle||'col',tb=$('#tb').closest('table');tb.dataset.ts=TS;tb.dataset.cs=prefs.cardStyle||'list';$$('#csSeg [data-cs]').forEach(b=>b.classList.toggle('on',b.dataset.cs===tb.dataset.cs));
   const vc=visCols();applyColW(vc);
 
   const list=filtered(),all=list.length&&list.every(a=>selected.has(a.code));
@@ -5195,7 +5196,7 @@ $('#tb').addEventListener('click',async e=>{const tr=e.target.closest('tr[data-c
   if(e.target.classList.contains('rc')){e.target.checked?selected.add(c):selected.delete(c);updSel();return}
   const act=(e.target.closest('[data-a]')||{}).dataset?.a;if(act==='menu'){openActMenu(e.target.closest('[data-a]'),c);return}
   if(act)doAct(act,c);
-  if(isPhone()&&!e.target.closest('input,button,img,.thn,.km')){const cs=prefs.cardStyle||'grid';if(cs==='list'||cs==='rich'){editAsset(c);return}if(cs==='fold'){tr.classList.toggle('open');return}}
+  if(isPhone()&&!e.target.closest('input,button,img,.thn,.km')){const cs=prefs.cardStyle||'list';if(cs==='list'||cs==='rich'){editAsset(c);return}if(cs==='fold'){tr.classList.toggle('open');return}}
   if(e.pointerType==='touch'||e.sourceCapabilities?.firesTouchEvents){const now=Date.now();if(lastTap.c===c&&now-lastTap.t<380&&!e.target.closest('input,button,img,.thn,.nmi,.pchip')){lastTap={};editAsset(c)}else lastTap={c,t:now}}});
 let lastTap={};
 $('#tb').addEventListener('dblclick',e=>{const tr=e.target.closest('tr[data-c]');if(!tr||e.target.closest('input,button,.km'))return;window.getSelection()?.removeAllRanges();editAsset(tr.dataset.c)});
@@ -5324,7 +5325,7 @@ document.querySelectorAll('input[name=oMulti]').forEach(r=>r.onchange=async e=>{
 function renderMulti(){document.querySelectorAll('input[name=oMulti]').forEach(r=>{r.checked=(r.value==='1')===!!settings.odooMulti;r.closest('label').classList.toggle('on',r.checked)})}
 function dsRender(){document.querySelectorAll('input[name=dsMode]').forEach(r=>{r.checked=r.value===ds.mode;r.closest('label').classList.toggle('on',r.checked)});
   $('#gsBox').style.display=ds.mode==='gsheet'?'':'none';$('#gsUrl').value=ds.url||'';
-  $('#oShowSync').checked=!!prefs.showSync;$('#oThumbStyle').value=prefs.thumbStyle||'col';$('#oCardStyle').value=prefs.cardStyle||'grid';$('#oHover').checked=!!prefs.hoverPreview;
+  $('#oShowSync').checked=!!prefs.showSync;$('#oThumbStyle').value=prefs.thumbStyle||'col';$('#oCardStyle').value=prefs.cardStyle||'list';$('#oHover').checked=!!prefs.hoverPreview;
   const dv=$('#gsDev');dv.className='pill '+(GS()?'p-ok':'p-warn');dv.textContent=GS()?'متصل ومسجّل الدخول':'غير مسجّل الدخول';$('#bGsLogout').style.display=GS()?'':'none';
   $('#gsInfo').textContent=GS()?(gsName?`متصل بـ «${gsName}»`:''):''}
 function gsForm(){return {mode:'gsheet',url:$('#gsUrl').value.trim(),key:ds.key}}
